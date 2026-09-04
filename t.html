@@ -1,0 +1,860 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson Desk | Teacher Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --ink:#16261f;
+  --paper:#f7f3e9;
+  --panel:#ffffff;
+  --chalk:#e8c547;
+  --coral:#e2683d;
+  --line:#dcd0b2;
+  --muted:#6b6152;
+  --green:#2b5e3a;
+  --radius:14px;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--paper);
+  font-family:'IBM Plex Sans', Arial, sans-serif;
+  color:var(--ink);
+  background-image:
+    radial-gradient(circle at 92% 8%, rgba(232,197,71,0.18), transparent 40%),
+    radial-gradient(circle at 4% 90%, rgba(226,104,61,0.10), transparent 45%);
+}
+
+header{
+  background:var(--ink); color:var(--paper); padding:1.4rem 1.5rem;
+  position:relative; overflow:hidden;
+}
+header::after{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 34px);
+  pointer-events:none;
+}
+.header-inner{
+  max-width:1600px; margin:auto; display:flex; align-items:center; justify-content:space-between;
+  gap:1rem; flex-wrap:wrap; position:relative; z-index:1;
+}
+.brand{ display:flex; align-items:center; gap:14px; }
+.stamp{
+  width:56px; height:56px; border-radius:50%; border:2px dashed var(--chalk);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:.65rem;
+  color:var(--chalk); text-align:center; line-height:1.1; flex-shrink:0;
+}
+.brand h1{ margin:0; font-family:'Fraunces', serif; font-weight:600; font-size:1.5rem; }
+.brand p{ margin:2px 0 0; font-size:.85rem; color:#c9c2ac; }
+.role-tag{
+  font-family:'IBM Plex Mono', monospace; font-size:.75rem;
+  background:rgba(232,197,71,0.14); color:var(--chalk);
+  border:1px solid rgba(232,197,71,0.4); padding:6px 12px; border-radius:100px; white-space:nowrap;
+}
+
+/* TABS */
+.tabbar{
+  max-width:1600px; margin:0 auto; padding:0 clamp(1rem,4vw,3rem);
+  display:flex; gap:8px; margin-top:1.2rem; flex-wrap:wrap;
+}
+.tab-btn{
+  padding:10px 18px; border-radius:100px; border:1.5px solid var(--line);
+  background:var(--panel); color:var(--ink); font-weight:600; font-size:.88rem;
+  cursor:pointer; font-family:'IBM Plex Sans', Arial, sans-serif;
+}
+.tab-btn.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+main{ max-width:1600px; margin:auto; padding:1.2rem clamp(1rem, 4vw, 3rem) 3rem; }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:1.6rem; margin-bottom:1.6rem;
+  box-shadow:0 1px 0 rgba(22,38,31,0.03);
+}
+.card h2{ font-family:'Fraunces', serif; font-weight:600; font-size:1.3rem; margin:0 0 .3rem; display:flex; align-items:center; gap:10px; }
+.card .sub{ margin:0 0 1.2rem; color:var(--muted); font-size:.9rem; }
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace; font-size:.72rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--coral); margin:0 0 .35rem;
+}
+.warn-note{
+  font-size:.78rem; color:var(--muted); background:var(--paper); border:1px dashed var(--line);
+  border-radius:8px; padding:8px 12px; margin:0 0 1.2rem;
+}
+
+label{ font-weight:600; display:block; margin-top:16px; margin-bottom:6px; font-size:.9rem; }
+label .tag-optional{
+  font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:.68rem;
+  color:var(--muted); text-transform:uppercase; letter-spacing:.05em;
+  background:var(--paper); border:1px solid var(--line); border-radius:100px; padding:2px 8px; margin-left:6px;
+}
+
+input[type=date], input[type=text], input[type=email], input[type=password], textarea, select{
+  width:100%; padding:11px 12px; border:1.5px solid var(--line);
+  border-radius:8px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:.95rem;
+  background:#fffdf8; color:var(--ink);
+}
+input:focus, textarea:focus, select:focus{
+  outline:none; border-color:var(--ink); box-shadow:0 0 0 3px rgba(22,38,31,0.08);
+}
+textarea{ min-height:90px; resize:vertical; }
+
+.code-area{
+  min-height:220px; font-family:'IBM Plex Mono', monospace; font-size:.85rem; line-height:1.55;
+  background:repeating-linear-gradient(#fffdf8 0px, #fffdf8 27px, var(--line) 28px);
+  background-attachment:local;
+}
+
+.row{ display:flex; gap:12px; flex-wrap:wrap; }
+.row > *{ flex:1 1 200px; }
+
+.btn-group{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+
+button, .file-btn{
+  padding:12px 18px; border:none; border-radius:8px; cursor:pointer;
+  font-family:'IBM Plex Sans', Arial, sans-serif; font-weight:600; font-size:.9rem;
+  transition:transform .08s ease, opacity .15s ease;
+}
+button:active{ transform:translateY(1px); }
+
+.btn-primary{ background:var(--ink); color:var(--paper); width:100%; margin-top:20px; padding:14px; font-size:.95rem; }
+.btn-primary:hover{ opacity:.92; }
+.btn-secondary{ background:var(--paper); color:var(--ink); border:1.5px solid var(--line) !important; }
+.btn-secondary:hover{ border-color:var(--ink) !important; }
+.btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid var(--line) !important; }
+
+.file-btn{
+  background:var(--paper); border:1.5px dashed var(--muted); color:var(--ink);
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+}
+.file-btn:hover{ border-color:var(--ink); }
+.file-btn input{ display:none; }
+
+.preview-wrap{ margin-top:14px; border:1.5px solid var(--line); border-radius:10px; overflow:hidden; }
+.preview-bar{ background:var(--paper); padding:8px 12px; font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); border-bottom:1px solid var(--line); }
+iframe{ width:100%; height:420px; border:none; display:block; background:#fff; }
+
+.status-msg{ font-family:'IBM Plex Mono', monospace; font-size:.8rem; margin-top:10px; padding:10px 12px; border-radius:8px; display:none; }
+.status-msg.show{ display:block; }
+.status-ok{ background:#eaf3ea; color:var(--green); border:1px solid #c6e0c9; }
+.status-err{ background:#fbe9e5; color:var(--coral); border:1px solid #f3c8ba; }
+
+/* PILL CHECKBOX GROUPS */
+.pill-group{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+.pill-check{
+  display:inline-flex; align-items:center; gap:6px; padding:8px 12px;
+  border:1.5px solid var(--line); border-radius:100px; cursor:pointer;
+  font-size:.85rem; background:#fffdf8; user-select:none;
+}
+.pill-check input{ width:auto; margin:0; accent-color:var(--ink); }
+.pill-check.checked{ border-color:var(--ink); background:rgba(22,38,31,0.05); font-weight:600; }
+.empty-note{ color:var(--muted); font-size:.88rem; font-style:italic; }
+
+/* LESSON LIST */
+.date-group{ margin-bottom:18px; }
+.date-group-head{
+  font-family:'IBM Plex Mono', monospace; font-size:.78rem; text-transform:uppercase;
+  letter-spacing:.05em; color:var(--muted); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--line);
+}
+.lesson-row{
+  display:flex; align-items:center; gap:14px; padding:12px;
+  border:1px solid var(--line); border-radius:10px; margin-bottom:10px;
+  background:#fffdf8; flex-wrap:wrap;
+}
+.subj-chip{
+  font-family:'IBM Plex Mono', monospace; font-size:.68rem; text-transform:uppercase;
+  background:rgba(232,197,71,0.18); color:#8a6d0a; border:1px solid rgba(232,197,71,0.5);
+  border-radius:100px; padding:3px 10px; flex-shrink:0;
+}
+.lesson-info{ flex:1 1 200px; min-width:0; }
+.lesson-info h4{ margin:0 0 3px; font-family:'Fraunces', serif; font-size:1.02rem; }
+.lesson-info span{ font-size:.78rem; color:var(--muted); }
+.assign-badge{
+  font-family:'IBM Plex Mono', monospace; font-size:.68rem; background:rgba(226,104,61,0.12); color:var(--coral);
+  border:1px solid rgba(226,104,61,0.35); border-radius:100px; padding:2px 8px; margin-left:8px;
+}
+.lesson-actions{ display:flex; gap:8px; }
+.lesson-actions button{ padding:8px 12px; font-size:.8rem; }
+.btn-delete{ background:transparent; color:var(--coral); border:1.5px solid rgba(226,104,61,0.4) !important; }
+.btn-delete:hover{ background:rgba(226,104,61,0.08); }
+
+/* STUDENT / CLASS LISTS */
+.class-chip-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; margin-bottom:8px; background:#fffdf8; }
+.class-chip-row strong{ font-family:'Fraunces', serif; font-weight:600; }
+
+.student-row{
+  display:flex; align-items:center; gap:14px; padding:12px; border:1px solid var(--line);
+  border-radius:10px; margin-bottom:10px; background:#fffdf8; flex-wrap:wrap;
+}
+.avatar-badge{
+  width:44px; height:44px; border-radius:50%; background:var(--ink); color:var(--paper);
+  display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif;
+  font-weight:600; flex-shrink:0;
+}
+.student-info{ flex:1 1 220px; min-width:0; }
+.student-info h4{ margin:0 0 3px; font-family:'Fraunces', serif; font-size:1rem; }
+.student-info span{ font-size:.78rem; color:var(--muted); display:block; }
+.status-pill{
+  font-family:'IBM Plex Mono', monospace; font-size:.68rem; text-transform:uppercase;
+  border-radius:100px; padding:3px 10px; margin-left:0;
+}
+.status-active{ background:rgba(43,94,58,0.1); color:var(--green); border:1px solid rgba(43,94,58,0.3); }
+.status-disabled{ background:rgba(226,104,61,0.1); color:var(--coral); border:1px solid rgba(226,104,61,0.3); }
+.student-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+.student-actions button{ padding:8px 12px; font-size:.78rem; }
+
+@media(max-width:640px){
+  .brand h1{ font-size:1.2rem; }
+  main{ padding:1rem 1rem 2.5rem; }
+  .card{ padding:1.2rem; }
+  .lesson-row, .student-row{ flex-direction:column; align-items:flex-start; }
+  .lesson-actions, .student-actions{ width:100%; }
+  .lesson-actions button, .student-actions button{ flex:1; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="stamp">LESSON<br>DESK</div>
+      <div>
+        <h1>Lesson Desk</h1>
+        <p>Daily lesson planner &amp; class administration</p>
+      </div>
+    </div>
+    <div class="role-tag">Teacher view</div>
+  </div>
+</header>
+
+<div class="tabbar">
+  <button class="tab-btn active" data-tab="tabLessons" onclick="switchTab('tabLessons')">Lessons</button>
+  <button class="tab-btn" data-tab="tabClasses" onclick="switchTab('tabClasses')">Classes &amp; Students</button>
+</div>
+
+<main>
+
+  <!-- ================= LESSONS TAB ================= -->
+  <div class="tab-panel active" id="tabLessons">
+
+    <div class="card">
+      <p class="eyebrow" id="lessonFormEyebrow">New entry</p>
+      <h2 id="lessonFormTitle">Create a daily lesson</h2>
+      <p class="sub">A day can hold more than one lesson &mdash; give each one a subject, choose who it's for, then publish.</p>
+
+      <form id="lessonForm">
+        <div class="row">
+          <div>
+            <label>Date</label>
+            <input type="date" id="lessonDate" required>
+          </div>
+          <div>
+            <label>Subject</label>
+            <input type="text" id="lessonSubject" list="subjectOptions" placeholder="e.g. Mathematics" required>
+            <datalist id="subjectOptions"></datalist>
+          </div>
+        </div>
+
+        <label>Lesson title</label>
+        <input type="text" id="lessonTitle" placeholder="e.g. Introduction to Fractions" required>
+
+        <label>Who is this lesson for?</label>
+        <p class="sub" style="margin:0 0 4px">Tick whole classes and/or specific students. A student sees a lesson if their class is ticked, or if they're ticked individually.</p>
+        <div class="pill-group" id="classCheckboxWrap"><span class="empty-note">No classes yet &mdash; add one in the "Classes &amp; Students" tab.</span></div>
+        <div class="pill-group" id="studentCheckboxWrap"></div>
+
+        <label>Lesson content <span class="tag-optional">HTML code</span></label>
+        <div class="btn-group" style="margin-top:0">
+          <label class="file-btn">
+            Upload HTML file
+            <input type="file" id="fileUpload" accept=".html,.htm" onchange="handleFileUpload(event)">
+          </label>
+          <button type="button" class="btn-secondary" onclick="togglePreview()">Preview lesson</button>
+        </div>
+        <textarea id="lessonCode" class="code-area" required placeholder="&lt;h2&gt;Today's Lesson&lt;/h2&gt;
+&lt;p&gt;Write or paste the lesson's HTML here, or upload a file above.&lt;/p&gt;"></textarea>
+
+        <div class="preview-wrap" id="previewWrap" style="display:none">
+          <div class="preview-bar">Preview — exactly what students will see</div>
+          <iframe id="previewFrame"></iframe>
+        </div>
+
+        <label>Assignment <span class="tag-optional">optional · HTML code</span></label>
+        <div class="btn-group" style="margin-top:0">
+          <label class="file-btn">
+            Upload assignment HTML file
+            <input type="file" id="assignmentUpload" accept=".html,.htm" onchange="handleAssignmentUpload(event)">
+          </label>
+          <button type="button" class="btn-secondary" onclick="toggleAssignmentPreview()">Preview assignment</button>
+        </div>
+        <textarea id="assignmentText" class="code-area" style="min-height:160px" placeholder="Paste or write the assignment's HTML here, or upload a file above. Leave blank if there isn't one."></textarea>
+
+        <div class="preview-wrap" id="assignmentPreviewWrap" style="display:none">
+          <div class="preview-bar">Assignment preview</div>
+          <iframe id="assignmentPreviewFrame" style="height:260px"></iframe>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn-primary" id="saveLessonBtn" style="margin-top:0;flex:2">Publish lesson</button>
+          <button type="button" class="btn-ghost" id="cancelLessonEditBtn" style="display:none" onclick="cancelLessonEdit()">Cancel edit</button>
+        </div>
+        <div id="statusMsg" class="status-msg"></div>
+      </form>
+    </div>
+
+    <div class="card">
+      <p class="eyebrow">Register</p>
+      <h2>All published lessons</h2>
+      <p class="sub">Grouped by date, newest first. Edit reopens a lesson above; delete removes it for students.</p>
+      <div id="lessonList"></div>
+    </div>
+  </div>
+
+  <!-- ================= CLASSES & STUDENTS TAB ================= -->
+  <div class="tab-panel" id="tabClasses">
+
+    <div class="card">
+      <p class="eyebrow">Classes</p>
+      <h2>Add a class</h2>
+      <div class="row">
+        <input type="text" id="newClassName" placeholder="e.g. Grade 6 - Blue">
+        <button type="button" class="btn-secondary" style="flex:0 0 auto" onclick="addClass()">Add class</button>
+      </div>
+      <div id="classList" style="margin-top:16px"></div>
+    </div>
+
+    <div class="card">
+      <p class="eyebrow" id="studentFormEyebrow">New account</p>
+      <h2 id="studentFormTitle">Create a student account</h2>
+      <p class="warn-note">Accounts are stored for this app's own sign-in check, not a secure identity system. Don't reuse passwords students use elsewhere, and treat this the same way you'd treat a class roster.</p>
+
+      <form id="studentForm">
+        <div class="row">
+          <div>
+            <label>Student name</label>
+            <input type="text" id="studentName" required>
+          </div>
+          <div>
+            <label>Class</label>
+            <select id="studentClassSelect" required><option value="">Select a class</option></select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Email</label>
+            <input type="email" id="studentEmail" required>
+          </div>
+          <div>
+            <label>Password</label>
+            <div style="display:flex; gap:8px">
+              <input type="text" id="studentPassword" required style="flex:1">
+              <button type="button" class="btn-secondary" style="flex:0 0 auto" onclick="generatePassword()">Generate</button>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button type="submit" class="btn-primary" id="saveStudentBtn" style="margin-top:0;flex:2">Create account</button>
+          <button type="button" class="btn-ghost" id="cancelStudentEditBtn" style="display:none" onclick="cancelStudentEdit()">Cancel edit</button>
+        </div>
+        <div id="studentStatusMsg" class="status-msg"></div>
+      </form>
+    </div>
+
+    <div class="card">
+      <p class="eyebrow">Roster</p>
+      <h2>Student accounts</h2>
+      <p class="sub">Toggle access, edit details, or copy login credentials to send to a student yourself.</p>
+      <div id="studentList"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FIREBASE + LOGIC -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, set, get, remove, push, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB-BUuIs7VCzeZgGXziqsAk-zr7UarRp4c",
+  authDomain: "survey-d97e7.firebaseapp.com",
+  databaseURL: "https://survey-d97e7-default-rtdb.firebaseio.com",
+  projectId: "survey-d97e7",
+  storageBucket: "survey-d97e7.firebasestorage.app",
+  messagingSenderId: "861361956801",
+  appId: "1:861361956801:web:65b2ee8eb04f5c2d5d3140",
+  measurementId: "G-QW860EGGZ9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+
+/* ---------------- TABS ---------------- */
+window.switchTab = (id) => {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelector(`.tab-btn[data-tab="${id}"]`).classList.add("active");
+};
+
+/* ---------------- STATE ---------------- */
+let classes = {};
+let students = {};
+let subjects = {};
+let editingLessonKey = null; // { date, id } or null
+let editingStudentId = null;
+
+/* ---------------- ELEMENTS ---------------- */
+const lessonDate = document.getElementById("lessonDate");
+const lessonSubject = document.getElementById("lessonSubject");
+const subjectOptions = document.getElementById("subjectOptions");
+const lessonTitle = document.getElementById("lessonTitle");
+const lessonCode = document.getElementById("lessonCode");
+const assignmentText = document.getElementById("assignmentText");
+const previewFrame = document.getElementById("previewFrame");
+const previewWrap = document.getElementById("previewWrap");
+const assignmentPreviewFrame = document.getElementById("assignmentPreviewFrame");
+const assignmentPreviewWrap = document.getElementById("assignmentPreviewWrap");
+const statusMsg = document.getElementById("statusMsg");
+const lessonList = document.getElementById("lessonList");
+const classCheckboxWrap = document.getElementById("classCheckboxWrap");
+const studentCheckboxWrap = document.getElementById("studentCheckboxWrap");
+const saveLessonBtn = document.getElementById("saveLessonBtn");
+const cancelLessonEditBtn = document.getElementById("cancelLessonEditBtn");
+const lessonFormTitle = document.getElementById("lessonFormTitle");
+const lessonFormEyebrow = document.getElementById("lessonFormEyebrow");
+
+const classList = document.getElementById("classList");
+const newClassName = document.getElementById("newClassName");
+
+const studentForm = document.getElementById("studentForm");
+const studentName = document.getElementById("studentName");
+const studentEmail = document.getElementById("studentEmail");
+const studentPassword = document.getElementById("studentPassword");
+const studentClassSelect = document.getElementById("studentClassSelect");
+const studentStatusMsg = document.getElementById("studentStatusMsg");
+const studentList = document.getElementById("studentList");
+const saveStudentBtn = document.getElementById("saveStudentBtn");
+const cancelStudentEditBtn = document.getElementById("cancelStudentEditBtn");
+const studentFormTitle = document.getElementById("studentFormTitle");
+const studentFormEyebrow = document.getElementById("studentFormEyebrow");
+
+function showStatus(el, text, ok = true){
+  el.textContent = text;
+  el.className = "status-msg show " + (ok ? "status-ok" : "status-err");
+  setTimeout(() => el.classList.remove("show"), 3500);
+}
+
+/* ==================================================
+   CLASSES
+================================================== */
+window.addClass = () => {
+  const name = newClassName.value.trim();
+  if (!name) return;
+  push(ref(db, "classes"), { name, createdAt: Date.now() }).then(() => {
+    newClassName.value = "";
+    loadClasses();
+  });
+};
+
+window.deleteClass = (id) => {
+  if (!confirm("Delete this class? Students already assigned to it will keep an unlinked class reference.")) return;
+  remove(ref(db, "classes/" + id)).then(loadClasses);
+};
+
+function loadClasses(){
+  get(ref(db, "classes")).then(snap => {
+    classes = {};
+    classList.innerHTML = "";
+    if (!snap.exists()) {
+      classList.innerHTML = "<p class='empty-note'>No classes yet. Add one above.</p>";
+    } else {
+      snap.forEach(child => { classes[child.key] = child.val(); });
+      Object.entries(classes).sort((a,b)=>a[1].name.localeCompare(b[1].name)).forEach(([id, c]) => {
+        const row = document.createElement("div");
+        row.className = "class-chip-row";
+        row.innerHTML = `<strong>${c.name}</strong><button type="button" class="btn-delete" onclick="deleteClass('${id}')">Delete</button>`;
+        classList.appendChild(row);
+      });
+    }
+    populateClassSelect();
+    renderClassCheckboxes();
+  });
+}
+
+function populateClassSelect(){
+  studentClassSelect.innerHTML = `<option value="">Select a class</option>`;
+  Object.entries(classes).sort((a,b)=>a[1].name.localeCompare(b[1].name)).forEach(([id, c]) => {
+    studentClassSelect.innerHTML += `<option value="${id}">${c.name}</option>`;
+  });
+}
+
+/* ==================================================
+   STUDENTS
+================================================== */
+window.generatePassword = () => {
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  let out = "";
+  for (let i = 0; i < 10; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  studentPassword.value = out;
+};
+
+studentForm.addEventListener("submit", e => {
+  e.preventDefault();
+  const payload = {
+    name: studentName.value.trim(),
+    email: studentEmail.value.trim().toLowerCase(),
+    password: studentPassword.value,
+    classId: studentClassSelect.value,
+    active: editingStudentId ? students[editingStudentId]?.active !== false : true,
+    updatedAt: Date.now()
+  };
+  if (!payload.classId) { showStatus(studentStatusMsg, "Select a class for this student.", false); return; }
+
+  const targetId = editingStudentId || push(ref(db, "students")).key;
+  set(ref(db, "students/" + targetId), payload).then(() => {
+    showStatus(studentStatusMsg, editingStudentId ? "Student account updated." : "Student account created.");
+    cancelStudentEdit();
+    loadStudents();
+  });
+});
+
+window.editStudent = (id) => {
+  const s = students[id];
+  if (!s) return;
+  editingStudentId = id;
+  studentName.value = s.name || "";
+  studentEmail.value = s.email || "";
+  studentPassword.value = s.password || "";
+  studentClassSelect.value = s.classId || "";
+  studentFormTitle.textContent = "Edit student account";
+  studentFormEyebrow.textContent = "Editing " + (s.name || "student");
+  saveStudentBtn.textContent = "Save changes";
+  cancelStudentEditBtn.style.display = "inline-block";
+  window.switchTab("tabClasses");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+window.cancelStudentEdit = () => {
+  editingStudentId = null;
+  studentForm.reset();
+  studentFormTitle.textContent = "Create a student account";
+  studentFormEyebrow.textContent = "New account";
+  saveStudentBtn.textContent = "Create account";
+  cancelStudentEditBtn.style.display = "none";
+};
+
+window.toggleStudentActive = (id) => {
+  const s = students[id];
+  if (!s) return;
+  update(ref(db, "students/" + id), { active: !(s.active !== false) }).then(loadStudents);
+};
+
+window.deleteStudent = (id) => {
+  if (!confirm("Delete this student account? They will no longer be able to log in.")) return;
+  remove(ref(db, "students/" + id)).then(loadStudents);
+};
+
+window.copyCredentials = (id) => {
+  const s = students[id];
+  if (!s) return;
+  const text = `Login: [your Lesson Desk student link]\nEmail: ${s.email}\nPassword: ${s.password}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showStatus(studentStatusMsg, "Credentials copied — paste them into an email or message to " + s.name + "."));
+  } else {
+    alert(text);
+  }
+};
+
+function loadStudents(){
+  get(ref(db, "students")).then(snap => {
+    students = {};
+    studentList.innerHTML = "";
+    if (!snap.exists()) {
+      studentList.innerHTML = "<p class='empty-note'>No student accounts yet. Create one above.</p>";
+      renderStudentCheckboxes();
+      return;
+    }
+    snap.forEach(child => { students[child.key] = child.val(); });
+    Object.entries(students).sort((a,b)=>(a[1].name||"").localeCompare(b[1].name||"")).forEach(([id, s]) => {
+      const active = s.active !== false;
+      const initials = (s.name || "?").trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+      const className = classes[s.classId]?.name || "Unassigned class";
+      const row = document.createElement("div");
+      row.className = "student-row";
+      row.innerHTML = `
+        <div class="avatar-badge">${initials}</div>
+        <div class="student-info">
+          <h4>${s.name || "Unnamed"} <span class="status-pill ${active ? "status-active" : "status-disabled"}">${active ? "Active" : "Disabled"}</span></h4>
+          <span>${s.email || ""}</span>
+          <span>${className}</span>
+        </div>
+        <div class="student-actions">
+          <button type="button" class="btn-secondary" onclick="copyCredentials('${id}')">Copy credentials</button>
+          <button type="button" class="btn-secondary" onclick="editStudent('${id}')">Edit</button>
+          <button type="button" class="btn-secondary" onclick="toggleStudentActive('${id}')">${active ? "Disable access" : "Enable access"}</button>
+          <button type="button" class="btn-delete" onclick="deleteStudent('${id}')">Delete</button>
+        </div>
+      `;
+      studentList.appendChild(row);
+    });
+    renderStudentCheckboxes();
+  });
+}
+
+/* ==================================================
+   LESSON AUDIENCE CHECKBOXES
+================================================== */
+let selectedClassIds = new Set();
+let selectedStudentIds = new Set();
+
+function renderClassCheckboxes(){
+  classCheckboxWrap.innerHTML = "";
+  const entries = Object.entries(classes);
+  if (!entries.length) {
+    classCheckboxWrap.innerHTML = "<span class='empty-note'>No classes yet — add one in the \"Classes &amp; Students\" tab.</span>";
+    return;
+  }
+  entries.sort((a,b)=>a[1].name.localeCompare(b[1].name)).forEach(([id, c]) => {
+    const label = document.createElement("label");
+    label.className = "pill-check" + (selectedClassIds.has(id) ? " checked" : "");
+    label.innerHTML = `<input type="checkbox" value="${id}" ${selectedClassIds.has(id) ? "checked" : ""}> ${c.name} <span style="color:var(--muted);font-size:.75rem">(whole class)</span>`;
+    label.querySelector("input").addEventListener("change", (e) => {
+      if (e.target.checked) selectedClassIds.add(id); else selectedClassIds.delete(id);
+      label.classList.toggle("checked", e.target.checked);
+    });
+    classCheckboxWrap.appendChild(label);
+  });
+}
+
+function renderStudentCheckboxes(){
+  studentCheckboxWrap.innerHTML = "";
+  const entries = Object.entries(students);
+  if (!entries.length) return;
+  entries.sort((a,b)=>(a[1].name||"").localeCompare(b[1].name||"")).forEach(([id, s]) => {
+    const className = classes[s.classId]?.name || "Unassigned";
+    const label = document.createElement("label");
+    label.className = "pill-check" + (selectedStudentIds.has(id) ? " checked" : "");
+    label.innerHTML = `<input type="checkbox" value="${id}" ${selectedStudentIds.has(id) ? "checked" : ""}> ${s.name || "Unnamed"} <span style="color:var(--muted);font-size:.75rem">(${className})</span>`;
+    label.querySelector("input").addEventListener("change", (e) => {
+      if (e.target.checked) selectedStudentIds.add(id); else selectedStudentIds.delete(id);
+      label.classList.toggle("checked", e.target.checked);
+    });
+    studentCheckboxWrap.appendChild(label);
+  });
+}
+
+/* ==================================================
+   SUBJECTS
+================================================== */
+function loadSubjects(){
+  get(ref(db, "subjects")).then(snap => {
+    subjects = {};
+    subjectOptions.innerHTML = "";
+    if (!snap.exists()) return;
+    snap.forEach(child => { subjects[child.key] = child.val(); });
+    Object.values(subjects).forEach(s => {
+      subjectOptions.innerHTML += `<option value="${s.name}"></option>`;
+    });
+  });
+}
+
+function ensureSubjectSaved(name){
+  const exists = Object.values(subjects).some(s => s.name.toLowerCase() === name.toLowerCase());
+  if (!exists) {
+    push(ref(db, "subjects"), { name }).then(loadSubjects);
+  }
+}
+
+/* ==================================================
+   LESSON FORM
+================================================== */
+document.getElementById("lessonForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const date = lessonDate.value;
+  if (!date) { showStatus(statusMsg, "Please choose a lesson date first.", false); return; }
+  if (selectedClassIds.size === 0 && selectedStudentIds.size === 0) {
+    showStatus(statusMsg, "Select at least one class or student for this lesson.", false); return;
+  }
+
+  const subjectName = lessonSubject.value.trim();
+  ensureSubjectSaved(subjectName);
+
+  const payload = {
+    subject: subjectName,
+    title: lessonTitle.value.trim(),
+    html: lessonCode.value,
+    assignment: assignmentText.value.trim() || null,
+    classIds: Array.from(selectedClassIds),
+    studentIds: Array.from(selectedStudentIds),
+    updatedAt: Date.now()
+  };
+
+  if (editingLessonKey && editingLessonKey.date !== date) {
+    // date changed while editing — move the entry
+    remove(ref(db, `lessons/${editingLessonKey.date}/${editingLessonKey.id}`));
+    editingLessonKey = { date, id: push(ref(db, "lessons/" + date)).key };
+  }
+
+  const id = editingLessonKey ? editingLessonKey.id : push(ref(db, "lessons/" + date)).key;
+  if (!editingLessonKey) payload.createdAt = Date.now();
+
+  set(ref(db, `lessons/${date}/${id}`), payload).then(() => {
+    showStatus(statusMsg, editingLessonKey ? "Lesson updated." : "Lesson published for " + date + ".");
+    cancelLessonEdit();
+    loadLessonList();
+  }).catch(() => showStatus(statusMsg, "Could not save. Check your connection and try again.", false));
+});
+
+window.cancelLessonEdit = () => {
+  editingLessonKey = null;
+  document.getElementById("lessonForm").reset();
+  selectedClassIds = new Set();
+  selectedStudentIds = new Set();
+  renderClassCheckboxes();
+  renderStudentCheckboxes();
+  previewWrap.style.display = "none";
+  assignmentPreviewWrap.style.display = "none";
+  lessonFormTitle.textContent = "Create a daily lesson";
+  lessonFormEyebrow.textContent = "New entry";
+  saveLessonBtn.textContent = "Publish lesson";
+  cancelLessonEditBtn.style.display = "none";
+};
+
+/* UPLOAD HTML FILES */
+window.handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { lessonCode.value = e.target.result; showStatus(statusMsg, "File \"" + file.name + "\" loaded into the editor."); };
+  reader.readAsText(file);
+};
+window.handleAssignmentUpload = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { assignmentText.value = e.target.result; showStatus(statusMsg, "File \"" + file.name + "\" loaded into the assignment editor."); };
+  reader.readAsText(file);
+};
+
+/* PREVIEWS */
+window.togglePreview = () => {
+  const opening = previewWrap.style.display === "none";
+  if (opening) previewFrame.srcdoc = lessonCode.value;
+  previewWrap.style.display = opening ? "block" : "none";
+};
+window.toggleAssignmentPreview = () => {
+  const opening = assignmentPreviewWrap.style.display === "none";
+  if (opening) assignmentPreviewFrame.srcdoc = assignmentText.value;
+  assignmentPreviewWrap.style.display = opening ? "block" : "none";
+};
+
+/* ==================================================
+   LESSON LIST (flattened, grouped by date)
+================================================== */
+function audienceSummary(entry){
+  const parts = [];
+  if (entry.classIds && entry.classIds.length) {
+    parts.push(entry.classIds.map(id => classes[id]?.name || "Unknown class").join(", "));
+  }
+  if (entry.studentIds && entry.studentIds.length) {
+    parts.push(entry.studentIds.map(id => students[id]?.name || "Unknown student").join(", ") + " (individual)");
+  }
+  return parts.join(" · ") || "No audience set";
+}
+
+function loadLessonList(){
+  get(ref(db, "lessons")).then(snap => {
+    lessonList.innerHTML = "";
+    if (!snap.exists()) {
+      lessonList.innerHTML = "<p class='empty-note'>No lessons published yet. Create your first one above.</p>";
+      return;
+    }
+    const dates = [];
+    snap.forEach(dateChild => {
+      const entries = [];
+      dateChild.forEach(lessonChild => entries.push({ id: lessonChild.key, ...lessonChild.val() }));
+      dates.push({ date: dateChild.key, entries });
+    });
+    dates.sort((a,b) => b.date.localeCompare(a.date));
+
+    dates.forEach(({ date, entries }) => {
+      const group = document.createElement("div");
+      group.className = "date-group";
+      const [y,m,d] = date.split("-");
+      group.innerHTML = `<div class="date-group-head">${MONTHS[parseInt(m,10)-1]} ${parseInt(d,10)}, ${y} &middot; ${entries.length} lesson${entries.length>1?"s":""}</div>`;
+      entries.forEach(entry => {
+        const row = document.createElement("div");
+        row.className = "lesson-row";
+        row.innerHTML = `
+          <span class="subj-chip">${entry.subject || "General"}</span>
+          <div class="lesson-info">
+            <h4>${entry.title || "Untitled lesson"} ${entry.assignment ? '<span class="assign-badge">Assignment</span>' : ""}</h4>
+            <span>${audienceSummary(entry)}</span>
+          </div>
+          <div class="lesson-actions">
+            <button type="button" class="btn-secondary" onclick="editLesson('${date}','${entry.id}')">Edit</button>
+            <button type="button" class="btn-delete" onclick="deleteLesson('${date}','${entry.id}')">Delete</button>
+          </div>
+        `;
+        group.appendChild(row);
+      });
+      lessonList.appendChild(group);
+    });
+  });
+}
+
+window.editLesson = (date, id) => {
+  get(ref(db, `lessons/${date}/${id}`)).then(snap => {
+    if (!snap.exists()) return;
+    const data = snap.val();
+    editingLessonKey = { date, id };
+    lessonDate.value = date;
+    lessonSubject.value = data.subject || "";
+    lessonTitle.value = data.title || "";
+    lessonCode.value = data.html || "";
+    assignmentText.value = data.assignment || "";
+    selectedClassIds = new Set(data.classIds || []);
+    selectedStudentIds = new Set(data.studentIds || []);
+    renderClassCheckboxes();
+    renderStudentCheckboxes();
+    lessonFormTitle.textContent = "Edit lesson";
+    lessonFormEyebrow.textContent = "Editing " + date;
+    saveLessonBtn.textContent = "Save changes";
+    cancelLessonEditBtn.style.display = "inline-block";
+    window.switchTab("tabLessons");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+};
+
+window.deleteLesson = (date, id) => {
+  if (!confirm("Delete this lesson? This can't be undone.")) return;
+  remove(ref(db, `lessons/${date}/${id}`)).then(loadLessonList);
+};
+
+/* ==================================================
+   INIT
+================================================== */
+loadSubjects();
+loadClasses();
+loadStudents();
+loadLessonList();
+</script>
+
+</body>
+</html>
