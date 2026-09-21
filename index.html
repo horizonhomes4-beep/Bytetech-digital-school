@@ -521,6 +521,24 @@ window.openEntry = (date, id, which) => {
 <meta name="viewport" content="width=device-width, initial-scale=1"></head><body>${body}</body></html>`;
   win.location.href = URL.createObjectURL(new Blob([doc], { type: "text/html" }));
 };
+// Disable Right Click
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+document.onkeydown = function(e) {
+  if(e.keyCode == 123) { // F12
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+     return false;
+  }
+  if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+     return false;
+  }
+}
 </script>
 
 </body>
