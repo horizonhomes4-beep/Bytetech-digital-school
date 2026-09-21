@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -446,6 +447,7 @@ footer{ text-align:center; padding:24px; color:var(--muted); font-size:.82rem; }
       </div>
 
       <p class="count-note" id="libraryCount"></p>
+      <div id="libStatus" class="status-msg"></div>
       <div id="lessonList"></div>
     </div>
   </div>
@@ -1178,9 +1180,10 @@ function lessonRow(entry){
   if (entry.link || entry.assignmentLink) badges.push(`<span class="badge badge-link">Link</span>`);
   if (entry.dueDate) badges.push(`<span class="badge badge-due">Due ${esc(entry.dueDate)}</span>`);
 
+  const k = `data-date="${esc(entry.date)}" data-id="${esc(entry.id)}"`;
   const openBtns = [];
-  if (hasLesson(entry)) openBtns.push(`<button type="button" class="btn-secondary" onclick="openEntry('${entry.date}','${entry.id}','lesson')">Open lesson</button>`);
-  if (hasAssignment(entry)) openBtns.push(`<button type="button" class="btn-secondary" onclick="openEntry('${entry.date}','${entry.id}','assignment')">Open assignment</button>`);
+  if (hasLesson(entry)) openBtns.push(`<button type="button" class="btn-secondary" data-act="open-lesson" ${k}>Open lesson</button>`);
+  if (hasAssignment(entry)) openBtns.push(`<button type="button" class="btn-secondary" data-act="open-assignment" ${k}>Open assignment</button>`);
 
   row.innerHTML = `
     <span class="subj-chip">${esc(entry.subject || "General")}</span>
@@ -1191,16 +1194,30 @@ function lessonRow(entry){
     </div>
     <div class="lesson-actions">
       ${openBtns.join("")}
-      <button type="button" class="btn-secondary" onclick="editLesson('${entry.date}','${entry.id}')">Edit</button>
-      <button type="button" class="btn-secondary" onclick="duplicateLesson('${entry.date}','${entry.id}')">Duplicate</button>
+      <button type="button" class="btn-secondary" data-act="edit" ${k}>Edit</button>
+      <button type="button" class="btn-secondary" data-act="duplicate" ${k}>Duplicate</button>
       ${pub
-        ? `<button type="button" class="btn-hold" onclick="setPublished('${entry.date}','${entry.id}',false)">Unpublish</button>`
-        : `<button type="button" class="btn-go" onclick="setPublished('${entry.date}','${entry.id}',true)">Publish</button>`}
-      <button type="button" class="btn-delete" onclick="deleteLesson('${entry.date}','${entry.id}')">Delete</button>
+        ? `<button type="button" class="btn-hold" data-act="unpublish" ${k}>Unpublish</button>`
+        : `<button type="button" class="btn-go" data-act="publish" ${k}>Publish</button>`}
+      <button type="button" class="btn-delete" data-act="delete" ${k}>Delete</button>
     </div>
   `;
   return row;
 }
+
+/* One delegated listener for every row button — survives re-renders and
+   avoids inline-handler scope problems. */
+$("lessonList").addEventListener("click", ev => {
+  const btn = ev.target.closest("button[data-act]");
+  if (!btn) return;
+  const { act, date, id } = btn.dataset;
+  if (act === "open-lesson")      return window.openEntry(date, id, "lesson");
+  if (act === "open-assignment")  return window.openEntry(date, id, "assignment");
+  if (act === "edit")             return window.editLesson(date, id);
+  if (act === "duplicate")        return window.duplicateLesson(date, id);
+  if (act === "delete")           return window.deleteLesson(date, id);
+  if (act === "publish" || act === "unpublish") return window.setPublished(date, id, act === "publish", btn);
+});
 
 ["fClass","fSubject","fKind","fStatus","fSearch"].forEach(id => {
   $(id).addEventListener("input", renderLessonLibrary);
@@ -1213,9 +1230,26 @@ window.openEntry = (date, id, which) => {
   else openInNewTab(e.assignment, e.assignmentLink);
 };
 
-window.setPublished = (date, id, state) => {
-  update(ref(db, `lessons/${date}/${id}`), { published: state, updatedAt: Date.now() })
-    .then(loadLessonList);
+window.setPublished = (date, id, state, btn) => {
+  if (btn) { btn.disabled = true; btn.textContent = state ? "Publishing…" : "Unpublishing…"; }
+
+  // Write the single flag directly — the smallest possible change to the node.
+  set(ref(db, `lessons/${date}/${id}/published`), state)
+    .then(() => set(ref(db, `lessons/${date}/${id}/updatedAt`), Date.now()))
+    .then(() => {
+      const e = allLessons.find(x => x.date === date && x.id === id);
+      if (e) e.published = state;          // update local copy so the row flips at once
+      renderLessonLibrary();
+      showStatus($("libStatus"), state
+        ? "Published — students can see it now."
+        : "Unpublished — it is now hidden from students.");
+      return loadLessonList();             // then confirm against the database
+    })
+    .catch(err => {
+      if (btn) { btn.disabled = false; btn.textContent = state ? "Publish" : "Unpublish"; }
+      showStatus($("libStatus"), "Could not change visibility: " + (err && err.message ? err.message : err), false);
+      console.error("setPublished failed", err);
+    });
 };
 
 window.duplicateLesson = (date, id) => {
@@ -1289,6 +1323,25 @@ loadSubjects()
   .then(loadClasses)
   .then(loadLessonList);
 </script>
+<script>
+// Disable Right Click
+document.addEventListener('contextmenu', event => event.preventDefault());
 
+// Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+document.onkeydown = function(e) {
+  if(e.keyCode == 123) { // F12
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+     return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+     return false;
+  }
+  if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+     return false;
+  }
+}
+</script>
 </body>
 </html>
