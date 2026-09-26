@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practical Computer Skills Course — Home</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/firebase-config.js"></script>
+<script src="assets/devtools-guard.js"></script>
+</head>
+<body data-base="">
+<script type="module" src="assets/auth-guard.js"></script>
+
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg>
+      </span>
+      Practical PC Skills
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="current">Home</a></li>
+      <li><a href="curriculum.html">3-Month Curriculum</a></li>
+      <li><a href="phase1/week1.html">Phase 1 · Week 1</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="section-tight">
+  <div class="wrap">
+    <div class="eyebrow-row">
+      <span class="pill pill-note">Hands-on from day one</span>
+    </div>
+    <h1>Stop reading about computers.<br>Start operating one.</h1>
+    <p style="max-width:56ch; font-size:1.1rem;">
+      This is a practical, task-based course. Every lesson hands you a real computer and a real
+      job to complete — no long lectures, no slides to memorise. You learn to use a PC the same
+      way you'd learn to ride a bicycle: by doing it, falling off, and doing it again until your
+      hands know the way.
+    </p>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:22px;">
+      <a href="phase1/week1.html" class="btn btn-primary">
+        Start Week 1
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+      <a href="curriculum.html" class="btn btn-ghost">View the full curriculum</a>
+    </div>
+  </div>
+</header>
+
+<!-- WHO THIS IS FOR -->
+<section>
+  <div class="wrap grid-2" style="align-items:center;">
+    <div>
+      <h2>Built for someone touching a PC for real, on purpose</h2>
+      <p>
+        Whether you've never turned on a computer or you get by clicking around nervously, this
+        course meets you where you are. There's no assumed background — only a willingness to sit
+        at a keyboard and do the exercise in front of you.
+      </p>
+      <p>
+        You'll practise on more than one machine wherever possible. A skill you can only perform
+        on "your" computer isn't mastered yet — a skill you can perform on <em>any</em> computer,
+        with a different keyboard, a different screen, maybe even a different operating system, is
+        the real target.
+      </p>
+    </div>
+    <div class="card">
+      <h4 style="margin-bottom:14px;">By the end of this course you will be able to</h4>
+      <ul class="step-list" style="padding-left:18px;">
+        <li>Operate any Windows or Mac computer confidently, without help</li>
+        <li>Manage files and folders like a filing clerk, not a hoarder</li>
+        <li>Write, calculate and present using real office software</li>
+        <li>Get online safely and communicate professionally by email</li>
+        <li>Diagnose and fix the ten most common everyday PC problems</li>
+        <li>Sit down at an unfamiliar computer and be productive in minutes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background:var(--panel); border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);">
+  <div class="wrap">
+    <h2>How the course is structured</h2>
+    <p style="margin-bottom:32px;">Three phases, twelve weeks, one skill added on top of the last. Every week lives on its own page inside its phase folder, so you always know exactly where to look.</p>
+    <div class="grid-3">
+      <div class="card">
+        <span class="pill pill-basic">Weeks 1–4</span>
+        <h3 style="margin-top:14px;">Phase 1 — Digital Foundations</h3>
+        <p>Turning the machine on, controlling it with confidence, and organising files without losing anything.</p>
+      </div>
+      <div class="card">
+        <span class="pill" style="background:var(--info-tint); color:var(--info);">Weeks 5–8</span>
+        <h3 style="margin-top:14px;">Phase 2 — Productivity &amp; Communication</h3>
+        <p>Documents, spreadsheets, slides, email and cloud storage — the tools of everyday work.</p>
+      </div>
+      <div class="card">
+        <span class="pill pill-advanced">Weeks 9–12</span>
+        <h3 style="margin-top:14px;">Phase 3 — Advanced Skills &amp; Troubleshooting</h3>
+        <p>System settings, the command line, fixing your own problems, and a final practical exam.</p>
+      </div>
+    </div>
+    <div class="center" style="margin-top:30px;">
+      <a href="curriculum.html" class="btn btn-ghost btn-sm">See every week in detail →</a>
+    </div>
+  </div>
+</section>
+
+<!-- COURSE MAP -->
+<section class="section-tight">
+  <div class="wrap">
+    <div class="course-map-head">
+      <h2>Jump to any week</h2>
+      <a href="curriculum.html" class="small" style="text-decoration:none; font-weight:700;">Open full curriculum →</a>
+    </div>
+    <p class="small" style="margin-bottom:0;">Solid = published lesson. Outline = topic confirmed, lesson coming soon.</p>
+    <div class="course-map" id="courseMap"></div>
+  </div>
+</section>
+
+<!-- THE METHOD -->
+<section>
+  <div class="wrap">
+    <h2>Every lesson follows the same practical method</h2>
+    <div class="grid-3" style="margin-top:24px;">
+      <div>
+        <div class="eyebrow-row" style="margin-bottom:10px;">
+          <span style="font-family:var(--font-head); font-weight:800; font-size:1.4rem; color:var(--primary);">1</span>
+        </div>
+        <h4>Basic task, on your own computer</h4>
+        <p>You perform the core skill, step by step, on the machine in front of you, until it's ticked off.</p>
+      </div>
+      <div>
+        <div class="eyebrow-row" style="margin-bottom:10px;">
+          <span style="font-family:var(--font-head); font-weight:800; font-size:1.4rem; color:var(--accent);">2</span>
+        </div>
+        <h4>Advanced task, same skill area</h4>
+        <p>A harder version of the same job — the kind a real task at work or school would actually ask of you.</p>
+      </div>
+      <div>
+        <div class="eyebrow-row" style="margin-bottom:10px;">
+          <span style="font-family:var(--font-head); font-weight:800; font-size:1.4rem; color:var(--info);">3</span>
+        </div>
+        <h4>Prove it, on a different computer</h4>
+        <p>You repeat the task on a classmate's PC, a lab machine, or another OS, so the skill travels with you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALLOUT -->
+<section class="section-tight">
+  <div class="wrap">
+    <div class="callout callout-info">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+      <div>
+        <h4 style="margin-bottom:4px;">Keep this site open while you work</h4>
+        <p>
+          The <a href="curriculum.html">curriculum page</a> is your map for all twelve weeks —
+          bookmark it. Each week's lesson page has checklists that save your progress in your own
+          browser, so you can tick a task, close the tab, and come back to exactly where you left off.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- START CTA -->
+<section class="section-tight center">
+  <div class="wrap">
+    <h2>Ready for Phase 1, Week 1?</h2>
+    <p style="margin:0 auto 20px;">Meet your machine, master the mouse and keyboard, and take control of your files — all in five practical sessions.</p>
+    <a href="phase1/week1.html" class="btn btn-primary">Go to Week 1 lesson</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Practical Computer Skills Course · Phase 1, Week 1 live now</p>
+    <p>Learn it once. Prove it on any machine.</p>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+<script src="assets/read-aloud.js"></script>
+</body>
+</html>
