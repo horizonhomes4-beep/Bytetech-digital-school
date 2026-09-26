@@ -93,10 +93,14 @@ let currentStudent=null,visibleEntries=[];
 
 function showLoginError(text){const el=$("loginMsg");el.textContent=text;el.style.whiteSpace="pre-line";el.classList.add("show");}
 function clearLoginError(){$("loginMsg").classList.remove("show");}
-function isComputerSkills(s){const c=String(s?.course||s?.courseId||s?.program||"").toLowerCase().trim();const cl=String(s?.className||"").toLowerCase();return c==="computer-skills"||c==="computer skills"||c==="practical computer skills"||c.includes("computer-skills")||/computer skills|computer-skills|pc skills|practical pc|digital skills/.test(cl);}
+function isComputerSkills(s){
+  const normalize=v=>String(v??"").toLowerCase().replace(/[–—]/g,"-").replace(/[^a-z0-9]+/g," ").replace(/\s+/g," ").trim();
+  const values=[s?.course,s?.courseId,s?.program,s?.programme,s?.courseName,s?.programmeName,s?.department,s?.track,s?.className,s?.class];
+  return values.some(v=>{const x=normalize(v);return x.includes("practical computer skills")||x.includes("computer skills course")||x.includes("computer skills")||x.includes("practical pc skills")||x.includes("pc skills")||x.includes("digital skills");});
+}
 function saveSession(s){sessionStorage.setItem("lessonDeskStudent",JSON.stringify(s));}
 function getSession(){try{const s=JSON.parse(sessionStorage.getItem("lessonDeskStudent")||"null");return s&&s.id?s:null}catch{return null}}
-async function hydrateStudent(id,base={}){const snap=await get(ref(db,"students/"+id));const rec=snap.val();if(!rec)throw new Error("Student account was not found.");let className=base.className||"";if(rec.classId){const cs=await get(ref(db,"classes/"+rec.classId));if(cs.exists())className=cs.val()?.name||className;}return {...base,...rec,id,name:rec.name||base.name||"Student",classId:rec.classId||base.classId||"",course:rec.course||rec.courseId||rec.program||base.course||"general",className,unlocked:rec.unlocked||{}}}
+async function hydrateStudent(id,base={}){const snap=await get(ref(db,"students/"+id));const rec=snap.val();if(!rec)throw new Error("Student account was not found.");let className=base.className||"";if(rec.classId){const cs=await get(ref(db,"classes/"+rec.classId));if(cs.exists())className=cs.val()?.name||className;}return {...base,...rec,id,name:rec.name||base.name||"Student",classId:rec.classId||base.classId||"",course:rec.course||rec.courseId||rec.program||rec.programme||rec.courseName||rec.programmeName||base.course||"general",className,unlocked:rec.unlocked||{}}}
 function redirectForCourse(s,target=null){
   if(isComputerSkills(s)){
     const dest=target&&target.includes("computer skills only")?target:"computer skills only/index.html";
