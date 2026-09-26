@@ -557,6 +557,20 @@ footer{ text-align:center; padding:24px; color:var(--muted); font-size:.82rem; }
         </div>
         <div class="row">
           <div>
+            <label>Course / Programme</label>
+            <select id="studentCourseSelect" required>
+              <option value="">Select course</option>
+              <option value="computer-skills">Practical Computer Skills</option>
+              <option value="general">General / Lesson Desk</option>
+            </select>
+          </div>
+          <div>
+            <label>Access</label>
+            <input type="text" value="One login for all pages" disabled>
+          </div>
+        </div>
+        <div class="row">
+          <div>
             <label>Email</label>
             <input type="email" id="studentEmail" required>
           </div>
@@ -825,6 +839,7 @@ $("studentForm").addEventListener("submit", e => {
     email: $("studentEmail").value.trim().toLowerCase(),
     password: $("studentPassword").value,
     classId: $("studentClassSelect").value,
+    course: $("studentCourseSelect").value,
     suspended: existing.suspended === true,
     suspendReason: existing.suspendReason || null,
     active: existing.suspended === true ? false : true,
@@ -832,6 +847,7 @@ $("studentForm").addEventListener("submit", e => {
     updatedAt: Date.now()
   };
   if (!payload.classId) { showStatus($("studentStatusMsg"), "Select a class for this student.", false); return; }
+  if (!payload.course) { showStatus($("studentStatusMsg"), "Select the student's course / programme.", false); return; }
 
   const clash = Object.entries(students).find(([id, s]) =>
     id !== editingStudentId && (s.email || "").toLowerCase() === payload.email);
@@ -853,6 +869,7 @@ window.editStudent = (id) => {
   $("studentEmail").value = s.email || "";
   $("studentPassword").value = s.password || "";
   $("studentClassSelect").value = s.classId || "";
+  $("studentCourseSelect").value = s.course || "general";
   $("studentFormTitle").textContent = "Edit student account";
   $("studentFormEyebrow").textContent = "Editing " + (s.name || "student");
   $("saveStudentBtn").textContent = "Save changes";
