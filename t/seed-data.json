@@ -1,0 +1,120 @@
+{
+  "admins": {
+    "admin_001": {
+      "name": "Ms. Adeyemi",
+      "email": "admin@example.com",
+      "password": "ChangeThisPassword123"
+    }
+  },
+
+  "students": {
+    "stu_ada": {
+      "name": "Ada Lovelace",
+      "email": "ada@example.com",
+      "password": "student123",
+      "classId": "class_2026a",
+      "active": true,
+      "suspended": false,
+      "activity": {
+        "page": "Phase 1 · Week 1 — Meet Your Machine",
+        "href": "phase1/week1.html",
+        "at": 1735000000000
+      },
+      "progress": {
+        "phase1-week1": {
+          "tasks": { "d1-t1": true, "d1-t2": true, "d1-t3": true, "d1-t4": false, "d1-t5": false },
+          "completed": 3,
+          "total": 24,
+          "updatedAt": 1735000000000
+        }
+      },
+      "unlocked": {
+        "phase1_week2_html": true
+      },
+      "requests": {}
+    },
+
+    "stu_grace": {
+      "name": "Grace Hopper",
+      "email": "grace@example.com",
+      "password": "student123",
+      "classId": "class_2026a",
+      "active": true,
+      "suspended": false,
+      "activity": {
+        "page": "Phase 1 · Week 3 — The Internet & Browsers (Coming soon)",
+        "href": "phase1/week3.html",
+        "at": 1735000100000
+      },
+      "progress": {},
+      "unlocked": {},
+      "requests": {
+        "phase1_week3_html": "req_stu_grace_phase1_week3_html"
+      }
+    },
+
+    "stu_alan": {
+      "name": "Alan Turing",
+      "email": "alan@example.com",
+      "password": "student123",
+      "classId": "class_2026b",
+      "active": true,
+      "suspended": true,
+      "suspendReason": "Please see your teacher about the Week 1 attendance form.",
+      "activity": {},
+      "progress": {},
+      "unlocked": {},
+      "requests": {}
+    },
+
+    "stu_margaret": {
+      "name": "Margaret Hamilton",
+      "email": "margaret@example.com",
+      "password": "student123",
+      "classId": "class_2026b",
+      "active": true,
+      "suspended": false,
+      "activity": {},
+      "progress": {},
+      "unlocked": {},
+      "requests": {}
+    }
+  },
+
+  "accessRequests": {
+    "req_stu_grace_phase1_week3_html": {
+      "studentId": "stu_grace",
+      "studentName": "Grace Hopper",
+      "classId": "class_2026a",
+      "weekHref": "phase1/week3.html",
+      "weekTitle": "The Internet & Browsers",
+      "requestedAt": 1735000100000,
+      "status": "pending"
+    }
+  },
+
+  "lessons": {
+    "2026-01-12": {
+      "lesson_week1_intro": {
+        "kind": "lesson",
+        "title": "Week 1 kickoff — bring a charged laptop",
+        "body": "We'll start with Day 1 (Power & the Parts of a Computer) together in class, then you finish Days 2-5 at your own pace this week.",
+        "classIds": ["class_2026a", "class_2026b"],
+        "studentIds": [],
+        "published": true
+      }
+    },
+    "2026-01-19": {
+      "assignment_week1_checkin": {
+        "kind": "assignment",
+        "title": "Week 1 self-assessment check-in",
+        "body": "Screenshot your completed Week 1 checklist (100%) and submit it here before Friday.",
+        "assignment": "Submit a screenshot of your finished Week 1 progress bar.",
+        "assignmentLink": "",
+        "classIds": ["class_2026a", "class_2026b"],
+        "studentIds": [],
+        "published": true
+      }
+    }
+  }
+}
