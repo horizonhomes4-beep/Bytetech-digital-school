@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Practical PC Skills Course</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/firebase-config.js"></script>
+<script src="assets/devtools-guard.js"></script>
+</head>
+<body class="admin-shell">
+<header class="admin-topbar">
+  <div class="wrap">
+    <div>
+      <p style="margin:0;color:#aeb8c4;font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;">Practical PC Skills</p>
+      <h1>Course administration & student management</h1>
+    </div>
+    <span class="small" style="color:#cfd6df;">Full lesson control</span>
+  </div>
+</header>
+
+<main class="section-tight">
+<div class="wrap">
+  <div class="admin-tabs" role="tablist">
+    <button class="admin-tab active" data-tab="overview">Students & Requests</button>
+    <button class="admin-tab" data-tab="lessons">Lessons / Phases / Weeks</button>
+    <button class="admin-tab" data-tab="messages">Notifications & Assignments</button>
+  </div>
+
+  <section id="tab-overview" class="admin-tab-panel">
+    <div class="admin-card">
+      <h2>Live student activity</h2>
+      <p class="sub">Monitor students, their current lesson and saved progress.</p>
+      <div class="admin-toolbar">
+        <input type="search" id="studentSearch" placeholder="Search student name, ID or class…">
+        <select id="studentFilter"><option value="all">All students</option><option value="online">Online now</option><option value="offline">Offline</option></select>
+      </div>
+      <div id="studentList"></div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-section-head">
+        <div><h2>Lesson access requests</h2><p class="sub">Review requests and grant or remove access for individual students.</p></div>
+        <span id="requestCount" class="admin-count">0</span>
+      </div>
+      <div id="requestList"></div>
+    </div>
+  </section>
+
+  <section id="tab-lessons" class="admin-tab-panel" hidden>
+    <div class="admin-card">
+      <div class="admin-section-head">
+        <div><h2>All lessons — phases and weeks</h2><p class="sub">Week 1 is permanently open. Every later lesson is request-only and must be granted to an individual student. There is no global “open to everyone” lesson setting.</p></div>
+        <button type="button" id="refreshLessonsBtn" class="btn btn-ghost btn-sm">Refresh</button>
+      </div>
+      <div id="lessonManagementList"></div>
+    </div>
+
+    <div class="admin-card">
+      <h2>Edit lesson content</h2>
+      <p class="sub">Select any week, then directly type/paste HTML or upload an HTML file. The editor removes scripts and inline event handlers before saving for student safety.</p>
+      <label for="lessonSelect">Lesson</label>
+      <select id="lessonSelect"><option value="">Loading lessons…</option></select>
+      <div id="editorMeta" class="small" style="margin:10px 0 14px;"></div>
+      <label for="lessonHtml">HTML content</label>
+      <textarea id="lessonHtml" class="lesson-editor-textarea" spellcheck="false" placeholder="Type, paste or edit the lesson HTML here…"></textarea>
+      <div class="editor-actions">
+        <label class="file-button">Upload HTML file <input type="file" id="lessonFile" accept=".html,.htm,text/html"></label>
+        <button type="button" id="loadCurrentBtn" class="btn btn-ghost btn-sm">Load saved lesson</button>
+        <button type="button" id="saveLessonBtn" class="btn btn-primary btn-sm">Save lesson</button>
+        <button type="button" id="deleteContentBtn" class="btn btn-danger btn-sm">Delete lesson content</button>
+      </div>
+      <p id="editorMsg" class="small" style="margin-top:10px;"></p>
+    </div>
+  </section>
+
+  <section id="tab-messages" class="admin-tab-panel" hidden>
+    <div class="admin-card">
+      <h2>Next-lesson request communication</h2>
+      <p class="sub">Select a pending next-lesson request. Notifications and assignments can only be sent to that requesting student. Use this area to assess the previous lesson, send a project if needed, and communicate before granting access.</p>
+      <label for="requestCommunicationSelect">Pending request</label>
+      <select id="requestCommunicationSelect"><option value="">Select a pending request…</option></select>
+      <div id="requestCommunicationMeta" class="request-context" hidden></div>
+
+      <div class="admin-grid" style="margin-top:18px;">
+        <div>
+          <h3 style="font-size:1rem;">Notification to this requester</h3>
+          <label>Title</label>
+          <input id="noticeTitle" class="admin-input" placeholder="e.g. Please complete the Week 2 skills check">
+          <label>Message</label>
+          <textarea id="noticeBody" class="admin-message-box" placeholder="Write the message for this student…"></textarea>
+          <button type="button" id="sendNoticeBtn" class="btn btn-primary">Send to requester</button>
+          <p id="noticeMsg" class="small"></p>
+        </div>
+
+        <div>
+          <h3 style="font-size:1rem;">Project / assessment for this request</h3>
+          <label>Project title</label>
+          <input id="assignmentTitle" class="admin-input" placeholder="e.g. Previous lesson skills check">
+          <label>Instructions</label>
+          <textarea id="assignmentBody" class="admin-message-box" placeholder="Give the student a practical project or assessment to demonstrate understanding…"></textarea>
+          <label>Due date (optional)</label>
+          <input id="assignmentDue" class="admin-input" type="datetime-local">
+          <button type="button" id="createAssignmentBtn" class="btn btn-primary">Send project to requester</button>
+          <p id="assignmentMsg" class="small"></p>
+        </div>
+      </div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h2>Recent request projects</h2><p class="sub">These assignments are tied to a specific lesson-access request and a single student.</p></div></div>
+      <div id="assignmentList"></div>
+    </div>
+  </section>
+</div>
+</main>
+<script type="module" src="assets/admin.js"></script>
+</body>
+</html>
