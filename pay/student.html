@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>My Account</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap" style="max-width:520px">
+  <header class="top">
+    <div class="brand"><img class="logo" src="logo.jpg" alt="School logo" onerror="this.style.display='none'"><h1>My <span>Account</span></h1></div>
+    <span id="conn" class="conn off">Connecting…</span>
+  </header>
+  <div id="body"><div class="empty">Loading…</div></div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="config.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const id = new URLSearchParams(location.search).get("id");
+function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), 2500); }
+
+if (CONFIG_ERROR) {
+  // banner from config.js already shown
+} else if (!id) {
+  $("body").innerHTML = `<div class="empty">No student link provided. Ask the school office for your personal link.</div>`;
+} else if (!studentsRef) {
+  $("body").innerHTML = `<div class="empty">Not connected — check config.js.</div>`;
+} else {
+  watchConnection($("conn"));
+  studentsRef.child(id).on("value", sn => {
+    const s = sn.val();
+    if (!s) { $("body").innerHTML = `<div class="empty">Student record not found. Ask the school office for a fresh link.</div>`; return; }
+    window._lastEnd = s.end;
+    render(s);
+  }, err => { $("body").innerHTML = `<div class="empty">Could not load your record: ${esc(err.message)}</div>`; });
+}
+
+function render(s) {
+  const bal = balanceOf(s), pct = s.fee > 0 ? Math.min(100, s.paid / s.fee * 100) : 0;
+  const c = certStatus(s);
+  let certAction = "";
+  if (s.certEligible) {
+    if (s.certCollected) certAction = `<div style="color:var(--ok);font-weight:600">🎓 Your certificate has been collected.</div>`;
+    else if (s.certRequested) certAction = `<div style="color:var(--warn);font-weight:600">Request sent — awaiting the school office.</div>`;
+    else certAction = `<button class="btn" id="reqBtn" style="width:100%">Request certificate</button>`;
+  } else {
+    certAction = `<div style="color:var(--mu)">A certificate is not applicable for this course.</div>`;
+  }
+  $("body").innerHTML = `<article class="card">
+    <div><h3>${esc(s.name)}</h3><div class="course">${esc(s.course)}</div></div>
+    <div class="rows">
+      <div><small>Start date</small><b>${fmtDate(s.start)}</b></div>
+      <div><small>End date</small><b>${fmtDate(s.end)}</b></div>
+      <div><small>Duration</small><b>${durMonths(s.start, s.end)} months</b></div>
+      <div><small>Course fee</small><b>${money(s.fee)}</b></div>
+      <div><small>Amount paid</small><b style="color:var(--ok)">${money(s.paid)}</b></div>
+      <div><small>Balance remaining</small><b style="color:${bal ? "var(--warn)" : "var(--ok)"}">${money(bal)}</b></div>
+    </div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="cds" id="cds">${countdownHTML(s.end)}</div>
+    <div class="certbox">
+      <div style="display:flex;justify-content:space-between;align-items:center"><b>Certificate</b><span class="badge ${c.cls}">${c.label}</span></div>
+      ${certAction}
+    </div>
+  </article>`;
+  const rb = $("reqBtn");
+  if (rb) rb.onclick = () => {
+    rb.disabled = true; rb.textContent = "Sending…";
+    Promise.all([
+      certRequestsRef.push({ studentId: id, name: s.name, course: s.course, requestedAt: firebase.database.ServerValue.TIMESTAMP }),
+      studentsRef.child(id).update({ certRequested: true })
+    ]).then(() => toast("Request sent to the school office")).catch(err => { toast("Error: " + err.message); rb.disabled = false; rb.textContent = "Request certificate"; });
+  };
+}
+setInterval(() => { const el = $("cds"); if (el && window._lastEnd) el.innerHTML = countdownHTML(window._lastEnd); }, 1000);
+</script>
+</body>
+</html>
