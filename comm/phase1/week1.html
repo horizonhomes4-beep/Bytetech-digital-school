@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 1 · Week 1 — Meet Your Machine</title>
+<link rel="stylesheet" href="../assets/style.css">
+<meta name="week-data" content='{"phase": 1, "week": 1, "title": "Meet Your Machine", "skills": "Power on/off correctly, mouse & keyboard control, desktop navigation, files & folders, zipping, Task Manager, Wi-Fi, screenshots, basic troubleshooting.", "status": "live", "phaseTitle": "Digital Foundations", "phaseTagline": "Get comfortable operating the machine itself before touching any real software.", "phaseColorVar": "--ink"}'>
+<script src="../assets/firebase-config.js"></script>
+<script src="../assets/devtools-guard.js"></script>
+</head>
+<body data-progress-key="phase1-week1" data-base="../" data-week-href="phase1/week1.html" data-week-title="Meet Your Machine">
+<script type="module" src="../assets/auth-guard.js"></script>
+<script type="module" src="../assets/lesson-runtime.js"></script>
+
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="brand">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg>
+      </span>
+      Practical PC Skills
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../curriculum.html">3-Month Curriculum</a></li>
+      <li><a href="week1.html" class="current">Phase 1 · Week 1</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="section-tight">
+  <div class="wrap">
+    <div class="eyebrow-row"><span class="pill pill-note">Phase 1 · Week 1</span><span class="small">Practical intensive — five sessions</span></div>
+    <h1>Meet Your Machine</h1>
+    <p style="font-size:1.1rem; max-width:64ch;">
+      This week is 100% hands-on. You will spend almost no time reading and almost all of your
+      time clicking, typing, and dragging things on a real computer. Work through the five daily
+      sessions in order — each one builds on the last.
+    </p>
+  </div>
+</header>
+
+<!-- COURSE MAP -->
+<section class="section-tight" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="course-map-head">
+      <h2>All weeks</h2>
+      <a href="../curriculum.html" class="small" style="text-decoration:none; font-weight:700;">Full curriculum →</a>
+    </div>
+    <div class="course-map" id="courseMap"></div>
+  </div>
+</section>
+
+<div id="lessonOverrideHost" hidden></div>
+<div id="lessonOriginalContent">
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="wrap">
+    <div class="progress-track"><div class="progress-fill"></div></div>
+    <div class="progress-text">0 of 0 tasks completed</div>
+  </div>
+</div>
+
+<!-- RULES -->
+<section class="section-tight">
+  <div class="wrap">
+    <div class="callout callout-warn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"></path><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path></svg>
+      <div>
+        <h4 style="margin-bottom:6px;">Three rules for this week</h4>
+        <p style="margin-bottom:4px;"><strong>1. Do it, don't read it.</strong> Only tick a box after you have physically performed the action on a computer.</p>
+        <p style="margin-bottom:4px;"><strong>2. Use two different computers.</strong> Wherever you see a <span class="pill pill-advanced">Prove it</span> box, repeat the task on a different PC — a lab machine, a friend's laptop, or a different account.</p>
+        <p><strong>3. Don't skip ahead.</strong> Each day assumes you can already do everything from the day before.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <h4 style="margin-bottom:12px;">What you need</h4>
+      <ul class="step-list">
+        <li>Access to a desktop or laptop computer (Windows or macOS — instructions note the difference where it matters)</li>
+        <li>Access to a <strong>second, different computer</strong> at some point this week (a friend's, a lab PC, a library computer)</li>
+        <li>About 45–60 minutes per day</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 1 -->
+<section class="section-tight">
+  <div class="wrap">
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 1 OF 5</div>
+          <h3 style="margin:2px 0 0;">Power &amp; the Parts of a Computer</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>Before you touch software, you need total control over the hardware — turning it on and off the right way, every time.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t1" data-task-id="d1-t1">
+          <div class="task-body">
+            <label for="d1-t1">Identify every part of your computer</label>
+            <p>Physically point to and name: the screen/monitor, keyboard, mouse or trackpad, the power button, at least two ports (e.g. USB, charging port), and the power cable.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t2" data-task-id="d1-t2">
+          <div class="task-body">
+            <label for="d1-t2">Turn the computer on from completely off</label>
+            <p>Press the power button once, then wait for it to fully load to the desktop or lock screen without touching anything else.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t3" data-task-id="d1-t3">
+          <div class="task-body">
+            <label for="d1-t3">Shut down correctly using the menu, not the power button</label>
+            <p><strong>Windows:</strong> Start menu → Power icon → Shut down. <strong>Mac:</strong> Apple menu → Shut Down. Never hold the power button unless the computer is frozen.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t4" data-task-id="d1-t4">
+          <div class="task-body">
+            <label for="d1-t4">Restart the computer using the menu</label>
+            <p>Find "Restart" in the same power menu and use it, then wait for the computer to fully come back up.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t5" data-task-id="d1-t5">
+          <div class="task-body">
+            <label for="d1-t5">Put the computer to sleep and wake it up</label>
+            <p>Choose "Sleep" from the power menu, then wake it by pressing a key or clicking the mouse/trackpad.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced task</div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t6" data-task-id="d1-t6">
+          <div class="task-body">
+            <label for="d1-t6">Adjust volume and screen brightness without a mouse</label>
+            <p>Find and use the keyboard's dedicated brightness and volume keys (usually the F-row, marked with a sun and speaker icon), or the on-screen sliders if your keyboard has none.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>Sit at a computer you've never used before (different brand, or a laptop if you started on a desktop). Turn it on, and shut it down correctly using its menu. Notice what's different about where the buttons are.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 2 OF 5</div>
+          <h3 style="margin:2px 0 0;">Mouse &amp; Keyboard Mastery</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>Every single thing you'll ever do on a computer routes through these two devices. Today you drill the movements until they're automatic.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t1" data-task-id="d2-t1">
+          <div class="task-body">
+            <label for="d2-t1">Practise left-click, right-click and double-click</label>
+            <p>On the desktop: left-click an empty area to select nothing, right-click to open a menu, then close it. Double-click a desktop icon to open it.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t2" data-task-id="d2-t2">
+          <div class="task-body">
+            <label for="d2-t2">Click-and-drag an icon to a new position</label>
+            <p>Press and hold the left mouse button on a desktop icon, move it to a new spot, then release.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t3" data-task-id="d2-t3">
+          <div class="task-body">
+            <label for="d2-t3">Open Notepad (Windows) or TextEdit (Mac) and type a full paragraph</label>
+            <p>Type at least 4 sentences about your day. Don't worry about mistakes — just get comfortable finding the keys.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t4" data-task-id="d2-t4">
+          <div class="task-body">
+            <label for="d2-t4">Use Shift, Caps Lock and Backspace correctly</label>
+            <p>Type a sentence with a capital letter using Shift, then type a full word in Caps Lock, then turn Caps Lock off and delete a mistake with Backspace.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t5" data-task-id="d2-t5">
+          <div class="task-body">
+            <label for="d2-t5">Select, copy, cut and paste text using only the keyboard</label>
+            <p>Highlight text with <span class="kbd">Shift</span> + arrow keys, copy with <span class="kbd">Ctrl</span>+<span class="kbd">C</span> (<span class="kbd">Cmd</span>+<span class="kbd">C</span> on Mac), then paste it elsewhere with <span class="kbd">Ctrl</span>+<span class="kbd">V</span>. Try <span class="kbd">Ctrl</span>+<span class="kbd">X</span> to cut instead.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t6" data-task-id="d2-t6">
+          <div class="task-body">
+            <label for="d2-t6">Use five keyboard shortcuts from memory</label>
+            <p><span class="kbd">Ctrl</span>+<span class="kbd">Z</span> undo, <span class="kbd">Ctrl</span>+<span class="kbd">A</span> select all, <span class="kbd">Ctrl</span>+<span class="kbd">S</span> save, <span class="kbd">Alt</span>+<span class="kbd">Tab</span> switch windows, and the <span class="kbd">Windows</span> (or <span class="kbd">Cmd</span>) key to open the start menu/launcher.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On another PC, open its text editor and type, then copy a sentence and paste it three times using only keyboard shortcuts — no right-click menu allowed.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 3 OF 5</div>
+          <h3 style="margin:2px 0 0;">Windows, Desktop &amp; File Explorer</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>Today you learn to control what's on screen and where your files actually live.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t1" data-task-id="d3-t1">
+          <div class="task-body">
+            <label for="d3-t1">Open, minimise, maximise and close three different windows</label>
+            <p>Open three different apps (e.g. Notepad, File Explorer/Finder, a browser), then practise the three buttons in the corner of each window.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t2" data-task-id="d3-t2">
+          <div class="task-body">
+            <label for="d3-t2">Snap two windows side by side</label>
+            <p><strong>Windows:</strong> drag a window's title bar to the left edge of the screen, then click a second window into the space on the right. <strong>Mac:</strong> hold the green button to choose a split-screen tile.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t3" data-task-id="d3-t3">
+          <div class="task-body">
+            <label for="d3-t3">Open File Explorer (Windows) or Finder (Mac) and find your Documents and Downloads folders</label>
+            <p>Click into each one and describe out loud what's inside.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t4" data-task-id="d3-t4">
+          <div class="task-body">
+            <label for="d3-t4">Create a new folder called "MyFirstFolder"</label>
+            <p>Inside Documents, right-click an empty space → New → Folder, and name it exactly <strong>MyFirstFolder</strong>.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t5" data-task-id="d3-t5">
+          <div class="task-body">
+            <label for="d3-t5">Create, rename, move and delete a file</label>
+            <p>Inside MyFirstFolder, create a text file, rename it "notes-v1", move it to the Desktop, then delete it and check it appears in the Recycle Bin / Trash.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t6" data-task-id="d3-t6">
+          <div class="task-body">
+            <label for="d3-t6">Restore a deleted file from the Recycle Bin / Trash</label>
+            <p>Open the Recycle Bin (Windows) or Trash (Mac), find "notes-v1", and restore it to its original location.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced task</div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t7" data-task-id="d3-t7">
+          <div class="task-body">
+            <label for="d3-t7">Build a three-level folder structure and move a file into the deepest one</label>
+            <p>Create MyFirstFolder → Projects → 2026, then create a file and move it directly into the 2026 folder without opening it along the way.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On a different PC (ideally the other operating system — try Mac if you used Windows, or vice versa), create the same MyFirstFolder → Projects → 2026 structure from memory.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 4 OF 5</div>
+          <h3 style="margin:2px 0 0;">Advanced File Handling &amp; Software</h3>
+        </div>
+        <span class="pill pill-advanced">Advanced</span>
+      </div>
+      <div class="day-body">
+        <p>Now you go beyond basic filing into the tasks that separate a confident user from a beginner.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t1" data-task-id="d4-t1">
+          <div class="task-body">
+            <label for="d4-t1">Turn on file extensions and identify five file types</label>
+            <p><strong>Windows:</strong> File Explorer → View → Show → File name extensions. Find one example each of <span class="kbd">.docx</span>, <span class="kbd">.pdf</span>, <span class="kbd">.jpg</span>, <span class="kbd">.mp3</span> and <span class="kbd">.zip</span> on the computer.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t2" data-task-id="d4-t2">
+          <div class="task-body">
+            <label for="d4-t2">Search for a file by name using the built-in search</label>
+            <p>Use the search bar in File Explorer/Finder (or the Start menu / Spotlight) to find "notes-v1" without clicking through any folders.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t3" data-task-id="d4-t3">
+          <div class="task-body">
+            <label for="d4-t3">Compress (zip) MyFirstFolder, then extract it into a new location</label>
+            <p>Right-click MyFirstFolder → "Compress to ZIP" or "Send to → Compressed folder" (Mac: right-click → Compress). Then move the .zip file to a new folder and extract it there.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t4" data-task-id="d4-t4">
+          <div class="task-body">
+            <label for="d4-t4">Install one small, free, trustworthy application</label>
+            <p>Using the Microsoft Store, Mac App Store, or a well-known official site, install one simple free app (e.g. a calculator app or PDF reader). Never install anything from a pop-up ad.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t5" data-task-id="d4-t5">
+          <div class="task-body">
+            <label for="d4-t5">Uninstall the app you just installed</label>
+            <p><strong>Windows:</strong> Settings → Apps → find it → Uninstall. <strong>Mac:</strong> drag it from Applications to the Trash.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t6" data-task-id="d4-t6">
+          <div class="task-body">
+            <label for="d4-t6">Open Task Manager (Windows) or Activity Monitor (Mac) and end a task</label>
+            <p>Press <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">Esc</span> (Windows) or open Activity Monitor from Applications → Utilities (Mac). Find a running app you opened earlier and end/quit it from this window.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t7" data-task-id="d4-t7">
+          <div class="task-body">
+            <label for="d4-t7">Check how much storage space is used and free</label>
+            <p><strong>Windows:</strong> This PC → right-click your main drive → Properties. <strong>Mac:</strong> Apple menu → About This Mac → Storage.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>Copy your zipped MyFirstFolder onto a USB drive (or send it to yourself by email/cloud link), then open and extract it on a completely different computer to confirm it survived the trip intact.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 5 OF 5</div>
+          <h3 style="margin:2px 0 0;">Settings, Connectivity &amp; Troubleshooting</h3>
+        </div>
+        <span class="pill pill-advanced">Advanced</span>
+      </div>
+      <div class="day-body">
+        <p>Your final session of the week — the skills that make you the person people ask for help.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t1" data-task-id="d5-t1">
+          <div class="task-body">
+            <label for="d5-t1">Connect to a Wi-Fi network and check the connection status</label>
+            <p>Click the Wi-Fi icon in the taskbar/menu bar, join a network with its password, and confirm you're connected before opening a browser.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t2" data-task-id="d5-t2">
+          <div class="task-body">
+            <label for="d5-t2">Take a screenshot and save it in a folder of your choice</label>
+            <p><strong>Windows:</strong> <span class="kbd">Windows</span>+<span class="kbd">Shift</span>+<span class="kbd">S</span> to select an area. <strong>Mac:</strong> <span class="kbd">Cmd</span>+<span class="kbd">Shift</span>+<span class="kbd">4</span>. Move the saved image into MyFirstFolder.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t3" data-task-id="d5-t3">
+          <div class="task-body">
+            <label for="d5-t3">Find the computer's system information</label>
+            <p>Check the operating system version, amount of RAM, and processor type via Settings → About (Windows) or Apple menu → About This Mac.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t4" data-task-id="d5-t4">
+          <div class="task-body">
+            <label for="d5-t4">Safely eject a USB drive or external device</label>
+            <p>Right-click the drive in File Explorer/Finder and choose "Eject" before physically unplugging it — never pull it out directly.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t5" data-task-id="d5-t5">
+          <div class="task-body">
+            <label for="d5-t5">Force-close an unresponsive application</label>
+            <p>Open an app, then use Task Manager / Activity Monitor (or <span class="kbd">Alt</span>+<span class="kbd">F4</span> / <span class="kbd">Cmd</span>+<span class="kbd">Option</span>+<span class="kbd">Esc</span>) to force it to close, simulating what you'd do if it froze.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t6" data-task-id="d5-t6">
+          <div class="task-body">
+            <label for="d5-t6">Adjust one display setting and one mouse setting</label>
+            <p>Change the screen resolution or text size, and change the mouse pointer speed, in Settings — then set them back if you changed them on a shared computer.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Final challenge — the full transfer test</h4>
+          <p>Sit at a computer you have never used before, ideally with someone watching. Without help, in under 15 minutes: connect to Wi-Fi, create a folder, take a screenshot and save it into that folder, check the system's storage space, and shut the computer down correctly. This is the real test of Week 1.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SELF ASSESSMENT -->
+<section class="section-tight" style="background:var(--panel); border-top:1px solid var(--line-soft);">
+  <div class="wrap">
+    <h2>End of week self-assessment</h2>
+    <p>Answer honestly. If you can't say yes to all six, revisit that day before moving to Week 2.</p>
+    <div class="grid-2">
+      <ul class="step-list">
+        <li>I can turn a computer on and shut it down correctly without guidance</li>
+        <li>I can copy, cut and paste using keyboard shortcuts</li>
+        <li>I can create, rename, move and delete files and folders confidently</li>
+      </ul>
+      <ul class="step-list">
+        <li>I can zip and unzip a folder</li>
+        <li>I can install and uninstall a simple application safely</li>
+        <li>I performed the full transfer test on an unfamiliar computer</li>
+      </ul>
+    </div>
+    <div class="callout callout-info" style="margin-top:10px;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      <div>
+        <p style="margin-bottom:0;"><strong>Next up — Week 2:</strong> Personalising your operating system, managing user accounts, and installing a printer. Check the <a href="../curriculum.html">curriculum page</a> as it's added.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight center">
+  <div class="wrap" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <button class="btn btn-ghost" data-reset-progress type="button">Reset my checklist</button>
+    <a href="../curriculum.html" class="btn btn-ghost">← Back to curriculum</a>
+  </div>
+</section>
+
+</div>
+
+<section class="section-tight">
+  <div class="wrap">
+    <div class="callout callout-info next-lesson-request">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+      <div>
+        <h4 style="margin-bottom:6px;">Finished Week 1? Request your next lesson.</h4>
+        <p>Week 2 is not automatically opened. Complete and understand Week 1 first, then open <a href="week2.html">Week 2</a> and submit your request. The teacher will review your progress before granting access.</p>
+        <p style="margin:8px 0 0;"><strong>Fast-track your review:</strong> chat the teacher on WhatsApp <a href="https://wa.me/2349129225442?text=Hello%20Teacher%2C%20I%20have%20finished%20Week%201%20and%20would%20like%20to%20request%20Week%202." target="_blank" rel="noopener">+234 912 922 5442</a>. The teacher may check your skills, ask questions, or give you a project before granting Week 2.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section-tight" style="padding-top:0;">
+  <div class="wrap">
+    <div id="nextLessonRequestRoot"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Phase 1 · Week 1 — Meet Your Machine</p>
+    <p><a href="../index.html">Home</a></p>
+  </div>
+</footer>
+
+<script src="../assets/script.js"></script>
+<script src="../assets/read-aloud.js"></script>
+
+<script src="../assets/next-lesson-request.js"></script>
+</body>
+</html>
