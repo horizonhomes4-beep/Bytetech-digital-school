@@ -67,5 +67,47 @@ if (studentsRef) studentsRef.on("value", sn => {
 $("q").addEventListener("input", render);
 setInterval(() => document.querySelectorAll(".cds").forEach(el => el.innerHTML = countdownHTML(el.dataset.end)), 1000);
 </script>
+  <script>
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("keydown", function (e) {
+    // F12
+    if (e.key === "F12") {
+        e.preventDefault();
+    }
+
+    // Ctrl/Cmd + common developer/copy shortcuts
+    if (
+        (e.ctrlKey || e.metaKey) &&
+        ["u", "s", "c", "x", "a", "p"].includes(e.key.toLowerCase())
+    ) {
+        e.preventDefault();
+    }
+
+    // Ctrl+Shift+I / J / C
+    if (
+        (e.ctrlKey || e.metaKey) &&
+        e.shiftKey &&
+        ["i", "j", "c"].includes(e.key.toLowerCase())
+    ) {
+        e.preventDefault();
+    }
+});
+
+document.addEventListener("copy", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("cut", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("dragstart", function (e) {
+    e.preventDefault();
+});
+</script>
+
 </body>
 </html>
