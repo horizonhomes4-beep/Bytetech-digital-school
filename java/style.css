@@ -1,0 +1,27 @@
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f7fb;color:#172033;line-height:1.65}
+.topbar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e4e9f2;padding:15px 24px;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.brand{font-size:20px;font-weight:800;color:#1457c5}.brand span{font-weight:500;color:#667085}
+.lesson-badge{background:#eaf2ff;color:#1457c5;padding:7px 12px;border-radius:30px;font-size:13px;font-weight:700}
+.layout{display:flex;max-width:1500px;margin:auto}
+.sidebar{width:260px;position:sticky;top:67px;height:calc(100vh - 67px);overflow:auto;background:#fff;padding:25px 15px;border-right:1px solid #e4e9f2}
+.sidebar h3{margin:5px 12px 15px}.sidebar a{display:block;padding:10px 12px;border-radius:9px;text-decoration:none;color:#526070;font-size:14px}.sidebar a:hover{background:#eef4ff;color:#1457c5}
+.content{width:min(100%,1000px);padding:35px 25px 70px;margin:auto}
+.hero{background:linear-gradient(135deg,#1457c5,#3679e5);color:#fff;padding:45px;border-radius:25px;margin-bottom:25px;box-shadow:0 15px 35px rgba(20,87,197,.18)}
+.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.1;margin:10px 0}.hero p{font-size:18px;max-width:750px}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.5px}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+.btn,button{border:0;border-radius:10px;padding:11px 17px;background:#1457c5;color:#fff;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}.btn.secondary,button.secondary{background:#eaf2ff;color:#1457c5}
+.card{background:#fff;border:1px solid #e5eaf2;border-radius:18px;padding:28px;margin-bottom:22px;box-shadow:0 5px 18px rgba(20,35,60,.04)}
+h2{color:#1457c5;margin-top:0}h3{margin-top:25px;color:#24364d}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.three-col>div,.rules>div{padding:18px;border-radius:14px;background:#f5f8fd;border:1px solid #e5eaf2}
+.diagram{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.diagram div{padding:25px;text-align:center;border-radius:15px;background:#eef4ff;font-size:20px;font-weight:800;color:#1457c5}.diagram small{font-size:13px;color:#526070}
+table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #e1e6ef;padding:12px;text-align:left}th{background:#f3f6fb}
+pre{background:#111827;color:#e5edf9;padding:18px;border-radius:12px;overflow:auto;font-size:14px;line-height:1.55}code{font-family:"Courier New",monospace}.note{background:#fff8df;border-left:5px solid #e7b100;padding:14px;border-radius:8px}
+.code-wrap{position:relative}.copy{position:absolute;right:10px;top:10px;background:#2d3748;font-size:12px;padding:7px 10px}
+.simulator,.workspace,.challenge-demo{background:#f3f7ff;border:1px solid #dce7fa;border-radius:15px;padding:22px;margin-top:20px}.simulator input,.workspace input,.challenge-demo input,.simulator select{padding:11px;border:1px solid #ccd6e5;border-radius:9px;margin:5px 4px 5px 0;max-width:100%}
+.style-demo{padding:30px;text-align:center;background:#e8f0ff;border-radius:14px;margin-bottom:15px;transition:.3s}.output{margin-top:15px;background:#fff;padding:15px;border-radius:10px;min-height:45px}
+.exercise{padding:15px;background:#f8fafc;border-left:4px solid #1457c5;margin:10px 0;border-radius:7px}.checks{padding-left:20px}.checks li{margin:8px 0}.checks li::marker{color:#1457c5}
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.q{padding:17px;margin:12px 0;background:#f7f9fc;border-radius:12px}.q label{display:block;margin:7px}.score{margin-top:18px;font-size:20px;font-weight:800}.next{margin-top:25px;padding:20px;background:#eef6ff;border-radius:15px}
+#toast{position:fixed;right:20px;bottom:20px;background:#172033;color:#fff;padding:12px 17px;border-radius:10px;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none}#toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:800px){.sidebar{display:none}.content{padding:20px 14px 50px}.hero{padding:30px 22px}.three-col,.diagram,.rules{grid-template-columns:1fr}.card{padding:20px}.topbar{padding:12px 15px}.brand span{display:none}}

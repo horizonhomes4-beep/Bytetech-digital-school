@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathCloud JavaScript Fundamentals - Lesson 1: Start</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">MathCloud <span>JavaScript Fundamentals</span></div>
+  <div class="lesson-badge">Lesson 1 • START</div>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+  <h3>Lesson 1</h3>
+  <a href="#welcome">Welcome</a>
+  <a href="#what">What is JavaScript?</a>
+  <a href="#three">HTML + CSS + JavaScript</a>
+  <a href="#setup">Project Setup</a>
+  <a href="#hello">First JavaScript</a>
+  <a href="#example1">Example 1: Message</a>
+  <a href="#example2">Example 2: Button</a>
+  <a href="#example3">Example 3: Input</a>
+  <a href="#example4">Example 4: Calculator</a>
+  <a href="#example5">Example 5: Change Style</a>
+  <a href="#practice">Practice Lab</a>
+  <a href="#challenge">Challenge</a>
+  <a href="#assessment">Assessment</a>
+  <a href="#summary">Summary</a>
+</aside>
+
+<main class="content">
+<section id="welcome" class="hero">
+  <span class="eyebrow">SELF-TUTORING COURSE</span>
+  <h1>JavaScript Fundamentals: Start</h1>
+  <p>Learn what JavaScript is, how HTML, CSS and JavaScript work together, and build your first interactive webpages.</p>
+  <div class="hero-actions">
+    <a class="btn" href="#example1">Start Learning</a>
+    <a class="btn secondary" href="#practice">Go to Practice</a>
+  </div>
+</section>
+
+<section id="what" class="card">
+<h2>1. What is JavaScript?</h2>
+<p>JavaScript is a programming language used to make webpages interactive and able to respond to users.</p>
+<div class="three-col">
+  <div><strong>HTML</strong><p>Creates the structure and content.</p></div>
+  <div><strong>CSS</strong><p>Controls appearance and layout.</p></div>
+  <div><strong>JavaScript</strong><p>Controls behavior and interaction.</p></div>
+</div>
+<h3>Examples of what JavaScript can do</h3>
+<ul class="checks">
+<li>Respond when a user clicks a button.</li>
+<li>Read information entered into a form.</li>
+<li>Calculate numbers.</li>
+<li>Change text, images, colors and styles.</li>
+<li>Show, hide and create webpage content.</li>
+<li>Validate forms.</li>
+<li>Build calculators, quizzes, games and other tools.</li>
+</ul>
+</section>
+
+<section id="three" class="card">
+<h2>2. How HTML, CSS and JavaScript Work Together</h2>
+<div class="diagram"><div>HTML<br><small>Structure</small></div><div>CSS<br><small>Appearance</small></div><div>JavaScript<br><small>Behavior</small></div></div>
+<p>A useful way to remember them:</p>
+<table><tr><th>Technology</th><th>Question it answers</th><th>Example</th></tr>
+<tr><td>HTML</td><td>What is on the page?</td><td>Heading, paragraph, button</td></tr>
+<tr><td>CSS</td><td>How should it look?</td><td>Color, size, spacing</td></tr>
+<tr><td>JavaScript</td><td>What should it do?</td><td>Calculate, react, change content</td></tr>
+</table>
+</section>
+
+<section id="setup" class="card">
+<h2>3. Create Your First Project</h2>
+<p>Create a folder named <b>javascript-lesson-1</b>. Inside it create these three files:</p>
+<pre><code>javascript-lesson-1/
+├── index.html
+├── style.css
+└── script.js</code></pre>
+<p>Open <b>index.html</b> in your browser. The browser loads the HTML, then the linked CSS and JavaScript.</p>
+<div class="note"><b>Important:</b> The filenames must match exactly. If HTML says <code>script.js</code>, the JavaScript file must be called <code>script.js</code>.</div>
+</section>
+
+<section id="hello" class="card">
+<h2>4. Your First JavaScript</h2>
+<p>Start with the simplest JavaScript statement:</p>
+<pre><code>alert("Hello, JavaScript!");</code></pre>
+<p><code>alert()</code> displays a browser message. Try it in the browser console or inside your JavaScript file.</p>
+<h3>Console practice</h3>
+<pre><code>console.log("Hello from JavaScript!");
+console.log(10 + 20);</code></pre>
+<p><code>console.log()</code> sends information to the browser's Developer Console. It is very useful for testing and debugging.</p>
+</section>
+
+<section id="example1" class="card">
+<h2>5. Complete Example 1 — Change a Message</h2>
+<p><b>Goal:</b> Click a button and make JavaScript change text on the webpage.</p>
+<h3>HTML — index.html</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('html1')">Copy HTML</button><pre><code id="html1">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="card"&gt;
+    &lt;h1&gt;My First JavaScript Page&lt;/h1&gt;
+    &lt;p id="message"&gt;Click the button below.&lt;/p&gt;
+    &lt;button onclick="changeMessage()"&gt;Change Message&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+
+<h3>CSS — style.css</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('css1')">Copy CSS</button><pre><code id="css1">body {
+  font-family: Arial, sans-serif;
+  background: #eef4ff;
+  padding: 40px;
+}
+
+.card {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  text-align: center;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+}
+
+button {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 10px;
+  background: #1457c5;
+  color: white;
+  cursor: pointer;
+}</code></pre></div>
+
+<h3>JavaScript — script.js</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('js1')">Copy JavaScript</button><pre><code id="js1">function changeMessage() {
+  document.getElementById("message").innerHTML =
+    "Excellent! JavaScript changed the webpage.";
+}</code></pre></div>
+
+<h3>How it works</h3>
+<ol>
+<li>The button has <code>onclick="changeMessage()"</code>.</li>
+<li>That calls the JavaScript function.</li>
+<li><code>getElementById("message")</code> finds the paragraph.</li>
+<li><code>innerHTML</code> changes its content.</li>
+</ol>
+
+<div class="simulator">
+<h3>Live Simulator</h3>
+<p id="sim1">Click the button to see JavaScript change this text.</p>
+<button onclick="document.getElementById('sim1').innerHTML='It worked! JavaScript changed the HTML.'">Run JavaScript</button>
+<button class="secondary" onclick="document.getElementById('sim1').innerHTML='Click the button to see JavaScript change this text.'">Reset</button>
+</div>
+</section>
+
+<section id="example2" class="card">
+<h2>6. Complete Example 2 — User Input and Greeting</h2>
+<p>This example teaches the important idea of <b>input → processing → output</b>.</p>
+<h3>HTML</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('html2')">Copy HTML</button><pre><code id="html2">&lt;div class="card"&gt;
+  &lt;h2&gt;Student Greeting&lt;/h2&gt;
+  &lt;input id="name" type="text" placeholder="Enter your name"&gt;
+  &lt;button onclick="greetStudent()"&gt;Greet Me&lt;/button&gt;
+  &lt;p id="greeting"&gt;&lt;/p&gt;
+&lt;/div&gt;</code></pre></div>
+<h3>CSS</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('css2')">Copy CSS</button><pre><code id="css2">.card {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 25px;
+  background: white;
+  border-radius: 15px;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 12px 18px;
+  cursor: pointer;
+}</code></pre></div>
+<h3>JavaScript</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('js2')">Copy JavaScript</button><pre><code id="js2">function greetStudent() {
+  let name = document.getElementById("name").value;
+
+  document.getElementById("greeting").innerHTML =
+    "Hello, " + name + "! Welcome to JavaScript.";
+}</code></pre></div>
+<p><b>New idea:</b> <code>.value</code> reads what the user typed into an input.</p>
+<div class="simulator">
+<h3>Try It Yourself</h3>
+<input id="practiceName" type="text" placeholder="Type your name">
+<button onclick="greetLive()">Greet Me</button>
+<p id="liveGreeting"></p>
+</div>
+</section>
+
+<section id="example3" class="card">
+<h2>7. Complete Example 3 — Two Inputs</h2>
+<p>JavaScript can read more than one input and combine the information.</p>
+<h3>HTML</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('html3')">Copy HTML</button><pre><code id="html3">&lt;input id="student" type="text" placeholder="Student name"&gt;
+&lt;input id="school" type="text" placeholder="School name"&gt;
+&lt;button onclick="showInfo()"&gt;Show Information&lt;/button&gt;
+&lt;div id="result"&gt;&lt;/div&gt;</code></pre></div>
+<h3>CSS</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('css3')">Copy CSS</button><pre><code id="css3">input {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  padding: 12px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+#result {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f0f6ff;
+}</code></pre></div>
+<h3>JavaScript</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('js3')">Copy JavaScript</button><pre><code id="js3">function showInfo() {
+  let student = document.getElementById("student").value;
+  let school = document.getElementById("school").value;
+
+  document.getElementById("result").innerHTML =
+    "Student: " + student + "&lt;br&gt;School: " + school;
+}</code></pre></div>
+</section>
+
+<section id="example4" class="card">
+<h2>8. Complete Example 4 — Simple Calculator</h2>
+<p>This introduces JavaScript calculations. Later lessons will explain variables and operators in much greater detail.</p>
+<h3>HTML</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('html4')">Copy HTML</button><pre><code id="html4">&lt;input id="num1" type="number" placeholder="First number"&gt;
+&lt;input id="num2" type="number" placeholder="Second number"&gt;
+&lt;button onclick="addNumbers()"&gt;Add&lt;/button&gt;
+&lt;p id="answer"&gt;&lt;/p&gt;</code></pre></div>
+<h3>CSS</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('css4')">Copy CSS</button><pre><code id="css4">input {
+  padding: 12px;
+  margin: 5px;
+}
+
+button {
+  padding: 12px 18px;
+  cursor: pointer;
+}
+
+#answer {
+  font-size: 20px;
+  font-weight: bold;
+}</code></pre></div>
+<h3>JavaScript</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('js4')">Copy JavaScript</button><pre><code id="js4">function addNumbers() {
+  let a = Number(document.getElementById("num1").value);
+  let b = Number(document.getElementById("num2").value);
+
+  let answer = a + b;
+
+  document.getElementById("answer").innerHTML =
+    "Answer: " + answer;
+}</code></pre></div>
+<p><b>Important:</b> <code>Number()</code> converts the input text into a number so JavaScript can perform numerical calculations.</p>
+<div class="simulator">
+<h3>Calculator Practice</h3>
+<input id="calcA" type="number" placeholder="Number 1">
+<input id="calcB" type="number" placeholder="Number 2">
+<select id="calcOp">
+<option value="+">Add</option>
+<option value="-">Subtract</option>
+<option value="*">Multiply</option>
+<option value="/">Divide</option>
+</select>
+<button onclick="calculateLive()">Calculate</button>
+<p id="calcResult"></p>
+</div>
+</section>
+
+<section id="example5" class="card">
+<h2>9. Complete Example 5 — JavaScript Changes CSS</h2>
+<p>JavaScript can also change the appearance of an HTML element.</p>
+<h3>HTML</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('html5')">Copy HTML</button><pre><code id="html5">&lt;div id="box"&gt;Change my appearance&lt;/div&gt;
+&lt;button onclick="changeStyle()"&gt;Change Style&lt;/button&gt;</code></pre></div>
+<h3>CSS</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('css5')">Copy CSS</button><pre><code id="css5">#box {
+  padding: 30px;
+  background: #e8f0ff;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 15px;
+}</code></pre></div>
+<h3>JavaScript</h3>
+<div class="code-wrap"><button class="copy" onclick="copyCode('js5')">Copy JavaScript</button><pre><code id="js5">function changeStyle() {
+  let box = document.getElementById("box");
+
+  box.style.backgroundColor = "gold";
+  box.style.color = "black";
+  box.style.fontSize = "24px";
+  box.style.fontWeight = "bold";
+}</code></pre></div>
+<div class="simulator">
+<div id="styleBox" class="style-demo">I can change my appearance.</div>
+<button onclick="changeStyleLive()">Change Style</button>
+<button class="secondary" onclick="resetStyleLive()">Reset</button>
+</div>
+</section>
+
+<section class="card">
+<h2>10. Another Option: JavaScript Inside HTML</h2>
+<p>For small experiments, JavaScript can be written directly inside the HTML file:</p>
+<pre><code>&lt;script&gt;
+  alert("Hello!");
+&lt;/script&gt;</code></pre>
+<p>However, for real projects, keeping JavaScript in a separate <code>script.js</code> file is usually easier to organize and maintain.</p>
+</section>
+
+<section class="card">
+<h2>11. JavaScript Comments</h2>
+<p>Comments are notes for humans. The browser does not execute them.</p>
+<pre><code>// This is a single-line comment
+
+/*
+  This is a
+  multi-line comment
+*/
+
+let name = "David"; // Store the student's name</code></pre>
+<p>Use comments to explain code that may not be obvious.</p>
+</section>
+
+<section class="card">
+<h2>12. Basic JavaScript Rules You Should Know Now</h2>
+<div class="rules">
+<div><b>1. JavaScript is case-sensitive.</b><br><code>name</code> and <code>Name</code> are different.</div>
+<div><b>2. Use quotation marks for text.</b><br><code>"Hello"</code></div>
+<div><b>3. Use parentheses with functions.</b><br><code>alert("Hi")</code></div>
+<div><b>4. Use braces for blocks.</b><br><code>function test() { }</code></div>
+<div><b>5. Check spelling carefully.</b><br><code>document</code> is not <code>documentt</code>.</div>
+</div>
+</section>
+
+<section id="practice" class="card">
+<h2>13. Practice Lab</h2>
+<p>Complete these tasks yourself before looking at the suggested solution.</p>
+<div class="exercise"><b>Practice 1:</b> Create a button that changes “I am learning” to “I can write JavaScript!”</div>
+<div class="exercise"><b>Practice 2:</b> Create an input for a student's name and display “Welcome, [name]”.</div>
+<div class="exercise"><b>Practice 3:</b> Create two number inputs and display their sum.</div>
+<div class="exercise"><b>Practice 4:</b> Create a button that changes the background color of a box.</div>
+<div class="exercise"><b>Practice 5:</b> Create a simple student card containing name, age and school, then display the information when a button is clicked.</div>
+
+<h3>Practice Workspace</h3>
+<div class="workspace">
+<label>Your name</label>
+<input id="labName" placeholder="Enter your name">
+<label>Your favourite subject</label>
+<input id="labSubject" placeholder="Enter a subject">
+<button onclick="runLab()">Run My Program</button>
+<div id="labOutput" class="output">Your result will appear here.</div>
+</div>
+</section>
+
+<section id="challenge" class="card">
+<h2>14. Mini Project Challenge — Student Welcome Card</h2>
+<p>Build a working page with:</p>
+<ul>
+<li>A student name input</li>
+<li>A school input</li>
+<li>A favourite subject input</li>
+<li>A button</li>
+<li>A result area</li>
+<li>Your own CSS design</li>
+</ul>
+<p>When the button is clicked, display a complete welcome message.</p>
+<div class="challenge-demo">
+<input id="chName" placeholder="Student name">
+<input id="chSchool" placeholder="School">
+<input id="chSubject" placeholder="Favourite subject">
+<button onclick="runChallenge()">Create Welcome Card</button>
+<div id="challengeResult"></div>
+</div>
+</section>
+
+<section id="assessment" class="card">
+<h2>15. Lesson 1 Assessment</h2>
+<p>Choose the correct answer. Your score is calculated instantly.</p>
+<form id="quiz">
+<div class="q"><p>1. Which technology provides webpage structure?</p>
+<label><input type="radio" name="q1" value="a"> CSS</label>
+<label><input type="radio" name="q1" value="b"> HTML</label>
+<label><input type="radio" name="q1" value="c"> JavaScript</label></div>
+<div class="q"><p>2. Which technology controls webpage appearance?</p>
+<label><input type="radio" name="q2" value="a"> HTML</label>
+<label><input type="radio" name="q2" value="b"> CSS</label>
+<label><input type="radio" name="q2" value="c"> JavaScript</label></div>
+<div class="q"><p>3. Which technology adds interaction?</p>
+<label><input type="radio" name="q3" value="a"> HTML</label>
+<label><input type="radio" name="q3" value="b"> CSS</label>
+<label><input type="radio" name="q3" value="c"> JavaScript</label></div>
+<div class="q"><p>4. What does document.getElementById() do?</p>
+<label><input type="radio" name="q4" value="a"> Finds an HTML element</label>
+<label><input type="radio" name="q4" value="b"> Creates CSS</label>
+<label><input type="radio" name="q4" value="c"> Deletes the webpage</label></div>
+<div class="q"><p>5. What does .value normally read from an input?</p>
+<label><input type="radio" name="q5" value="a"> Its typed value</label>
+<label><input type="radio" name="q5" value="b"> Its CSS color</label>
+<label><input type="radio" name="q5" value="c"> Its filename</label></div>
+<button type="button" onclick="markQuiz()">Submit Assessment</button>
+<div id="score" class="score"></div>
+</form>
+</section>
+
+<section id="summary" class="card">
+<h2>16. Lesson Summary</h2>
+<ul class="checks">
+<li>HTML creates structure.</li>
+<li>CSS controls appearance.</li>
+<li>JavaScript controls behavior.</li>
+<li>JavaScript can respond to events such as clicks.</li>
+<li>JavaScript can read input using <code>.value</code>.</li>
+<li>JavaScript can find HTML elements using <code>document.getElementById()</code>.</li>
+<li><code>innerHTML</code> can change webpage content.</li>
+<li>JavaScript can perform calculations.</li>
+<li>JavaScript can change CSS through the DOM.</li>
+<li>Keeping HTML, CSS and JavaScript in separate files helps organize projects.</li>
+</ul>
+<div class="next">
+<h3>Next Lesson: Setup</h3>
+<p>Next you will learn how to properly set up your JavaScript workspace, organize files, use the browser Developer Tools and find errors.</p>
+<a class="btn" href="#welcome">Back to Top</a>
+</div>
+</section>
+</main>
+</div>
+
+<div id="toast"></div>
+<script src="script.js"></script>
+<script>
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("keydown", function (e) {
+    // F12
+    if (e.key === "F12") {
+        e.preventDefault();
+    }
+
+    // Ctrl/Cmd + common developer/copy shortcuts
+    if (
+        (e.ctrlKey || e.metaKey) &&
+        ["u", "s", "c", "x", "a", "p"].includes(e.key.toLowerCase())
+    ) {
+        e.preventDefault();
+    }
+
+    // Ctrl+Shift+I / J / C
+    if (
+        (e.ctrlKey || e.metaKey) &&
+        e.shiftKey &&
+        ["i", "j", "c"].includes(e.key.toLowerCase())
+    ) {
+        e.preventDefault();
+    }
+});
+
+document.addEventListener("copy", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("cut", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("dragstart", function (e) {
+    e.preventDefault();
+});
+</script>
+
+</body>
+</html>
