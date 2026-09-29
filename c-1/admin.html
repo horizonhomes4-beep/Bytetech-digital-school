@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Practical PC Skills</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/firebase-config.js"></script>
+</head>
+<body class="admin-shell">
+<header class="admin-topbar"><div class="wrap"><div><p class="admin-kicker">Practical PC Skills</p><h1>Administrator control centre</h1></div><span class="admin-no-login">NO ADMIN LOGIN REQUIRED</span></div></header>
+<main class="section-tight"><div class="wrap">
+  <div class="admin-warning"><strong>Administrator page</strong><span>This page is intentionally open, as requested. Anyone who can access this URL can manage the Firebase course data.</span></div>
+  <div class="admin-tabs" role="tablist">
+    <button class="admin-tab active" data-tab="students">Students</button>
+    <button class="admin-tab" data-tab="requests">Lesson Requests</button>
+    <button class="admin-tab" data-tab="lessons">Lessons</button>
+    <button class="admin-tab" data-tab="messages">Notifications & Assignments</button>
+  </div>
+
+  <section id="tab-students" class="admin-tab-panel">
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h2>Create student</h2><p class="sub">Create the student account and generate a passcode. Give the passcode to the student privately.</p></div></div>
+      <form id="studentForm" class="admin-grid">
+        <div><label>Student ID</label><input id="newStudentId" required placeholder="e.g. STU001"><label>Full name</label><input id="newStudentName" required placeholder="Student full name"></div>
+        <div><label>Passcode</label><div class="passcode-row"><input id="newStudentPasscode" required minlength="4" placeholder="Create a passcode"><button type="button" id="generatePasscode" class="btn btn-ghost btn-sm">Generate</button></div><label>Class / group</label><input id="newStudentClass" placeholder="e.g. Computer Skills A"></div>
+        <div><label>Status</label><select id="newStudentStatus"><option value="active">Active</option><option value="suspended">Suspended</option></select><label>Notes (optional)</label><input id="newStudentNotes" placeholder="Optional admin note"></div>
+        <div style="display:flex;align-items:end"><button class="btn btn-primary" type="submit">Create student</button></div>
+      </form>
+      <div id="studentCreateMsg" class="admin-message"></div>
+      <div id="createdCredentials" class="created-credentials" hidden></div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h2>Student accounts</h2><p class="sub">Search, suspend, activate, reset passcodes and manage lesson access.</p></div><span id="studentCount" class="admin-count">0</span></div>
+      <div class="admin-toolbar"><input type="search" id="studentSearch" placeholder="Search ID, name or class…"><select id="studentFilter"><option value="all">All</option><option value="active">Active</option><option value="suspended">Suspended</option><option value="online">Online</option></select></div>
+      <div id="studentList"></div>
+    </div>
+  </section>
+
+  <section id="tab-requests" class="admin-tab-panel" hidden>
+    <div class="admin-card"><div class="admin-section-head"><div><h2>Pending lesson requests</h2><p class="sub">Students request only the next lesson. Review progress, send a notification or assignment, then grant access.</p></div><span id="requestCount" class="admin-count">0</span></div><div id="requestList"></div></div>
+  </section>
+
+  <section id="tab-lessons" class="admin-tab-panel" hidden>
+    <div class="admin-card"><div class="admin-section-head"><div><h2>All phases & weeks</h2><p class="sub">Week 1 is always open. Weeks 2–12 are individually unlocked for students.</p></div><button id="refreshLessonsBtn" class="btn btn-ghost btn-sm">Refresh</button></div><div id="lessonManagementList"></div></div>
+    <div class="admin-card">
+      <h2>Lesson editor</h2><p class="sub">Edit by typing/pasting HTML, upload an HTML page, or save an external lesson URL.</p>
+      <label>Lesson</label><select id="lessonSelect"><option>Loading…</option></select>
+      <div id="editorMeta" class="small" style="margin:10px 0"></div>
+      <label>HTML lesson content</label><textarea id="lessonHtml" class="lesson-editor-textarea" spellcheck="false" placeholder="Paste or type the lesson HTML here…"></textarea>
+      <div class="editor-actions"><label class="file-button">Upload HTML <input type="file" id="lessonFile" accept=".html,.htm,text/html"></label><button id="loadCurrentBtn" class="btn btn-ghost btn-sm" type="button">Load saved</button><button id="saveLessonBtn" class="btn btn-primary btn-sm" type="button">Save HTML</button><button id="deleteContentBtn" class="btn btn-danger btn-sm" type="button">Delete</button></div>
+      <div class="external-lesson-box"><label>External lesson/page URL</label><div class="url-row"><input id="lessonUrl" type="url" placeholder="https://example.com/lesson.html"><button id="loadLessonUrlBtn" type="button" class="btn btn-ghost btn-sm">Use URL</button></div><p class="small">The URL is saved and displayed to students in an embedded frame when the remote site allows embedding. If it blocks embedding, students still get an Open Lesson button.</p></div>
+      <p id="editorMsg" class="small"></p>
+    </div>
+  </section>
+
+  <section id="tab-messages" class="admin-tab-panel" hidden>
+    <div class="admin-card"><h2>Communicate with a requester</h2><p class="sub">Select a pending request. Messages and assignments go only to that student.</p>
+      <label>Pending request</label><select id="requestCommunicationSelect"><option value="">Select a pending request…</option></select>
+      <div id="requestCommunicationMeta" class="request-context" hidden></div>
+      <div class="admin-grid" style="margin-top:18px">
+        <div><h3>Notification</h3><label>Title</label><input id="noticeTitle" class="admin-input" placeholder="Please complete your skills check"><label>Message</label><textarea id="noticeBody" class="admin-message-box" placeholder="Write your message…"></textarea><button id="sendNoticeBtn" class="btn btn-primary" type="button">Send notification</button><p id="noticeMsg" class="small"></p></div>
+        <div><h3>Assignment / practical assessment</h3><label>Title</label><input id="assignmentTitle" class="admin-input" placeholder="Week 1 practical assessment"><label>Instructions</label><textarea id="assignmentBody" class="admin-message-box" placeholder="Tell the student exactly what to do…"></textarea><label>Due date</label><input id="assignmentDue" class="admin-input" type="datetime-local"><button id="createAssignmentBtn" class="btn btn-primary" type="button">Send assignment</button><p id="assignmentMsg" class="small"></p></div>
+      </div>
+    </div>
+    <div class="admin-card"><h2>Recent request assignments</h2><div id="assignmentList"></div></div>
+  </section>
+</div></main>
+<script type="module" src="assets/admin.js"></script>
+</body></html>
