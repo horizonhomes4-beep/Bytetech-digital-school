@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practical Computer Skills — Student Portal</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/firebase-config.js"></script>
+</head>
+<body data-base="">
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand"><span class="mark">💻</span> Practical PC Skills</a>
+    <button class="nav-toggle" aria-label="Toggle menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="#student-login" class="current">Student Login</a></li>
+      <li><a href="curriculum.html">3-Month Curriculum</a></li>
+      <li><a href="admin.html">Admin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="section-tight hero-login">
+  <div class="wrap login-layout">
+    <div>
+      <span class="pill pill-note">Student learning portal</span>
+      <h1>Learn practical computer skills by doing.</h1>
+      <p style="max-width:62ch;font-size:1.08rem;">Your teacher creates your student account and gives you a private passcode. Sign in here to continue from the lesson your teacher has unlocked for you.</p>
+      <div class="login-features">
+        <div><strong>01</strong><span>Week 1 opens automatically.</span></div>
+        <div><strong>02</strong><span>Request the next lesson when you are ready.</span></div>
+        <div><strong>03</strong><span>Your teacher reviews, sends assignments or grants access.</span></div>
+      </div>
+    </div>
+    <div class="login-card" id="student-login">
+      <div class="login-card-icon">🔐</div>
+      <h2>Student Login</h2>
+      <p class="sub">Use the Student ID and passcode provided by your administrator.</p>
+      <form id="studentLoginForm" autocomplete="off">
+        <label for="studentId">Student ID</label>
+        <input id="studentId" required autocomplete="username" placeholder="e.g. STU001">
+        <label for="studentPasscode">Passcode</label>
+        <input id="studentPasscode" required type="password" autocomplete="current-password" placeholder="Enter your passcode">
+        <button class="btn btn-primary login-submit" id="loginBtn" type="submit">Sign in to my lessons →</button>
+        <p id="loginMessage" class="login-message" role="alert"></p>
+      </form>
+      <p class="small login-help">Forgot your passcode? Contact the administrator. They can reset it from the Admin page.</p>
+    </div>
+  </div>
+</header>
+
+<section class="section-tight" id="how-it-works">
+<div class="wrap">
+  <div class="admin-card" style="color:inherit;">
+    <h2>How lesson access works</h2>
+    <div class="grid-3">
+      <div class="callout callout-info"><strong>Week 1</strong><p>Available immediately after you sign in.</p></div>
+      <div class="callout callout-rule"><strong>Next lesson</strong><p>Complete the current lesson, then request the next week.</p></div>
+      <div class="callout callout-info"><strong>Teacher review</strong><p>The administrator can notify you, give you an assignment, or unlock the next lesson.</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section-tight">
+<div class="wrap grid-2">
+  <div>
+    <h2>Three phases. Twelve weeks.</h2>
+    <p>Every week builds on the practical skills from the previous week. Lessons can be updated by the administrator without rebuilding the whole website.</p>
+  </div>
+  <div class="callout callout-info">
+    <strong>Need access?</strong>
+    <p style="margin:6px 0 0;">Ask your teacher to create your student account and give you your passcode.</p>
+    <a class="btn btn-ghost btn-sm" href="curriculum.html">View curriculum</a>
+  </div>
+</div>
+</section>
+
+<footer><div class="wrap"><p>Practical Computer Skills Course · Student Portal</p></div></footer>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+(function(){
+  const form=document.getElementById("studentLoginForm"),msg=document.getElementById("loginMessage"),btn=document.getElementById("loginBtn");
+  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  async function hash(v){
+    const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(String(v)));
+    return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+  function returnTarget(){
+    try{
+      const u=new URLSearchParams(location.search).get("returnTo");
+      const saved=sessionStorage.getItem("computerSkillsReturnTo");
+      return u||saved||"phase1/week1.html";
+    }catch{return "computer skills only/phase1/week1.html";}
+  }
+  form.addEventListener("submit",async e=>{
+    e.preventDefault(); msg.textContent=""; btn.disabled=true; btn.textContent="Checking passcode…";
+    const id=document.getElementById("studentId").value.trim();
+    const pass=document.getElementById("studentPasscode").value;
+    try{
+      const app=firebaseApp();
+      const snap=await firebaseDb().ref("students/"+id).once("value");
+      const s=snap.val();
+      if(!s) throw new Error("Student ID or passcode is incorrect.");
+      if(s.active===false||s.suspended===true) throw new Error("This student account is inactive. Contact your administrator.");
+      const h=await hash(pass);
+      const valid=(s.passcodeHash&&h===s.passcodeHash) || (s.passcode&&pass===s.passcode);
+      if(!valid) throw new Error("Student ID or passcode is incorrect.");
+      const session={id,name:s.name||"Student",classId:s.classId||"",course:"Practical Computer Skills"};
+      sessionStorage.setItem("computerSkillsStudent",JSON.stringify(session));
+      const target=returnTarget().replace(/^\/+/,"").replace(/^computer skills only\//i,"");
+      sessionStorage.removeItem("computerSkillsReturnTo");
+      location.href=target||"phase1/week1.html";
+    }catch(err){
+      console.error(err); msg.textContent=err.message||"Login failed. Please try again.";
+    }finally{btn.disabled=false;btn.textContent="Sign in to my lessons →";}
+  });
+  function firebaseApp(){return window.__studentFirebase||(window.__studentFirebase=firebase.apps.length?firebase.app():firebase.initializeApp(window.FIREBASE_CONFIG))}
+  function firebaseDb(){firebaseApp();return window.__studentDb||(window.__studentDb=firebase.database())}
+})();
+</script>
+</body>
+</html>
