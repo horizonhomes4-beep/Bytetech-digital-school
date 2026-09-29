@@ -35,7 +35,7 @@
 
 <!-- ================= LESSON LIST ================= -->
 
-<div id="browserView" style="display:none">
+<div id="browserView" style="display:none"><div id="studentDashboardGreeting" class="card" style="margin-bottom:18px;background:#eaf4ec;border:1px solid #c9e6d0;color:#183d28;font-weight:700;">Welcome back! <span style="font-weight:400;">Your learning dashboard is ready.</span></div>
 
 <div class="card">
   <p class="eyebrow">Your desk</p>
@@ -110,7 +110,10 @@ function redirectForCourse(s,target=null){
 }
 function enterBrowser(){
   $("loginView").style.display="none";$("browserView").style.display="block";$("roleTag").style.display="flex";
-  $("studentNameTag").textContent=currentStudent.name||"Student";$("headerSub").textContent="Your published lessons and assignments";loadEntries();
+  $("studentNameTag").textContent=currentStudent.name||"Student";$("headerSub").textContent="Your published lessons and assignments";
+  const greeting=document.getElementById("studentDashboardGreeting");
+  if(greeting) greeting.innerHTML=`Welcome back, <strong>${esc(currentStudent.name||"Student")}</strong>! <span>Choose a lesson, assignment, or course below to continue learning.</span>`;
+  loadEntries();
   const existing=document.getElementById("courseShortcut");if(existing)existing.remove();
   if(isComputerSkills(currentStudent)){
     const b=document.createElement("div");b.id="courseShortcut";b.className="card";b.innerHTML=`<p class="eyebrow">Your programme</p><h2>Practical Computer Skills</h2><p class="sub">Your Computer Skills course uses this same login. Continue your lesson journey without signing in again.</p><a class="btn-primary" style="display:block;text-align:center;text-decoration:none" href="computer%20skills%20only/index.html">Open Computer Skills Course</a>`;$("browserView").prepend(b);
@@ -129,11 +132,12 @@ $("loginForm").addEventListener("submit",async e=>{
     if(match.suspended===true||match.active===false)throw new Error("Your account has been suspended by your teacher."+(match.suspendReason?"\n\nReason: "+match.suspendReason:"")+"\n\nPlease speak to your teacher to get access back.");
     currentStudent=await hydrateStudent(match.id,match);
     saveSession(currentStudent);
-    const params=new URLSearchParams(location.search),returnTo=params.get("returnTo");
-    if(returnTo){
-      const decoded=decodeURIComponent(returnTo); if(decoded.startsWith("computer skills only/")&&isComputerSkills(currentStudent)){location.replace(decoded);return;}
-    }
-    if(isComputerSkills(currentStudent)){location.replace("computer skills only/index.html");return;}
+    // A lesson may have sent the student here to authenticate, but login
+    // always finishes at the main student dashboard. The student can then
+    // deliberately choose the course/lesson from there.
+    // All students enter the main dashboard first. Computer Skills students
+    // use the course shortcut from this dashboard; their existing session is
+    // reused inside the Computer Skills folder without another login.
     enterBrowser();
   }catch(err){showLoginError(err?.message||"Unable to sign in. Please check your connection and try again.");}
   finally{if(button){button.disabled=false;button.textContent="Log in"}}
@@ -141,7 +145,8 @@ $("loginForm").addEventListener("submit",async e=>{
 
 window.logout=()=>{currentStudent=null;sessionStorage.removeItem("lessonDeskStudent");sessionStorage.removeItem("lessonDeskReturnTo");location.href="index.html"};
 
-async function resume(){const saved=getSession();if(!saved)return;try{const snap=await get(ref(db,"students/"+saved.id)),rec=snap.val();if(!rec||rec.suspended===true||rec.active===false){sessionStorage.removeItem("lessonDeskStudent");return;}currentStudent=await hydrateStudent(saved.id,saved);const params=new URLSearchParams(location.search);if(params.get("forceLogin")==="1")return;const returnTo=params.get("returnTo");if(returnTo&&isComputerSkills(currentStudent)&&decodeURIComponent(returnTo).startsWith("computer skills only/")){location.replace(decodeURIComponent(returnTo));return;}if(isComputerSkills(currentStudent)){location.replace("computer skills only/index.html");return;}enterBrowser();}catch{sessionStorage.removeItem("lessonDeskStudent");}}
+async function resume(){const saved=getSession();if(!saved)return;try{const snap=await get(ref(db,"students/"+saved.id)),rec=snap.val();if(!rec||rec.suspended===true||rec.active===false){sessionStorage.removeItem("lessonDeskStudent");return;}currentStudent=await hydrateStudent(saved.id,saved);const params=new URLSearchParams(location.search);if(params.get("forceLogin")==="1")return;// Keep every student on the main dashboard after login/resume.
+enterBrowser();}catch{sessionStorage.removeItem("lessonDeskStudent");}}
 
 function hasLesson(e){return(e.kind||"lesson")!=="assignment"}function hasAssignment(e){return e.kind?e.kind!=="lesson":!!(e.assignment||e.assignmentLink)}
 function loadEntries(){get(ref(db,"lessons")).then(snap=>{visibleEntries=[];if(snap.exists())snap.forEach(dc=>dc.forEach(lc=>{const d=lc.val()||{};if(d.published===false)return;if((d.classIds||[]).includes(currentStudent.classId)||(d.studentIds||[]).includes(currentStudent.id))visibleEntries.push({date:dc.key,id:lc.key,...d})}));visibleEntries.sort((a,b)=>b.date.localeCompare(a.date));buildFilterOptions();renderEntries()}).catch(()=>{$("entryList").innerHTML="<div class='empty-state'><div class='big'>Couldn't load your lessons</div><p>Check your connection and refresh the page.</p></div>"})}
