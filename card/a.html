@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Admin · Student Accounts</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+<div id="app" class="wrap">
+  <header class="top">
+    <div class="brand"><img class="logo" src="logo.jpg" alt="School logo" onerror="this.style.display='none'"><h1>Admin <span>Panel</span></h1></div>
+    <div class="acts">
+      <span id="conn" class="conn off">Connecting…</span>
+      <button class="bell" id="bellBtn" title="Certificate requests">🔔<span id="bellDot" class="dot hide">0</span></button>
+      <a class="btn sec sm" style="display:inline-flex;align-items:center;text-decoration:none" href="index.html" target="_blank">View student page</a>
+    </div>
+  </header>
+
+  <div id="reqPanel" class="reqPanel hide"></div>
+  <section id="paymentDashboard" class="payment-dashboard hide"></section>
+
+  <section class="stats">
+    <div class="stat g"><small>Total collected</small><b id="tPaid">₦0</b></div>
+    <div class="stat w"><small>Balance expected</small><b id="tBal">₦0</b></div>
+    <div class="stat"><small>Students</small><b id="tCount">0</b></div>
+  </section>
+
+  <section class="panel">
+    <h3 id="formTitle" style="margin-bottom:12px">Add student</h3>
+    <div class="form">
+      <div><label>Student name</label><input id="name"></div>
+      <div><label>Course registered</label><input id="course"></div>
+      <div><label>Start date</label><input id="start" type="date"></div>
+      <div><label>End date</label><input id="end" type="date"></div>
+      <div><label>Course fee (₦)</label><input id="fee" type="number" min="0" step="any" inputmode="decimal"></div>
+      <div><label>Amount paid (₦)</label><input id="paid" type="number" min="0" step="any" inputmode="decimal"></div>
+      <div><label>Certificate — will issue after course?</label>
+        <select id="certEligible"><option value="no">No</option><option value="yes">Yes</option></select>
+      </div>
+      <div><label>Certificate collected?</label>
+        <select id="certCollected"><option value="no">Not collected</option><option value="yes">Collected</option></select>
+      </div>
+      <div class="acts"><button class="btn" id="save">Save</button><button class="btn sec hide" id="cancel">Cancel</button></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <input id="q" type="search" placeholder="Search students…" style="margin-bottom:12px">
+    <div class="tw"><table>
+      <thead><tr><th>Name</th><th>Course</th><th>Payment status</th><th>Start</th><th>End</th><th>Months</th><th>Fee</th><th>Paid</th><th>Balance</th><th>Certificate</th><th>Actions</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </section>
+</div>
+<div id="toast" class="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="config.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const F = ["name", "course", "start", "end", "fee", "paid"];
+let data = [], editId = null, requests = [], initialReqLoaded = false;
+let previousOverdueIds = new Set();
+
+function toast(m) {
+  const t = $("toast"); t.textContent = m; t.classList.add("show");
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+function monitorPaymentClock() {
+  if (!data.length) return;
+
+  const currentOverdue = new Set(
+    data.filter(s => paymentInfo(s).status === "overdue").map(s => s.id)
+  );
+
+  if (previousOverdueIds.size) {
+    data
+      .filter(s => currentOverdue.has(s.id) && !previousOverdueIds.has(s.id))
+      .slice(0, 5)
+      .forEach(s => toast(
+        `⛔ ${s.name} is now overdue. Full balance ${money(paymentInfo(s).balance)} is required.`
+      ));
+  }
+
+  previousOverdueIds = currentOverdue;
+}
+
+function renderPaymentDashboard() {
+  const x = paymentAdminSummary(data);
+  const box = $("paymentDashboard");
+  if (!x.overdue && !x.reminders) {
+    box.classList.add("hide"); box.innerHTML = ""; return;
+  }
+  box.classList.remove("hide");
+  box.classList.toggle("danger", x.overdue > 0);
+  box.innerHTML = `<div class="pd-head">
+    <div><h3>💳 Payment monitoring</h3>
+    <div style="color:var(--mu);font-size:.82rem">Payment requirements are calculated automatically from each student's fee, start date and course duration.</div></div>
+    <div class="pd-counts">
+      ${x.overdue ? `<span class="pd-count danger">⛔ ${x.overdue} overdue — access should be suspended</span>` : ""}
+      ${x.reminders ? `<span class="pd-count warn">🔔 ${x.reminders} payment reminder${x.reminders === 1 ? "" : "s"}</span>` : ""}
+    </div>
+  </div>`;
+}
+
+function start() {
+  if (!studentsRef) {
+    $("rows").innerHTML = `<tr><td class="empty" colspan="11">Not connected — fix config.js first (see the banner above).</td></tr>`;
+    $("save").disabled = true; return;
+  }
+  watchConnection($("conn"));
+
+  studentsRef.on("value", sn => {
+    const v = sn.val() || {};
+    data = Object.entries(v).map(([id, s]) => ({ id, ...s })).sort((a,b) => (a.name || "").localeCompare(b.name || ""));
+    render();
+
+    // Notify the administrator once when a student newly becomes overdue.
+    const currentOverdue = new Set(data.filter(s => paymentInfo(s).status === "overdue").map(s => s.id));
+    if (previousOverdueIds.size) {
+      data.filter(s => currentOverdue.has(s.id) && !previousOverdueIds.has(s.id))
+        .slice(0, 3).forEach(s => toast(`⛔ ${s.name} is overdue by ${money(paymentInfo(s).shortage)}`));
+    }
+    previousOverdueIds = currentOverdue;
+  }, err => toast("Database error: " + err.message));
+
+  // Payment status depends on the clock as well as Firebase data.
+  // Recheck every minute so an account can become overdue without a database edit.
+  setInterval(() => {
+    render();
+    monitorPaymentClock();
+  }, 60000);
+
+  certRequestsRef.once("value", sn => {
+    requests = Object.entries(sn.val() || {}).map(([id, r]) => ({ id, ...r }));
+    renderRequests();
+    initialReqLoaded = true;
+    certRequestsRef.on("child_added", sn2 => {
+      if (!initialReqLoaded) return;
+      const r = { id: sn2.key, ...sn2.val() };
+      if (!requests.find(x => x.id === r.id)) {
+        requests.push(r); renderRequests(); toast(`🔔 ${r.name} requested a certificate`);
+      }
+    });
+    certRequestsRef.on("child_removed", sn2 => {
+      requests = requests.filter(x => x.id !== sn2.key); renderRequests();
+    });
+  });
+}
+
+function renderRequests() {
+  $("bellDot").textContent = requests.length;
+  $("bellDot").classList.toggle("hide", requests.length === 0);
+  $("reqPanel").innerHTML = requests.length
+    ? requests.map(r => `<div class="reqItem"><div><b>${esc(r.name)}</b><br><small style="color:var(--mu)">${esc(r.course || "")}</small></div>
+        <button class="btn sm sec" data-resolve="${r.id}" data-sid="${esc(r.studentId || "")}">Resolve</button></div>`).join("")
+    : `<div class="empty">No pending certificate requests.</div>`;
+}
+$("bellBtn").onclick = () => $("reqPanel").classList.toggle("hide");
+document.addEventListener("click", e => {
+  if (!e.target.closest("#reqPanel") && !e.target.closest("#bellBtn")) $("reqPanel").classList.add("hide");
+  if (e.target.closest("[data-close-payment-detail]") || e.target.classList.contains("payment-detail-modal")) {
+    document.getElementById("paymentDetailModal")?.remove();
+  }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") document.getElementById("paymentDetailModal")?.remove();
+});
+$("reqPanel").addEventListener("click", e => {
+  const b = e.target.closest("[data-resolve]"); if (!b) return;
+  certRequestsRef.child(b.dataset.resolve).remove();
+  if (b.dataset.sid) studentsRef.child(b.dataset.sid).update({ certRequested: false }).catch(() => {});
+});
+
+function render() {
+  const t = totals(data);
+  $("tPaid").textContent = money(t.paid);
+  $("tBal").textContent = money(t.bal);
+  $("tCount").textContent = data.length;
+  renderPaymentDashboard();
+
+  const q = $("q").value.trim().toLowerCase();
+  const rows = data.filter(s => (s.name + " " + s.course).toLowerCase().includes(q));
+
+  $("rows").innerHTML = rows.length ? rows.map(s => {
+    const p = paymentInfo(s);
+    return `<tr>
+      <td data-l="Name"><b>${esc(s.name)}</b></td>
+      <td data-l="Course">${esc(s.course)}</td>
+      <td data-l="Payment"><div class="payment-status-wrap">${paymentStatusIconHTML(s)}</div></td>
+      <td data-l="Start">${fmtDate(s.start)}</td><td data-l="End">${fmtDate(s.end)}</td>
+      <td data-l="Months">${durMonths(s.start, s.end)}</td>
+      <td data-l="Fee">${money(s.fee)}</td><td data-l="Paid">${money(s.paid)}</td>
+      <td data-l="Balance">${money(balanceOf(s))}</td>
+      <td data-l="Certificate">${certBadgeHTML(s)}</td>
+      <td data-l="Actions"><div class="acts"><button class="btn sm sec" data-e="${s.id}">Edit</button><button class="btn sm sec" data-share="${s.id}">Share</button><button class="btn sm del" data-d="${s.id}">Delete</button></div></td>
+    </tr>`;
+  }).join("") : '<tr><td class="empty" colspan="11">No students yet.</td></tr>';
+}
+$("q").addEventListener("input", render);
+
+$("rows").addEventListener("click", e => {
+  const icon = e.target.closest("[data-payment-detail]");
+  if (!icon) return;
+  const s = data.find(x => x.id === icon.dataset.paymentDetail);
+  if (!s) return;
+  const old = document.getElementById("paymentDetailModal");
+  if (old) old.remove();
+  document.body.insertAdjacentHTML("beforeend", paymentDetailHTML(s));
+});
+
+$("rows").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.e) {
+    const s = data.find(x => x.id === b.dataset.e); if (!s) return;
+    F.forEach(k => $(k).value = s[k] ?? "");
+    editId = s.id;
+    $("certEligible").value = s.certEligible ? "yes" : "no";
+    $("certCollected").value = s.certCollected ? "yes" : "no";
+    $("formTitle").textContent = "Update student"; $("save").textContent = "Update"; $("cancel").classList.remove("hide");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else if (b.dataset.d) {
+    const s = data.find(x => x.id === b.dataset.d);
+    if (s && confirm(`Delete ${s.name}? This cannot be undone.`))
+      studentsRef.child(s.id).remove().then(() => { toast("Deleted"); if (editId === s.id) reset(); }).catch(err => toast(err.message));
+  } else if (b.dataset.share) {
+    copyText(studentLinkFor(b.dataset.share)).then(ok => toast(ok ? "Link copied — share it with the student" : "Link ready"));
+  }
+});
+
+function reset() {
+  F.forEach(k => $(k).value = ""); editId = null;
+  $("certEligible").value = "no"; $("certCollected").value = "no";
+  $("formTitle").textContent = "Add student"; $("save").textContent = "Save"; $("cancel").classList.add("hide");
+}
+$("cancel").onclick = reset;
+
+$("save").onclick = () => {
+  if (!studentsRef) return toast("Not connected to the database — fix config.js first.");
+  const s = {}; F.forEach(k => s[k] = $(k).value.trim());
+  if (!s.name || !s.course || !s.start || !s.end || s.fee === "" || s.paid === "") return toast("Fill in every field");
+  s.fee = +s.fee; s.paid = +s.paid;
+  if (s.end < s.start) return toast("End date must be after start date");
+  if (s.fee < 0 || s.paid < 0) return toast("Amounts cannot be negative");
+  if (s.paid > s.fee) return toast("Amount paid cannot exceed the fee");
+  s.certEligible = $("certEligible").value === "yes";
+  s.certCollected = $("certCollected").value === "yes";
+  if (editId) {
+    const cur = data.find(x => x.id === editId);
+    s.certRequested = cur ? !!cur.certRequested && !s.certCollected : false;
+  }
+  const btn = $("save"); btn.disabled = true;
+  const p = editId ? studentsRef.child(editId).update(s) : studentsRef.push(s);
+  p.then(() => { toast(editId ? "Updated" : "Saved"); reset(); })
+   .catch(err => toast("Error: " + err.message)).finally(() => btn.disabled = false);
+};
+start();
+</script>
+</body>
+</html>
