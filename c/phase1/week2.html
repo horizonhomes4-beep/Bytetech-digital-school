@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 1 · Week 2 — Your Operating System, Properly</title>
+<link rel="stylesheet" href="../assets/style.css">
+<meta name="week-data" content='{"phase": 1, "week": 2, "title": "Your Operating System, Properly", "skills": "Personalise the desktop, manage user accounts, install &amp; uninstall software safely, connect a printer, update the OS.", "status": "live", "phaseTitle": "Digital Foundations", "phaseTagline": "Get comfortable operating the machine itself before touching any real software.", "phaseColorVar": "--ink"}'>
+<script src="../assets/firebase-config.js"></script>
+<script src="../assets/devtools-guard.js"></script>
+</head>
+<body data-base="../" data-week-href="phase1/week2.html" data-week-title="Your Operating System, Properly" data-progress-key="phase1-week2">
+<script src="../assets/course.js"></script>
+<script type="module" src="../assets/auth-guard.js"></script>
+<script type="module" src="../assets/lesson-runtime.js"></script>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="brand">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg>
+      </span>
+      Practical PC Skills
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../curriculum.html">3-Month Curriculum</a></li>
+      <li><a href="week1.html">Phase 1 · Week 1</a></li>
+      <li><a href="week2.html" class="current">Phase 1 · Week 2</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="section-tight">
+  <div class="wrap">
+    <div class="eyebrow-row"><span class="pill pill-note">Phase 1 · Week 2</span><span class="small">Practical intensive — five sessions</span></div>
+    <h1>Your Operating System, Properly</h1>
+    <p style="font-size:1.1rem; max-width:64ch;">
+      Last week you learned to operate the machine. This week you learn to <strong>manage</strong> it:
+      make it comfortable to use, keep accounts safe, install software without picking up viruses,
+      connect a printer, and keep everything updated. Again, this is 100% hands-on.
+    </p>
+  </div>
+</header>
+
+<!-- COURSE MAP -->
+<section class="section-tight" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="course-map-head">
+      <h2>All weeks</h2>
+      <a href="../curriculum.html" class="small" style="text-decoration:none; font-weight:700;">Full curriculum →</a>
+    </div>
+    <div class="course-map" id="courseMap"></div>
+  </div>
+</section>
+
+<div id="lessonOverrideHost" hidden></div>
+
+<!-- Shows "Access granted" for unlocked students, or the request box for locked ones -->
+<section class="section-tight" style="padding-top:0;">
+  <div class="wrap">
+    <div id="requestAccessRoot"></div>
+  </div>
+</section>
+
+<div id="lessonOriginalContent">
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="wrap">
+    <div class="progress-track"><div class="progress-fill"></div></div>
+    <div class="progress-text">0 of 0 tasks completed</div>
+  </div>
+</div>
+
+<!-- RULES -->
+<section class="section-tight">
+  <div class="wrap">
+    <div class="callout callout-warn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"></path><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path></svg>
+      <div>
+        <h4 style="margin-bottom:6px;">Three rules for this week</h4>
+        <p style="margin-bottom:4px;"><strong>1. Do it, don't read it.</strong> Only tick a box after you have physically done the action on a computer.</p>
+        <p style="margin-bottom:4px;"><strong>2. Ask before you change someone else's computer.</strong> On a lab, work or borrowed PC, get permission first. If a task needs Administrator rights you do not have, watch your teacher do it and explain the steps back.</p>
+        <p><strong>3. Never use a password you use elsewhere</strong> for practice accounts, and never delete an account or app you did not create yourself.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <h4 style="margin-bottom:12px;">What you need</h4>
+      <ul class="step-list">
+        <li>A Windows or Mac computer where you may change settings (instructions note the difference where it matters)</li>
+        <li>An internet connection for Day 3 and Day 5</li>
+        <li>Access to a <strong>second computer</strong> for the "Prove it" boxes</li>
+        <li>A printer if one is available; if not, you will use Print to PDF</li>
+        <li>About 45–60 minutes per day</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+
+    <!-- DAY 1 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 1 OF 5</div>
+          <h3 style="margin:2px 0 0;">Make the Desktop Yours</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>A computer you can read comfortably and find things on quickly is a computer you use well. Today you personalise the desktop, but you also learn where every setting lives, because you will need that on every machine you ever touch.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t1" data-task-id="d1-t1">
+          <div class="task-body">
+            <label for="d1-t1">Open Settings and find Personalisation / Appearance</label>
+            <p><strong>Windows:</strong> press <span class="kbd">Win</span> + <span class="kbd">I</span>, then choose <em>Personalisation</em>. <strong>Mac:</strong> Apple menu → System Settings → Appearance.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t2" data-task-id="d1-t2">
+          <div class="task-body">
+            <label for="d1-t2">Change the desktop wallpaper</label>
+            <p>Pick a picture, apply it, and look at the desktop to confirm it changed. Then change it back to something calm and professional.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t3" data-task-id="d1-t3">
+          <div class="task-body">
+            <label for="d1-t3">Switch between Light mode and Dark mode</label>
+            <p>Turn on Dark mode, look at how apps change, then choose whichever is easier on your eyes.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t4" data-task-id="d1-t4">
+          <div class="task-body">
+            <label for="d1-t4">Make text and icons easier to read</label>
+            <p><strong>Windows:</strong> Settings → System → Display → Scale, or Accessibility → Text size. <strong>Mac:</strong> Settings → Displays. Increase the size one step and see the difference.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t5" data-task-id="d1-t5">
+          <div class="task-body">
+            <label for="d1-t5">Pin an app to the taskbar / Dock, then unpin it</label>
+            <p>Right-click an open app on the taskbar (or Dock) and choose <em>Pin</em>. Confirm it stays after you close the app, then unpin it.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t6" data-task-id="d1-t6">
+          <div class="task-body">
+            <label for="d1-t6">Set the screen to lock automatically after inactivity</label>
+            <p>Find the screen-saver / lock-screen timeout and set it to 5 minutes. Then lock the computer manually with <span class="kbd">Win</span> + <span class="kbd">L</span> (Mac: <span class="kbd">Ctrl</span> + <span class="kbd">Cmd</span> + <span class="kbd">Q</span>) and sign back in.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t7" data-task-id="d1-t7">
+          <div class="task-body">
+            <label for="d1-t7">Change the date, time and time zone correctly</label>
+            <p>Open Settings → Time &amp; language (Mac: General → Date &amp; Time). Confirm the computer shows the correct local time for Nigeria (West Africa Time).</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On a computer that is not yours (with permission), find the wallpaper setting and the display size setting in under two minutes. Do not change anything permanently; just prove you can find them. Notice where the menus are different.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 2 OF 5</div>
+          <h3 style="margin:2px 0 0;">User Accounts &amp; Passwords</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>One computer, many people. User accounts keep everyone's files, settings and passwords separate, and they decide who is allowed to install software. Today you learn the difference between an Administrator and a Standard user, and how to protect an account properly.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t1" data-task-id="d2-t1">
+          <div class="task-body">
+            <label for="d2-t1">Find out which account you are signed in with</label>
+            <p><strong>Windows:</strong> Settings → Accounts → Your info. <strong>Mac:</strong> System Settings → Users &amp; Groups. Note the account name and whether it says Administrator.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t2" data-task-id="d2-t2">
+          <div class="task-body">
+            <label for="d2-t2">Explain Administrator vs Standard in your own words</label>
+            <p>Write two sentences in Notepad/TextEdit: what an Administrator can do that a Standard user cannot (for example install software and change system settings).</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t3" data-task-id="d2-t3">
+          <div class="task-body">
+            <label for="d2-t3">Create a practice Standard user account</label>
+            <p><strong>Windows:</strong> Settings → Accounts → Other users → Add account. <strong>Mac:</strong> Users &amp; Groups → Add User. Name it <em>Practice</em>. <strong>Lab or borrowed PC?</strong> Ask permission first, or watch your teacher do it.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t4" data-task-id="d2-t4">
+          <div class="task-body">
+            <label for="d2-t4">Switch to the Practice account and back</label>
+            <p>Use the Start menu (or Apple menu) to switch user. Notice that the desktop, wallpaper and files are completely different, then switch back to your own account.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t5" data-task-id="d2-t5">
+          <div class="task-body">
+            <label for="d2-t5">Change a password or set a PIN</label>
+            <p>Change the password of your Practice account (never a password you use elsewhere). A strong password has 12 or more characters, mixes words, numbers and symbols, and is not your name or phone number.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t6" data-task-id="d2-t6">
+          <div class="task-body">
+            <label for="d2-t6">Sign out, lock and switch user: know the difference</label>
+            <p>Sign out closes your apps. Lock keeps them running behind the lock screen. Switch user leaves your session running while someone else signs in. Try all three and say which one you would use before leaving a shared computer.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t7" data-task-id="d2-t7">
+          <div class="task-body">
+            <label for="d2-t7">Delete the Practice account and its data safely</label>
+            <p>Only delete the account you created yourself. Choose to remove the account <em>and</em> its files, then confirm it no longer appears in the list.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>Look at the accounts on a second computer (do not change them). Which account is Administrator? Does it have a password? Write down what you would improve, without changing anything.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 3 OF 5</div>
+          <h3 style="margin:2px 0 0;">Installing &amp; Uninstalling Software Safely</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>Most computer problems, such as viruses, slow machines and pop-ups, begin with a careless install. Today you learn a safe routine: get software only from the official place, read every screen, and remove what you no longer need.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t1" data-task-id="d3-t1">
+          <div class="task-body">
+            <label for="d3-t1">Open the list of installed apps</label>
+            <p><strong>Windows:</strong> Settings → Apps → Installed apps. <strong>Mac:</strong> Finder → Applications. Scroll through and name three apps you recognise and one you don't.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t2" data-task-id="d3-t2">
+          <div class="task-body">
+            <label for="d3-t2">Find the official download page of a free app</label>
+            <p>Search for a free program such as 7-Zip, VLC or Notepad++. Choose the result from the <strong>official website</strong> (check the address in the browser), not an ad or a 'free download' site.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t3" data-task-id="d3-t3">
+          <div class="task-body">
+            <label for="d3-t3">Spot a fake download button</label>
+            <p>On a download page, find at least one advert that looks like a Download button but is not the real one. The real link is usually a plain text link or the official file name (for example an .exe or .msi from the developer's own site).</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t4" data-task-id="d3-t4">
+          <div class="task-body">
+            <label for="d3-t4">Install one small app from the official source</label>
+            <p>Run the installer and <strong>read every screen</strong>. Untick any extra toolbars, browser changes or 'special offers', then finish the installation and open the app once.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t5" data-task-id="d3-t5">
+          <div class="task-body">
+            <label for="d3-t5">Uninstall the app you just installed</label>
+            <p>Settings → Apps → Installed apps → ⋯ → Uninstall (Mac: drag the app from Applications to the Bin). Confirm it no longer appears in the list.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t6" data-task-id="d3-t6">
+          <div class="task-body">
+            <label for="d3-t6">Check the Publisher before you trust an installer</label>
+            <p>When Windows asks 'Do you want to allow this app to make changes?', look at the <em>Verified publisher</em> line. Say what you would do if it read 'Unknown publisher'.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t7" data-task-id="d3-t7">
+          <div class="task-body">
+            <label for="d3-t7">Use the Microsoft Store / App Store once</label>
+            <p>Search for a free app, view its details and ratings, and install then remove it. Explain why the store is safer than random websites.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On another computer, open the installed apps list and find the biggest app taking space and one you do not recognise. Do not remove anything; write down what you would check first.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 4 OF 5</div>
+          <h3 style="margin:2px 0 0;">Printers, Devices &amp; Bluetooth</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>A printer that will not print is one of the most common office problems. Today you learn how a computer finds and talks to devices, and how to print exactly what you want, with no wasted paper.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t1" data-task-id="d4-t1">
+          <div class="task-body">
+            <label for="d4-t1">Open Printers &amp; scanners</label>
+            <p><strong>Windows:</strong> Settings → Bluetooth &amp; devices → Printers &amp; scanners. <strong>Mac:</strong> System Settings → Printers &amp; Scanners. Note which printers are already listed.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t2" data-task-id="d4-t2">
+          <div class="task-body">
+            <label for="d4-t2">Add a printer, or walk through the wizard</label>
+            <p>Click <em>Add device</em> and let the computer search. If a real printer is nearby, add it (USB cable or the same Wi-Fi network). If not, stop at the list of found devices and explain what each entry means.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t3" data-task-id="d4-t3">
+          <div class="task-body">
+            <label for="d4-t3">Print to PDF instead of paper</label>
+            <p>Open your Week 1 practice note. Press <span class="kbd">Ctrl</span> + <span class="kbd">P</span>, choose <em>Microsoft Print to PDF</em> (Mac: PDF → Save as PDF) and save it to your Documents folder. Open the PDF to check it.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t4" data-task-id="d4-t4">
+          <div class="task-body">
+            <label for="d4-t4">Choose print options deliberately</label>
+            <p>In the print window, set: number of copies, only the pages you need, portrait or landscape, and black and white. Look at the preview before printing.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t5" data-task-id="d4-t5">
+          <div class="task-body">
+            <label for="d4-t5">Turn Bluetooth on, see what is nearby, then turn it off</label>
+            <p>Open the Bluetooth setting, switch it on, look at the list of nearby devices without pairing with anything you don't own, then switch it off again.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t6" data-task-id="d4-t6">
+          <div class="task-body">
+            <label for="d4-t6">Clear a stuck print job</label>
+            <p>Open the printer's print queue (double-click the printer). Cancel a waiting job and explain what a stuck queue looks like.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t7" data-task-id="d4-t7">
+          <div class="task-body">
+            <label for="d4-t7">Set a default printer and explain the difference from 'last used'</label>
+            <p>Find the option to set a printer as default and say when you would use it. Then check whether the computer is set to 'Let Windows manage my default printer'.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On a different computer, open Printers &amp; scanners and print a test page or a PDF. If it fails, write down the exact message on screen and the first two things you would try.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 5 OF 5</div>
+          <h3 style="margin:2px 0 0;">Updates, Storage &amp; Keeping It Healthy</h3>
+        </div>
+        <span class="pill pill-basic">Basic + Project</span>
+      </div>
+      <div class="day-body">
+        <p>A computer that is never updated becomes slow and unsafe. Today you check for updates, see where your storage goes, and finish with a practical project: setting up a computer for a new user from start to finish.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t1" data-task-id="d5-t1">
+          <div class="task-body">
+            <label for="d5-t1">Check for system updates</label>
+            <p><strong>Windows:</strong> Settings → Windows Update → Check for updates. <strong>Mac:</strong> System Settings → General → Software Update. Note whether updates are waiting.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t2" data-task-id="d5-t2">
+          <div class="task-body">
+            <label for="d5-t2">Find the Active hours / restart schedule</label>
+            <p>Windows Update → Advanced options (or Schedule restart). Set active hours that match the time you normally work so it does not restart mid-lesson.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t3" data-task-id="d5-t3">
+          <div class="task-body">
+            <label for="d5-t3">Read your PC's key specs</label>
+            <p><strong>Windows:</strong> Settings → System → About. <strong>Mac:</strong> Apple menu → About This Mac. Write down: device name, processor, memory (RAM), and Windows / macOS version.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t4" data-task-id="d5-t4">
+          <div class="task-body">
+            <label for="d5-t4">See where your storage is being used</label>
+            <p>Settings → System → Storage (Mac: General → Storage). Name the top three categories using space and how much free space is left.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t5" data-task-id="d5-t5">
+          <div class="task-body">
+            <label for="d5-t5">Free up space safely</label>
+            <p>Empty the Recycle Bin / Bin and clean temporary files using the Storage or Cleanup suggestions. Never delete anything you do not recognise in system folders.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t6" data-task-id="d5-t6">
+          <div class="task-body">
+            <label for="d5-t6">Check power and battery settings</label>
+            <p>Find the power mode (Best performance / Balanced / Best power efficiency) and battery usage. Explain which setting you would use on a laptop that must last all day.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t7" data-task-id="d5-t7">
+          <div class="task-body">
+            <label for="d5-t7">Final project: prepare a computer for a new user</label>
+            <p>On a computer where you have permission, do all of these in order: set a clear wallpaper, create a Standard account with a password, install one useful free app from its official site, add or test a printer (or print to PDF), and check for updates. Write a short checklist of what you did.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>Repeat your final project checklist on a second computer, or sit with a partner who follows your checklist step by step. Every step you had to explain aloud is a step that needs to be clearer.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SELF ASSESSMENT -->
+<section class="section-tight" style="background:var(--panel); border-top:1px solid var(--line-soft);">
+  <div class="wrap">
+    <h2>End of week self-assessment</h2>
+    <p>Answer honestly. If you can't say yes to all six, revisit that day before requesting Week 3.</p>
+    <div class="grid-2">
+      <ul class="step-list">
+        <li>I can change the wallpaper, theme, text size and screen lock settings</li>
+        <li>I can tell an Administrator from a Standard account and create one safely</li>
+        <li>I can install and remove an app using only the official source</li>
+      </ul>
+      <ul class="step-list">
+        <li>I can add a printer or print to PDF and choose the right print options</li>
+        <li>I can check for updates and see how much storage is left</li>
+        <li>I completed the final project on a second computer</li>
+      </ul>
+    </div>
+    <div class="callout callout-info" style="margin-top:10px;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      <div>
+        <p style="margin-bottom:0;"><strong>Next up — Week 3:</strong> The Internet &amp; Browsers: using a browser like a pro, searching effectively, spotting unsafe sites and setting up email. Request it below when you are ready.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight center">
+  <div class="wrap" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <button class="btn btn-ghost" data-reset-progress type="button">Reset my checklist</button>
+    <a href="../curriculum.html" class="btn btn-ghost">← Back to curriculum</a>
+  </div>
+</section>
+
+</div>
+
+<!-- Request Week 3 (only shown to students who have been granted Week 2) -->
+<section class="section-tight" style="padding-top:0;">
+  <div class="wrap">
+    <div id="nextLessonRequestRoot"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Phase 1 · Week 2 — Your Operating System, Properly</p>
+    <p><a href="../index.html">Home</a></p>
+  </div>
+</footer>
+
+<script src="../assets/script.js"></script>
+<script src="../assets/read-aloud.js"></script>
+<script src="../assets/request-access.js"></script>
+<script src="../assets/next-lesson-request.js"></script>
+</body>
+</html>

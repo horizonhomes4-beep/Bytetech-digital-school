@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3-Month Curriculum | Practical Computer Skills</title><link rel="stylesheet" href="assets/style.css"><script src="assets/firebase-config.js"></script><script src="assets/course.js"></script><script type="module" src="assets/auth-guard.js"></script><style>
+body{background:linear-gradient(180deg,#eef6ff 0,#f7faff 360px,#f5f7fb 100%)}.curriculum-hero{padding:54px 0 30px}.curriculum-hero h1{font-size:clamp(2.1rem,5vw,3.7rem);line-height:1.05;margin:14px 0}.curriculum-hero p{max-width:800px;color:#5d6a7b;font-size:1.06rem;line-height:1.7}.curriculum-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:15px 0 28px}.curriculum-search{flex:1 1 330px;height:48px;border:1px solid #dfe6ef;border-radius:12px;padding:0 15px;background:#fff;font-size:1rem;outline:0}.filter{border:1px solid #dfe6ef;background:#fff;border-radius:999px;padding:10px 14px;font-weight:800;color:#536176;cursor:pointer}.filter.active{background:#14213d;color:#fff;border-color:#14213d}.curr-phase{background:#fff;border:1px solid #e2e8f0;border-radius:22px;overflow:hidden;margin:22px 0;box-shadow:0 12px 32px rgba(20,33,61,.08)}.phase-head{padding:25px 28px;color:#fff}.p1 .phase-head{background:linear-gradient(135deg,#1769aa,#318ed4)}.p2 .phase-head{background:linear-gradient(135deg,#087b75,#18a49b)}.p3 .phase-head{background:linear-gradient(135deg,#733bb0,#a24fd0)}.phase-head span{font-size:.75rem;font-weight:900;letter-spacing:.12em}.phase-head h2{margin:7px 0;font-size:1.8rem}.phase-head p{margin:0;opacity:.95}.weeks{padding:8px 18px}.week-card{display:grid;grid-template-columns:85px minmax(0,1fr) 105px 120px;gap:18px;align-items:center;padding:21px 8px;border-bottom:1px solid #e8edf3}.week-card:last-child{border-bottom:0}.week-number{font-weight:900;color:#1769aa}.week-content h3{margin:0 0 6px;font-size:1.08rem}.week-content p{margin:0;color:#596778;line-height:1.55}.topic-line{margin-top:9px;color:#687587;font-size:.84rem}.status{justify-self:start;border-radius:999px;padding:7px 10px;font-size:.75rem;font-weight:900}.status.available{background:#e7f8ef;color:#16834a}.status.pending{background:#fff3dc;color:#a15c00}.week-link{text-align:center;text-decoration:none;padding:9px 10px;border-radius:10px;background:#f0f3f7;color:#7b8796;font-weight:800;font-size:.83rem}.week-link.active{background:#e9f2ff;color:#1769aa}.week-card.hidden{display:none}.curr-empty{display:none;text-align:center;padding:35px;background:#fff;border:1px dashed #cbd5e1;border-radius:16px;color:#64748b}.curr-empty.show{display:block}@media(max-width:800px){.week-card{grid-template-columns:70px 1fr}.status,.week-link{grid-column:2;justify-self:start}.weeks{padding:4px 12px}}@media(max-width:520px){.curriculum-hero{padding-top:35px}.phase-head{padding:21px}.week-card{grid-template-columns:1fr;gap:8px}.status,.week-link{grid-column:1}.topic-line{font-size:.8rem}}
+</style></head><body data-base="">
+<nav class="site-nav"><div class="wrap"><a href="index.html" class="brand"><span class="mark">PC</span>Practical PC Skills</a><button class="nav-toggle" aria-label="Toggle menu">☰</button><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="curriculum.html" class="current">Curriculum</a></li><li><a href="phase1/week1.html">Start learning</a></li></ul></div></nav>
+<header class="curriculum-hero"><div class="wrap"><span class="pill pill-note">12 WEEKS · 3 PHASES · PRACTICAL TRAINING</span><h1>Complete 3-Month Curriculum</h1><p>This is the complete course map. Every phase and every week is listed with the practical topics and skills students will learn. Week 1 is available immediately; later lessons are released individually after the administrator reviews a student's request.</p></div></header>
+<main class="wrap"><div class="curriculum-controls"><input id="curriculumSearch" class="curriculum-search" type="search" placeholder="Search topics, tools or skills…" aria-label="Search curriculum"><button class="filter active" data-filter="all">All phases</button><button class="filter" data-filter="1">Phase 1</button><button class="filter" data-filter="2">Phase 2</button><button class="filter" data-filter="3">Phase 3</button></div>
+<div id="curriculumCount" class="results-count">Showing all 12 weeks</div>
+<div id="currRoot"></div>
+<div id="currEmpty" class="curr-empty"><h3>No matching curriculum item</h3><p>Try another topic or select All phases.</p></div></main><footer><div class="wrap"><p>Practical Computer Skills Course · 3-Month Curriculum</p></div></footer>
+<script src="assets/read-aloud.js"></script>
+<script>
+/* The curriculum is built from assets/course.js. A week shows as "Available" automatically
+   as soon as its lesson file (phaseN/weekN.html) is uploaded - nothing on this page needs editing. */
+(()=>{
+  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const root=document.getElementById('currRoot'),search=document.getElementById('curriculumSearch'),
+        filters=[...document.querySelectorAll('.filter')],empty=document.getElementById('currEmpty'),
+        count=document.getElementById('curriculumCount');
+  let phase='all';
+  function build(){
+    const weeks=(window.CourseAPI?window.CourseAPI.list():[]);
+    const P=window.CourseAPI?window.CourseAPI.phases:{};
+    root.innerHTML=[1,2,3].map(id=>{
+      const ph=P[id]||{title:'Phase '+id,tagline:''};
+      const cards=weeks.filter(w=>w.phase===id).map(w=>{
+        const live=w.status==='live';
+        const num=String(w.week).padStart(2,'0');
+        return `<article class="week-card" data-search="${esc(('week '+w.week+' '+w.title+' '+w.topics).toLowerCase())}" data-week="${w.week}"><div class="week-number">WEEK ${num}</div><div class="week-content"><h3>${esc(w.title)}</h3><p>${esc(w.topics)}</p><div class="topic-line"><strong>Topics &amp; skills:</strong> ${esc(w.topics)}</div></div><span class="status ${live?'available':'pending'}">${live?'Available':'Coming soon'}</span>${live?`<a class="week-link active" href="${w.href}">Open lesson →</a>`:`<span class="week-link" style="opacity:.55;cursor:default;">Not published yet</span>`}</article>`;
+      }).join('');
+      return `<section class="curr-phase p${id}" data-phase="${id}"><div class="phase-head"><span>PHASE ${id}</span><h2>${esc(ph.title)}</h2><p>${esc(ph.tagline)}</p></div><div class="weeks">${cards}</div></section>`;
+    }).join('');
+    apply();
+  }
+  function apply(){
+    const q=(search.value||'').toLowerCase().trim();let n=0;
+    root.querySelectorAll('.week-card').forEach(c=>{
+      const ok=(phase==='all'||c.closest('.curr-phase').dataset.phase===phase)&&(!q||c.dataset.search.includes(q));
+      c.classList.toggle('hidden',!ok);if(ok)n++;
+    });
+    root.querySelectorAll('.curr-phase').forEach(p=>p.style.display=[...p.querySelectorAll('.week-card')].some(c=>!c.classList.contains('hidden'))?'':'none');
+    count.textContent=`Showing ${n} of 12 weeks`;empty.classList.toggle('show',n===0);
+  }
+  search.addEventListener('input',apply);
+  filters.forEach(b=>b.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));b.classList.add('active');phase=b.dataset.filter;apply();}));
+  document.addEventListener('course-updated',build);
+  build();
+})();
+</script></body></html>

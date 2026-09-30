@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 1 · Week 3 — The Internet &amp; Browsers</title>
+<link rel="stylesheet" href="../assets/style.css">
+<meta name="week-data" content='{"phase": 1, "week": 3, "title": "The Internet &amp; Browsers", "skills": "Use a browser like a pro (tabs, bookmarks, downloads), search effectively, spot unsafe sites, set up and use email.", "status": "live", "phaseTitle": "Digital Foundations", "phaseTagline": "Get comfortable operating the machine itself before touching any real software.", "phaseColorVar": "--ink"}'>
+<script src="../assets/firebase-config.js"></script>
+<script src="../assets/devtools-guard.js"></script>
+</head>
+<body data-base="../" data-week-href="phase1/week3.html" data-week-title="The Internet &amp; Browsers" data-progress-key="phase1-week3">
+<script src="../assets/course.js"></script>
+<script type="module" src="../assets/auth-guard.js"></script>
+<script type="module" src="../assets/lesson-runtime.js"></script>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="brand">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1"></rect><path d="M8 20h8M12 16v4"></path></svg>
+      </span>
+      Practical PC Skills
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../curriculum.html">3-Month Curriculum</a></li>
+      <li><a href="week1.html">Phase 1 · Week 1</a></li>
+      <li><a href="week2.html">Phase 1 · Week 2</a></li>
+      <li><a href="week3.html" class="current">Phase 1 · Week 3</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="section-tight">
+  <div class="wrap">
+    <div class="eyebrow-row"><span class="pill pill-note">Phase 1 · Week 3</span><span class="small">Practical intensive — five sessions</span></div>
+    <h1>The Internet &amp; Browsers</h1>
+    <p style="font-size:1.1rem; max-width:64ch;">
+      You can now operate and manage the machine. This week you connect it to the world.
+      You will learn to use a browser like a professional, <strong>find reliable information fast</strong>,
+      recognise unsafe websites before they cause harm, and send email with confidence.
+      As always, this is 100% hands-on.
+    </p>
+  </div>
+</header>
+
+<!-- COURSE MAP -->
+<section class="section-tight" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="course-map-head">
+      <h2>All weeks</h2>
+      <a href="../curriculum.html" class="small" style="text-decoration:none; font-weight:700;">Full curriculum →</a>
+    </div>
+    <div class="course-map" id="courseMap"></div>
+  </div>
+</section>
+
+<div id="lessonOverrideHost" hidden></div>
+
+<!-- Shows "Access granted" for unlocked students, or the request box for locked ones -->
+<section class="section-tight" style="padding-top:0;">
+  <div class="wrap">
+    <div id="requestAccessRoot"></div>
+  </div>
+</section>
+
+<div id="lessonOriginalContent">
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="wrap">
+    <div class="progress-track"><div class="progress-fill"></div></div>
+    <div class="progress-text">0 of 0 tasks completed</div>
+  </div>
+</div>
+
+<!-- RULES -->
+<section class="section-tight">
+  <div class="wrap">
+    <div class="callout callout-warn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"></path><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path></svg>
+      <div>
+        <h4 style="margin-bottom:6px;">Three rules for this week</h4>
+        <p style="margin-bottom:4px;"><strong>1. Do it, don't read it.</strong> Only tick a box after you have physically done the action on a computer.</p>
+        <p style="margin-bottom:4px;"><strong>2. Practise safely.</strong> Never type a real password, card number or personal details into a page you are not sure about. All &ldquo;unsafe site&rdquo; practice this week uses trusted sites, screenshots and examples.</p>
+        <p><strong>3. Ask before you change a shared computer.</strong> On a lab, work or borrowed PC, get permission before changing browser settings or creating accounts, and sign out and clear any bookmarks you made when you finish.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <h4 style="margin-bottom:12px;">What you need</h4>
+      <ul class="step-list">
+        <li>A computer with a working internet connection <strong>every day</strong> this week</li>
+        <li>At least one web browser (Chrome, Edge, Firefox or Safari)</li>
+        <li>An email address for Day 5 (your teacher can help you create one if you have none)</li>
+        <li>Access to a <strong>second computer</strong> for the &ldquo;Prove it&rdquo; boxes</li>
+        <li>A notebook or a text file for writing your notes and answers</li>
+        <li>About 45–60 minutes per day</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+
+    <!-- DAY 1 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 1 OF 5</div>
+          <h3 style="margin:2px 0 0;">How the Internet &amp; Browsers Work</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>Most people use the internet every day without knowing what they are looking at. Today you learn the difference between the <strong>internet</strong>, a <strong>website</strong>, a <strong>browser</strong> and a <strong>search engine</strong>, and you learn to read a web address the way a professional does. Everything else this week builds on this.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t1" data-task-id="d1-t1">
+          <div class="task-body">
+            <label for="d1-t1">Say the difference between a browser and a search engine</label>
+            <p>A <strong>browser</strong> is the app that opens websites (Chrome, Edge, Firefox, Safari). A <strong>search engine</strong> (Google, Bing, DuckDuckGo) is a website that helps you find other websites. Write one sentence in your own words explaining the difference, then say it aloud to someone or to yourself.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t2" data-task-id="d1-t2">
+          <div class="task-body">
+            <label for="d1-t2">Open a browser and name its parts</label>
+            <p>Open your browser and find: the <strong>address bar</strong>, the <strong>tab strip</strong>, the <strong>back</strong>, <strong>forward</strong> and <strong>refresh</strong> buttons, the <strong>home</strong> button (if shown) and the <strong>menu</strong> (three dots or lines). Point to each one with the mouse and say its name.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t3" data-task-id="d1-t3">
+          <div class="task-body">
+            <label for="d1-t3">Go to a website by typing its address</label>
+            <p>Click the address bar, type <strong>wikipedia.org</strong> and press <span class="kbd">Enter</span>. Notice that you did not need to type <em>https://</em> or <em>www</em>. Now use the Back and Forward buttons, then press Refresh (or <span class="kbd">F5</span>).</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t4" data-task-id="d1-t4">
+          <div class="task-body">
+            <label for="d1-t4">Break a web address into its parts</label>
+            <p>Open any Wikipedia article and look at the address. Identify the <strong>protocol</strong> (<em>https://</em>), the <strong>domain</strong> (<em>en.wikipedia.org</em>) and the <strong>page path</strong> (the part after the first single slash). Write the three parts down. The domain is the part that tells you who really owns the site.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t5" data-task-id="d1-t5">
+          <div class="task-body">
+            <label for="d1-t5">Check the padlock and site information</label>
+            <p>Click the small icon at the left of the address bar (a padlock or settings icon). Read what it says about the connection. <strong>Remember:</strong> a padlock only means your connection is private. It does <em>not</em> mean the website is honest. You will use this on Day 4.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t6" data-task-id="d1-t6">
+          <div class="task-body">
+            <label for="d1-t6">Find out which browser version you have and whether it is up to date</label>
+            <p>Open the browser menu → <em>Help</em> or <em>Settings</em> → <em>About</em>. Read the version number and whether it says it is up to date. If an update is waiting, note it down, and only install it if you have permission on this computer.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t7" data-task-id="d1-t7">
+          <div class="task-body">
+            <label for="d1-t7">Install and open a second browser</label>
+            <p>If a second browser is already on the computer (for example Edge <em>and</em> Chrome), use it. Otherwise, only if you have permission, download one from its <strong>official website</strong> (remember Week 2, Day 3: official source only). Open the same website in both and compare how the tabs and menus look.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t8" data-task-id="d1-t8">
+          <div class="task-body">
+            <label for="d1-t8">Change your browser's home page and startup behaviour</label>
+            <p>In <em>Settings</em>, find <em>On startup</em> (or <em>Home page</em>). Choose what opens when the browser starts. Set it to something useful, close the browser completely, reopen it and confirm it worked. Ask permission first on a shared computer and change it back if it is not your machine.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d1-t9" data-task-id="d1-t9">
+          <div class="task-body">
+            <label for="d1-t9">Change the default search engine</label>
+            <p>In <em>Settings</em> → <em>Search engine</em>, see which search engine your browser uses. Switch to a different one, search for the same word in both, and note one difference in the results. Then set it to the one you prefer.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On a second computer, open its browser and find the address bar, the menu and the About page in under one minute. Which browser is it and what version? Write it down.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 2 OF 5</div>
+          <h3 style="margin:2px 0 0;">Tabs, Bookmarks, History &amp; Downloads</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>Professionals do not keep one page open and hunt for things again and again. Today you learn to work with <strong>many tabs</strong>, <strong>save pages so you never lose them</strong>, <strong>find where you have been</strong>, and <strong>download files safely and find them again</strong>. Keyboard shortcuts are shown for Windows; on a Mac use <span class="kbd">Cmd</span> instead of <span class="kbd">Ctrl</span>.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t1" data-task-id="d2-t1">
+          <div class="task-body">
+            <label for="d2-t1">Open, switch and close tabs with the mouse</label>
+            <p>Open three tabs using the <strong>+</strong> button (for example a news site, Wikipedia and a search page). Click between them, drag one tab to a new position, then close one using the small <strong>×</strong>.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t2" data-task-id="d2-t2">
+          <div class="task-body">
+            <label for="d2-t2">Do the same with keyboard shortcuts</label>
+            <p>New tab: <span class="kbd">Ctrl</span> + <span class="kbd">T</span>. Next tab: <span class="kbd">Ctrl</span> + <span class="kbd">Tab</span>. Close tab: <span class="kbd">Ctrl</span> + <span class="kbd">W</span>. Practise each one three times until you do not need to look at the list.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t3" data-task-id="d2-t3">
+          <div class="task-body">
+            <label for="d2-t3">Bring back a tab you closed by accident</label>
+            <p>Close a tab on purpose, then press <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">T</span> to reopen it. This one shortcut will save you many times.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t4" data-task-id="d2-t4">
+          <div class="task-body">
+            <label for="d2-t4">Bookmark a page and open it again from the bookmarks</label>
+            <p>Open a page you like and press <span class="kbd">Ctrl</span> + <span class="kbd">D</span> (or click the star). Give it a clear name and save it. Then open a new tab, find the bookmark in the bookmarks menu (or <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">O</span>) and open it.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t5" data-task-id="d2-t5">
+          <div class="task-body">
+            <label for="d2-t5">Look at your browsing history</label>
+            <p>Press <span class="kbd">Ctrl</span> + <span class="kbd">H</span> to open the history. Find a page you visited earlier today and reopen it from there. Notice that the history is a list of <em>everything</em>, so anyone using this browser profile can see it.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t6" data-task-id="d2-t6">
+          <div class="task-body">
+            <label for="d2-t6">Download a file and find it</label>
+            <p>Go to a site that offers a small free document (for example a sample PDF from a government or university website). Click the download link, watch the download indicator, then open the <strong>Downloads</strong> list (<span class="kbd">Ctrl</span> + <span class="kbd">J</span>) and click <em>Show in folder</em>. Say aloud where the file is stored on the computer.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t7" data-task-id="d2-t7">
+          <div class="task-body">
+            <label for="d2-t7">Create a bookmarks folder and organise your bookmarks</label>
+            <p>Open the Bookmark Manager. Create a folder called <strong>Practical PC Course</strong> and move your bookmark into it. Add two more useful pages to the same folder. Show the bookmarks bar (<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">B</span>) and drag the folder onto it.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t8" data-task-id="d2-t8">
+          <div class="task-body">
+            <label for="d2-t8">Pin a tab and mute a noisy tab</label>
+            <p>Right-click a tab and choose <em>Pin tab</em>. Notice it becomes small and stays at the left. Open a page that plays a video or sound, right-click its tab and choose <em>Mute site</em>. Unpin and unmute when you are done.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t9" data-task-id="d2-t9">
+          <div class="task-body">
+            <label for="d2-t9">Use a private / incognito window, and know its limits</label>
+            <p>Open a private window (<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">N</span> in Chrome/Edge; <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">P</span> in Firefox). Visit a page, close the window, and check that it is not in the history. Then write down what private mode does <em>not</em> do: it does not hide you from your school, employer, internet provider or the website itself.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d2-t10" data-task-id="d2-t10">
+          <div class="task-body">
+            <label for="d2-t10">Change where downloads are saved</label>
+            <p>In <em>Settings</em> → <em>Downloads</em>, see the download location. If you have permission, change it to a folder you made yourself (for example <em>Documents\Course Downloads</em>), download a file again and confirm it landed there.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On a second computer, open three tabs, bookmark one page, reopen a closed tab and find where downloads go. If it is a shared computer, delete the bookmark you made when you finish.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 3 OF 5</div>
+          <h3 style="margin:2px 0 0;">Searching Effectively</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>Anyone can type words into a search box. The skill is getting the <em>right</em> answer in the first minute and knowing whether to trust it. Today you learn to choose keywords, use a few simple search tricks, filter results, and check a source before you believe it.</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t1" data-task-id="d3-t1">
+          <div class="task-body">
+            <label for="d3-t1">Turn a question into good keywords</label>
+            <p>Take the question <em>&ldquo;What is the best way to keep my laptop battery healthy?&rdquo;</em> Search it as a full sentence, then search it again with only the important words (for example <em>laptop battery health tips</em>). Compare the results and note which was better.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t2" data-task-id="d3-t2">
+          <div class="task-body">
+            <label for="d3-t2">Tell adverts from real results</label>
+            <p>Search for a product such as <em>laptop bag</em>. Find the results marked <strong>Ad</strong> or <strong>Sponsored</strong> at the top. Say aloud why an advert is not the same as the best answer.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t3" data-task-id="d3-t3">
+          <div class="task-body">
+            <label for="d3-t3">Search for an exact phrase using quotation marks</label>
+            <p>Search for <em>computer skills course</em> with no quotes, then with quotes around it: <em>&quot;computer skills course&quot;</em>. Note how the results become stricter.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t4" data-task-id="d3-t4">
+          <div class="task-body">
+            <label for="d3-t4">Exclude a word using the minus sign</label>
+            <p>Search for <em>jaguar speed</em>, then <em>jaguar speed -car</em>. Notice how the minus sign removes results you do not want.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t5" data-task-id="d3-t5">
+          <div class="task-body">
+            <label for="d3-t5">Search only one website</label>
+            <p>Type <em>site:bbc.com weather</em> (or another trusted site you know). This limits results to that one website. Try it with a second website.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t6" data-task-id="d3-t6">
+          <div class="task-body">
+            <label for="d3-t6">Filter by time and by type</label>
+            <p>Search for a news topic. Use <em>Tools</em> or <em>Filters</em> to show only results from the <strong>past year</strong>, then click the <strong>Images</strong> tab and the <strong>News</strong> tab. Say when a filter by date matters.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t7" data-task-id="d3-t7">
+          <div class="task-body">
+            <label for="d3-t7">Search for a specific file type</label>
+            <p>Type <em>computer basics guide filetype:pdf</em>. Open one of the results and check that it really is a PDF. Notice the address of the site before you open it.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t8" data-task-id="d3-t8">
+          <div class="task-body">
+            <label for="d3-t8">Check a claim using three independent sources</label>
+            <p>Search for a surprising claim you have heard (for example about a health tip, a famous person or a scientific fact). Open <strong>three different, unrelated</strong> sources. Write down what each says and whether they agree. Decide whether to believe the claim, and why.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t9" data-task-id="d3-t9">
+          <div class="task-body">
+            <label for="d3-t9">Judge who is behind a website</label>
+            <p>Pick one site from your results and find its <em>About</em> or <em>Contact</em> page. Answer: who runs it, what do they want (information, sales, opinion), and when was the page last updated? Write down whether you would trust it and why.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d3-t10" data-task-id="d3-t10">
+          <div class="task-body">
+            <label for="d3-t10">Find the same answer two different ways</label>
+            <p>Choose one factual question (for example the population of Nigeria). Find the answer once by using a search and once by browsing directly to a trusted website. Which was faster? Which was more reliable?</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On a second computer, search for the same question as one of today's tasks and use quotation marks, site: and the time filter. Compare its default search engine with yours.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 4 OF 5</div>
+          <h3 style="margin:2px 0 0;">Spotting Unsafe Websites &amp; Browsing Safely</h3>
+        </div>
+        <span class="pill pill-basic">Basic</span>
+      </div>
+      <div class="day-body">
+        <p>Most online harm comes from a person clicking something they should not have, not from clever hacking. Today you learn what fake and dangerous websites look like, what to do about pop-ups and download buttons, and how to control what websites can see. <strong>All practice today uses screenshots, examples and trusted sites. You will never enter your details on a suspicious page.</strong></p>
+
+        <div class="callout callout-info" style="margin:12px 0;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <div><p style="margin-bottom:0;"><strong>Golden rule:</strong> Never enter a password, card number or one-time code on a page you reached by clicking a link in a message. Type the address yourself or use a bookmark you made.</p></div>
+        </div>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t1" data-task-id="d4-t1">
+          <div class="task-body">
+            <label for="d4-t1">Read a web address from right to left at the domain</label>
+            <p>Look at these two addresses: <em>https://accounts.google.com/login</em> and <em>https://google.com.secure-login.example/login</em>. The real owner is the domain just before the first single slash, working <em>backwards</em> from the end of the domain. Write down which one is real and why the other one is fake.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t2" data-task-id="d4-t2">
+          <div class="task-body">
+            <label for="d4-t2">Spot lookalike addresses</label>
+            <p>Write down three ways a scammer can fake an address, for example <em>paypa1.com</em> (a number 1 instead of an L), <em>amazon-support.net</em> (extra words) and <em>gooogle.com</em> (an extra letter). Then look at your own bookmarks and check each domain is spelled correctly.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t3" data-task-id="d4-t3">
+          <div class="task-body">
+            <label for="d4-t3">Recognise the warning signs of an unsafe page</label>
+            <p>Make a checklist of five warning signs: a browser warning page, spelling mistakes, urgent threats (&ldquo;your account will be closed!&rdquo;), prizes you did not enter for, and requests for passwords, card details or a fee to receive money. Keep the checklist open in another tab.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t4" data-task-id="d4-t4">
+          <div class="task-body">
+            <label for="d4-t4">Close a pop-up safely</label>
+            <p>Never click the button inside a scary pop-up. Practise this: if a pop-up will not close, close the whole tab with <span class="kbd">Ctrl</span> + <span class="kbd">W</span>, or press <span class="kbd">Alt</span> + <span class="kbd">F4</span> to close the browser. Say aloud what you would do if a pop-up says &ldquo;Your computer has a virus, call this number.&rdquo;</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t5" data-task-id="d4-t5">
+          <div class="task-body">
+            <label for="d4-t5">Find the fake download button trap</label>
+            <p>Search for a free program from a trusted software website. Look at the page: often several big buttons say <em>Download</em> but only one is real. Point to any button that is actually an advert. Remember the rule from Week 2: use the <strong>official site</strong> of the program.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t6" data-task-id="d4-t6">
+          <div class="task-body">
+            <label for="d4-t6">Look at site permissions</label>
+            <p>Click the padlock/settings icon at the left of the address bar and open <em>Site settings</em>. Find <em>Location</em>, <em>Camera</em>, <em>Microphone</em> and <em>Notifications</em>. Say aloud why a simple website should not need your camera.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t7" data-task-id="d4-t7">
+          <div class="task-body">
+            <label for="d4-t7">Block a site from sending notifications</label>
+            <p>Open <em>Settings</em> → <em>Privacy and security</em> → <em>Site settings</em> → <em>Notifications</em>. Find a site allowed to show notifications and set it to <em>Block</em> if you do not need it.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t8" data-task-id="d4-t8">
+          <div class="task-body">
+            <label for="d4-t8">View cookies and clear browsing data</label>
+            <p>In <em>Settings</em>, open <em>Delete browsing data</em> (or <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">Del</span>). Read the options: history, cookies, cached files. Say what each one means. Only clear the <strong>cached images and files</strong> for the last hour so you do not lose saved logins on a shared computer.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t9" data-task-id="d4-t9">
+          <div class="task-body">
+            <label for="d4-t9">Check where a shortened or suspicious link really goes</label>
+            <p>Hover the mouse over any link (without clicking) and read the address at the bottom-left of the browser. Practise on three links on a news website. Explain why a link's text can say one thing while the address goes somewhere else.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d4-t10" data-task-id="d4-t10">
+          <div class="task-body">
+            <label for="d4-t10">Decide: safe, unsafe or unsure</label>
+            <p>Your teacher (or you, using search) will give you five example addresses or screenshots. Classify each one as safe, unsafe or unsure, and write one reason for each. When in doubt, the correct answer is: don't click, ask.</p>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On a second computer, check the permissions of one website and count how many websites are allowed to send notifications. Does the browser show you a warning if you open a known test-warning page? (Only if your teacher provides one.)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day-block">
+      <div class="day-head">
+        <div>
+          <div class="day-num">DAY 5 OF 5</div>
+          <h3 style="margin:2px 0 0;">Email Basics &amp; Final Project</h3>
+        </div>
+        <span class="pill pill-basic">Basic + Project</span>
+      </div>
+      <div class="day-body">
+        <p>Email is still the way the working world communicates: job applications, bank notices, school letters, account recovery. Today you learn the parts of an email account, how to write and send a clear message with an attachment, and how to keep your inbox tidy. Then you bring the whole week together in one project. (Professional email etiquette and filters come in Week 7.)</p>
+
+        <div class="track-label basic"><span class="dot"></span>Basic tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t1" data-task-id="d5-t1">
+          <div class="task-body">
+            <label for="d5-t1">Learn the parts of an email screen</label>
+            <p>Open your email (webmail such as Gmail, Outlook or Yahoo, or an email app). Find and say aloud: <strong>Inbox</strong>, <strong>Sent</strong>, <strong>Drafts</strong>, <strong>Spam/Junk</strong>, <strong>Trash</strong> and the <strong>Compose / New message</strong> button. <em>If you do not have an email account, ask your teacher to help you create one; use a strong, unique password that you do not use anywhere else.</em></p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t2" data-task-id="d5-t2">
+          <div class="task-body">
+            <label for="d5-t2">Understand an email address</label>
+            <p>An address has two parts: the <strong>username</strong>, the <strong>@</strong> sign and the <strong>domain</strong> (for example <em>name@example.com</em>). Write your own address and circle each part. Say why one wrong letter sends your message to a stranger.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t3" data-task-id="d5-t3">
+          <div class="task-body">
+            <label for="d5-t3">Write and send a clear email to yourself</label>
+            <p>Click Compose. In <strong>To</strong> put your own address. Write a <strong>Subject</strong> that says what the message is about (not just &ldquo;Hi&rdquo;), then a short body: greeting, one clear sentence, a thank-you and your name. Send it and wait for it to arrive in the Inbox.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t4" data-task-id="d5-t4">
+          <div class="task-body">
+            <label for="d5-t4">Reply and forward</label>
+            <p>Open the email you received. Click <strong>Reply</strong> and type one line, then send. Then click <strong>Forward</strong> and send it to your teacher or a practice partner. Say aloud the difference between Reply and Forward.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t5" data-task-id="d5-t5">
+          <div class="task-body">
+            <label for="d5-t5">Attach a file</label>
+            <p>Compose a new email. Use the paperclip (Attach) button to attach the file you downloaded on Day 2. Check that the file name appears in the message before sending. Never send an attachment without mentioning it in the body.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t6" data-task-id="d5-t6">
+          <div class="task-body">
+            <label for="d5-t6">Find a message in Spam and mark one correctly</label>
+            <p>Open the <em>Spam</em> or <em>Junk</em> folder. Read one message subject. Do <strong>not</strong> click links inside it. Say aloud why spam is dangerous. Then check that the <em>Report spam</em> or <em>Block</em> option exists.</p>
+          </div>
+        </div>
+
+        <div class="track-label advanced"><span class="dot"></span>Advanced tasks</div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t7" data-task-id="d5-t7">
+          <div class="task-body">
+            <label for="d5-t7">Learn To, Cc and Bcc</label>
+            <p><strong>To</strong> = the main person. <strong>Cc</strong> = others who should see it. <strong>Bcc</strong> = others who receive it, but nobody can see their address. Send a practice message with one address in To, another in Cc and (if allowed) a third in Bcc. Say when Bcc is the right choice.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t8" data-task-id="d5-t8">
+          <div class="task-body">
+            <label for="d5-t8">Add a signature</label>
+            <p>In your email <em>Settings</em>, find <em>Signature</em>. Create a simple professional signature (name, role or course, contact). Compose a new message and check that the signature appears.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t9" data-task-id="d5-t9">
+          <div class="task-body">
+            <label for="d5-t9">Recognise a phishing email</label>
+            <p>Open a phishing example from your teacher, or search for &ldquo;phishing email example&rdquo; and look at a picture. Point out: the sender's real address, urgent language, a mismatched link (hover, don't click) and a request for a password. Write down what you would do: delete it, report it, do <em>not</em> reply.</p>
+          </div>
+        </div>
+
+        <div class="task">
+          <input type="checkbox" id="d5-t10" data-task-id="d5-t10">
+          <div class="task-body">
+            <label for="d5-t10">Sign out correctly</label>
+            <p>On any shared or public computer, always <strong>sign out</strong> when you are finished, and close the browser. Find the sign-out button, use it, and confirm the sign-in screen appears again.</p>
+          </div>
+        </div>
+
+
+        <div class="card" style="margin-top:24px;">
+          <h4 style="margin-bottom:6px;">Final project: &ldquo;Research &amp; Report&rdquo;</h4>
+          <p>Choose one everyday topic (for example: how to protect a smartphone, how to write a good CV, or a health, sports or local-history topic). Do <strong>all</strong> of the following:</p>
+          <div class="task">
+            <input type="checkbox" id="d5-p1" data-task-id="d5-p1">
+            <div class="task-body">
+              <label for="d5-p1">Search with at least two techniques from Day 3</label>
+              <p>Use quotation marks, <em>site:</em>, the minus sign or a time filter. Write down which techniques you used.</p>
+            </div>
+          </div>
+          <div class="task">
+            <input type="checkbox" id="d5-p2" data-task-id="d5-p2">
+            <div class="task-body">
+              <label for="d5-p2">Bookmark three trustworthy sources in a new folder</label>
+              <p>Create a bookmarks folder named after your topic and save three sources you checked with the Day 3 and Day 4 tests.</p>
+            </div>
+          </div>
+          <div class="task">
+            <input type="checkbox" id="d5-p3" data-task-id="d5-p3">
+            <div class="task-body">
+              <label for="d5-p3">Download one useful file and find it again</label>
+              <p>Download a small document or image that supports your topic. Confirm it is in your Downloads folder.</p>
+            </div>
+          </div>
+          <div class="task">
+            <input type="checkbox" id="d5-p4" data-task-id="d5-p4">
+            <div class="task-body">
+              <label for="d5-p4">Email a summary with the file attached</label>
+              <p>Write a clear email with a subject and 4–5 sentences summarising what you learned, list the three source websites, attach the file and send it to your teacher (or to yourself if your teacher asks).</p>
+            </div>
+          </div>
+          <div class="task">
+            <input type="checkbox" id="d5-p5" data-task-id="d5-p5">
+            <div class="task-body">
+              <label for="d5-p5">Repeat the project's key steps on a second computer</label>
+              <p>Open your sent email on another computer, then search for the topic there. Sign out completely when done.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="transfer-box">
+          <h4>Prove it — on a different computer</h4>
+          <p>On a second computer, sign in to your email in the browser (only if you trust the computer), send yourself one message with an attachment and then <strong>sign out completely</strong>. Note anything that looked different.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section-tight" style="background:var(--panel); border-top:1px solid var(--line-soft);">
+  <div class="wrap">
+    <h2>End of week self-assessment</h2>
+    <p>Answer honestly. If you can't say yes to all eight, revisit that day before requesting Week 4.</p>
+    <div class="grid-2">
+      <ul class="step-list">
+        <li>I can explain the difference between a browser and a search engine</li>
+        <li>I can break a web address into protocol, domain and path</li>
+        <li>I can work with several tabs, bookmarks, history and downloads</li>
+        <li>I can find a downloaded file on my computer</li>
+      </ul>
+      <ul class="step-list">
+        <li>I can search with quotes, minus, site: and filters, and check a source</li>
+        <li>I can spot a fake address, a scam pop-up and a phishing email</li>
+        <li>I can write, attach, send, reply and forward an email, then sign out</li>
+        <li>I completed the final project on a second computer</li>
+      </ul>
+    </div>
+    <div class="callout callout-info" style="margin-top:10px;">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+      <div>
+        <p style="margin-bottom:0;"><strong>Next up — Week 4:</strong> Word Processing Essentials: typing, formatting and laying out a document, headers, page numbers, spell-check, saving in different formats and printing. Request it below when you are ready.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight center">
+  <div class="wrap" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <button class="btn btn-ghost" data-reset-progress type="button">Reset my checklist</button>
+    <a href="../curriculum.html" class="btn btn-ghost">← Back to curriculum</a>
+  </div>
+</section>
+
+</div>
+
+<!-- Request Week 4 (only shown to students who have been granted Week 3) -->
+<section class="section-tight" style="padding-top:0;">
+  <div class="wrap">
+    <div id="nextLessonRequestRoot"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Phase 1 · Week 3 — The Internet &amp; Browsers</p>
+    <p><a href="../index.html">Home</a></p>
+  </div>
+</footer>
+
+<script src="../assets/script.js"></script>
+<script src="../assets/read-aloud.js"></script>
+<script src="../assets/request-access.js"></script>
+<script src="../assets/next-lesson-request.js"></script>
+</body>
+</html>
