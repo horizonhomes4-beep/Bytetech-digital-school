@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scientific Notation: A Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Math&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#14243b;--mute:#52627a;--line:#d7dfeb;--acc:#2f4fd8;--dot:#d9480f;--ok:#0b7a43;--okbg:#e2f6ea;--no:#b3261e;--nobg:#fde8e6;
+--ui:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--math:"STIX Two Text","Noto Sans Math","Cambria Math","Times New Roman",serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1626;--card:#16213a;--ink:#e8eefc;--mute:#9db0cf;--line:#2a3a5c;--acc:#8ea6ff;--dot:#ff9a62;--ok:#6fe3a2;--okbg:#10382a;--no:#ff9b94;--nobg:#401a18}}
+:root[data-theme="dark"]{--bg:#0e1626;--card:#16213a;--ink:#e8eefc;--mute:#9db0cf;--line:#2a3a5c;--acc:#8ea6ff;--dot:#ff9a62;--ok:#6fe3a2;--okbg:#10382a;--no:#ff9b94;--nobg:#401a18}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.05rem/1.7 var(--ui)}
+.m,.mb{font-family:var(--math);font-size:1.18em;white-space:nowrap}
+.mb{display:block;font-size:1.7rem;text-align:center;margin:.6rem 0}
+sup{font-size:.68em;line-height:0}
+header.hero{padding:2.2rem 1.1rem 1.6rem;max-width:56rem;margin:0 auto}
+h1{font:700 clamp(1.9rem,6vw,3.1rem)/1.15 var(--ui);margin:0 0 .6rem}
+.big{font-family:var(--math);font-size:clamp(2rem,9vw,3.6rem);color:var(--acc)}
+.big b{color:var(--dot);font-weight:600}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px);display:flex;gap:.4rem;overflow-x:auto;padding-left:.8rem;padding-right:.8rem}
+nav a{flex:none;padding:.7rem .75rem;color:var(--mute);text-decoration:none;font-size:.9rem;font-weight:500;border-bottom:3px solid transparent}
+nav a:hover,nav a.on{color:var(--acc);border-color:var(--acc)}
+main{max-width:56rem;margin:0 auto;padding:1rem}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.4rem clamp(1rem,4vw,2rem);margin:1.2rem 0}
+h2{font:700 1.5rem/1.3 var(--ui);margin:0 0 .8rem}
+h3{font:500 1.1rem var(--ui);margin:1.3rem 0 .4rem}
+p{max-width:68ch}
+.def{border-left:5px solid var(--acc);padding:.4rem 1rem;background:var(--bg);border-radius:0 8px 8px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.right,.wrong{border-radius:10px;padding:.6rem 1rem}
+.right{background:var(--okbg);border:1px solid var(--ok)}.wrong{background:var(--nobg);border:1px solid var(--no)}
+.right h4,.wrong h4{margin:.2rem 0;font-size:1rem}.right li,.wrong li{margin:.35rem 0}
+ul{padding-left:1.2rem}
+details.say{margin-top:1rem;border:1px dashed var(--line);border-radius:10px;padding:.5rem 1rem}
+details.say summary{cursor:pointer;font-weight:500;color:var(--acc)}
+details.say p{font-style:italic;color:var(--mute)}
+.lab{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-top:1rem}
+.lab h3{margin-top:0}
+input[type=text],input[type=range]{font:inherit;width:100%}
+input[type=text]{font-family:var(--math);font-size:1.3rem;padding:.55rem .7rem;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+input:focus-visible,button:focus-visible,summary:focus-visible,nav a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button{font:500 .95rem var(--ui);cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:.5rem .8rem;min-height:44px}
+button.go{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.pal{display:flex;flex-wrap:wrap;gap:.35rem;margin:.6rem 0}
+.pal button{font-family:var(--math);font-size:1.25rem;min-width:44px;padding:.2rem .5rem}
+.fb{margin-top:.7rem;padding:.7rem 1rem;border-radius:10px;min-height:1.5rem}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.no{background:var(--nobg);color:var(--no)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+.dec{color:var(--dot);font-weight:700}
+table{border-collapse:collapse;display:block;overflow-x:auto;max-width:100%}
+td,th{border:1px solid var(--line);padding:.4rem .8rem;text-align:left}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="hero">
+<h1>Scientific notation</h1>
+<div class="big" aria-label="4.5 times 10 to the power of 6">4<b>.</b>5 × 10<sup>6</sup></div>
+<p>Write huge and tiny numbers in a short, standard form. Read each part, try the labs, then practise with instant feedback.</p>
+</header>
+<nav id="nav"></nav>
+<main>
+
+<section id="s1"><h2>1. What is scientific notation?</h2>
+<p class="def"><b>Scientific notation</b> writes very large or very small numbers in a shorter form: <span class="m"><i>a</i> × 10<sup><i>n</i></sup></span></p>
+<ul><li><span class="m"><i>a</i></span> is at least 1 and less than 10 (<span class="m">1 ≤ <i>a</i> &lt; 10</span>)</li>
+<li><span class="m"><i>n</i></span> is an integer (whole number, positive, negative or zero)</li>
+<li><span class="m">10<sup><i>n</i></sup></span> shows how many places the decimal point moved</li></ul>
+<p><span class="m">4,500,000 = 4.5 × 10<sup>6</sup></span> and <span class="m">0.00032 = 3.2 × 10<sup>−4</sup></span></p>
+<h3>Writing it: right and wrong</h3>
+<div class="two">
+<div class="right"><h4>Right</h4><ul><li class="m">4.5 × 10<sup>6</sup></li><li class="m">3.2 × 10<sup>−4</sup></li><li class="m">1 × 10<sup>3</sup></li><li class="m">9.99 × 10<sup>0</sup></li></ul></div>
+<div class="wrong"><h4>Wrong</h4><ul><li><span class="m">45 × 10<sup>5</sup></span> (45 is not below 10)</li><li><span class="m">0.5 × 10<sup>7</sup></span> (0.5 is below 1)</li><li><span class="m">3.2 × 10<sup>4</sup></span> for 0.00032 (sign is wrong)</li><li><span class="m">4.5 x 10^6</span> in a final answer (use × and a raised power)</li></ul></div></div>
+<details class="say"><summary>Read-aloud script</summary>
+<p>Scientific notation is a short way to write very big or very small numbers. We write a number a, times ten to the power n. The number a must be at least one and less than ten. The power n must be a whole number. For example, four point five times ten to the power six equals four million, five hundred thousand.</p></details>
+</section>
+
+<section id="s2"><h2>2. Why do we use it?</h2>
+<p>Earth to the Sun: <span class="m">149,600,000 km = 1.496 × 10<sup>8</sup> km</span>.<br>A bacterium: <span class="m">0.000002 m = 2 × 10<sup>−6</sup> m</span>.</p>
+<p>It helps with numbers that are extremely large, extremely small, hard to read, hard to calculate with, or common in science.</p>
+<div class="lab"><h3>Lab: zoom along the powers of ten</h3>
+<label for="zr">Exponent <span class="m"><i>n</i></span>: <b id="zn"></b></label>
+<input type="range" id="zr" min="-9" max="9" value="0" step="1">
+<p id="zo" class="m" style="white-space:normal"></p><p id="zt"></p></div>
+<details class="say"><summary>Read-aloud script</summary><p>The distance from Earth to the Sun is one hundred forty-nine million, six hundred thousand kilometres. In scientific notation it is one point four nine six times ten to the power eight. A bacterium is two times ten to the power negative six metres long.</p></details>
+</section>
+
+<section id="s3"><h2>3. The basic structure</h2>
+<p>Two parts: the <b>coefficient</b> <span class="m"><i>a</i></span> and the <b>power of ten</b> <span class="m">10<sup><i>n</i></sup></span>.</p>
+<p>Valid coefficients: <span class="m">1, 2.5, 3.72, 9.999</span>. Not valid: <span class="m">0.5, 12, 25.6</span>.</p>
+<p>So <span class="m">12 × 10<sup>5</sup></span> must become <span class="m">1.2 × 10<sup>6</sup></span>.</p>
+<details class="say"><summary>Read-aloud script</summary><p>Every number in scientific notation has a coefficient and a power of ten. The coefficient must be at least one and less than ten. Twelve times ten to the five is not correct. We rewrite it as one point two times ten to the six.</p></details>
+</section>
+
+<section id="s4"><h2>4. The exponent and its laws</h2>
+<p>A positive exponent gives a large number. A negative exponent gives a small number.<br>
+<span class="m">5.2 × 10<sup>4</sup> = 52,000</span> and <span class="m">5.2 × 10<sup>−4</sup> = 0.00052</span></p>
+<h3>Laws of exponents</h3>
+<table><tr><th>Law</th><th>Rule</th><th>Example</th></tr>
+<tr><td>Multiply</td><td class="m">10<sup><i>a</i></sup> × 10<sup><i>b</i></sup> = 10<sup><i>a</i>+<i>b</i></sup></td><td class="m">10<sup>4</sup> × 10<sup>5</sup> = 10<sup>9</sup></td></tr>
+<tr><td>Divide</td><td class="m">10<sup><i>a</i></sup> ÷ 10<sup><i>b</i></sup> = 10<sup><i>a</i>−<i>b</i></sup></td><td class="m">10<sup>7</sup> ÷ 10<sup>3</sup> = 10<sup>4</sup></td></tr>
+<tr><td>Power of a power</td><td class="m">(10<sup><i>a</i></sup>)<sup><i>b</i></sup> = 10<sup><i>ab</i></sup></td><td class="m">(10<sup>3</sup>)<sup>2</sup> = 10<sup>6</sup></td></tr>
+<tr><td>Zero exponent</td><td class="m">10<sup>0</sup> = 1</td><td class="m">6.3 = 6.3 × 10<sup>0</sup></td></tr>
+<tr><td>Negative exponent</td><td class="m">10<sup>−<i>n</i></sup> = 1 ÷ 10<sup><i>n</i></sup></td><td class="m">10<sup>−3</sup> = 1 ÷ 1000 = 0.001</td></tr></table>
+<details class="say"><summary>Read-aloud script</summary><p>The exponent tells us how many places the decimal point moves. Positive means a large number. Negative means a small number. To multiply powers of ten, add the exponents. To divide, subtract them. A power of a power multiplies the exponents. Ten to the zero is one. Ten to the negative n is one divided by ten to the n.</p></details>
+</section>
+
+<section id="s5"><h2>5. Powers of 10</h2>
+<p class="m" style="white-space:normal">10<sup>1</sup>=10 · 10<sup>2</sup>=100 · 10<sup>3</sup>=1,000 · 10<sup>6</sup>=1,000,000 · 10<sup>−1</sup>=0.1 · 10<sup>−2</sup>=0.01 · 10<sup>−3</sup>=0.001</p>
+<div class="lab"><h3>Lab: decimal mover</h3>
+<p>Type any number (for example <span class="m">0.0000072</span> or <span class="m">45000</span>) and see how the decimal point moves.</p>
+<label for="lin" class="m" style="font-size:1rem">Your number</label>
+<input type="text" id="lin" inputmode="decimal" value="45000" autocomplete="off">
+<div class="fb" id="lout" aria-live="polite"></div></div>
+<details class="say"><summary>Read-aloud script</summary><p>Ten to the one is ten. Ten to the two is one hundred. Each step adds one zero. Going the other way, ten to the negative one is zero point one, and each step down moves the decimal point one place further.</p></details>
+</section>
+
+<section id="s6"><h2>6. Large numbers to scientific notation</h2>
+<p><b>Example:</b> write <span class="m">45,000</span>. Start with <span class="m">45,000.0</span> and move the <span class="dec">decimal point</span> until one non-zero digit is in front: <span class="m">4.5</span>. It moved <b>4 places left</b>, so the answer is <span class="m">4.5 × 10<sup>4</sup></span>.</p>
+<p><b>Check:</b> <span class="m">4.5 × 10,000 = 45,000</span>. Correct.</p>
+<p>Another: <span class="m">7,250,000 → 7.25</span>, six places left, so <span class="m">7.25 × 10<sup>6</sup></span>.</p>
+<p><b>Rule:</b> large number, decimal moves left, exponent positive.</p>
+<div class="lab prac" data-mode="large"></div>
+<details class="say"><summary>Read-aloud script</summary><p>To write a large number, move the decimal point left until one non-zero digit is in front of it. Count the moves. That count is a positive exponent. Forty-five thousand becomes four point five times ten to the four.</p></details>
+</section>
+
+<section id="s7"><h2>7. Small numbers to scientific notation</h2>
+<p>Many mistakes happen here. Take <span class="m">0.00045</span>. Move the decimal point to get <span class="m">4.5</span>: <b>4 places right</b>. The number was below 1, so the exponent is negative: <span class="m">4.5 × 10<sup>−4</sup></span>.</p>
+<p><b>Worked:</b> <span class="m">0.0000072</span> moves 6 places right to <span class="m">7.2</span>, so <span class="m">7.2 × 10<sup>−6</sup></span>. Check: <span class="m">7.2 × 0.000001 = 0.0000072</span>.</p>
+<p><b>Memory aid:</b> left is positive, right is negative.</p>
+<div class="lab prac" data-mode="small"></div>
+<details class="say"><summary>Read-aloud script</summary><p>To write a small number, move the decimal point right until one non-zero digit is in front of it. Count the moves. Because the number was less than one, the exponent is negative. Zero point zero zero zero zero zero seven two becomes seven point two times ten to the negative six.</p></details>
+</section>
+
+<section id="s8"><h2>8. Back to ordinary form</h2>
+<p><span class="m">3.6 × 10<sup>5</sup></span>: exponent +5, move the decimal <b>5 places right</b>: <span class="m">360,000</span>.</p>
+<p><span class="m">4.8 × 10<sup>−4</sup></span>: exponent −4, move the decimal <b>4 places left</b>: <span class="m">0.00048</span>.</p>
+<p>Examples: <span class="m">6.2 × 10<sup>3</sup> = 6,200</span> · <span class="m">9.3 × 10<sup>−3</sup> = 0.0093</span> · <span class="m">2.75 × 10<sup>−5</sup> = 0.0000275</span></p>
+<div class="lab prac" data-mode="back"></div>
+<details class="say"><summary>Read-aloud script</summary><p>To go back to ordinary form, look at the sign of the exponent. Positive: move the decimal point right. Negative: move it left. The size of the exponent is the number of places.</p></details>
+</section>
+
+<p style="color:var(--mute);font-size:.9rem;text-align:center">Sections on comparing, adding, multiplying, dividing and common mistakes can be added next.</p>
+</main>
+<script>
+const $=s=>document.querySelector(s),SUP='⁰¹²³⁴⁵⁶⁷⁸⁹';
+const fmt=s=>s.replace('-','−');
+const sci=(c,n)=>`${c} × 10<sup>${fmt(String(n))}</sup>`;
+const com=s=>s.replace(/\B(?=(\d{3})+(?!\d))/g,',');
+const secs=[...document.querySelectorAll('section')];
+$('#nav').innerHTML=secs.map((s,i)=>`<a href="#${s.id}">${i+1}. ${s.querySelector('h2').textContent.replace(/^\d+\.\s*/,'').split(' ').slice(0,2).join(' ')}</a>`).join('');
+const links=[...document.querySelectorAll('nav a')];
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle('on',l.hash==='#'+e.target.id))}),{rootMargin:'-30% 0px -60% 0px'});
+secs.forEach(s=>io.observe(s));
+// zoom lab
+const things={'-9':'about the width of a DNA strand (2 nm)','-6':'about the size of a bacterium','-3':'about the thickness of a coin edge (1 mm)','0':'a metre: a big step','3':'a kilometre','6':'roughly the distance from Enugu to Lagos, times 3','8':'about the Earth–Sun distance (1.5 × 10⁸ km)'};
+function zoom(){const n=+$('#zr').value;$('#zn').textContent=n;
+const o=n<0?'0.'+'0'.repeat(-n-1)+'1':com('1'+'0'.repeat(n));
+$('#zo').innerHTML=`10<sup>${fmt(String(n))}</sup> = ${o}`;
+$('#zt').textContent=things[n]||(n<0?'Each step down is ten times smaller.':'Each step up is ten times bigger.')}
+$('#zr').oninput=zoom;zoom();
+// decimal mover lab
+function mover(){const raw=$('#lin').value.replace(/,/g,'').trim(),x=Number(raw),o=$('#lout');
+if(!raw||isNaN(x)||x===0){o.className='fb no';o.textContent='Enter a number other than 0, such as 45000 or 0.0000072.';return}
+const [m,e]=Math.abs(x).toExponential().split('e'),n=+e;o.className='fb ok';
+o.innerHTML=`Decimal moved <b>${Math.abs(n)}</b> place${Math.abs(n)==1?'':'s'} <b>${n>0?'left':n<0?'right':'(not at all)'}</b>, so the exponent is ${n>0?'positive':n<0?'negative':'zero'}.<br><span class="mb">${x<0?'−':''}${sci(m,n)}</span>`}
+$('#lin').oninput=mover;mover();
+// practice
+const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+function parse(s){s=s.replace(/\s/g,'').replace(/,/g,'').replace(/[−–]/g,'-').replace(/[×·*]/g,'x').replace(/X/g,'x');
+s=s.replace(/10([⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+)/,(m,r)=>'10^'+[...r].map(c=>c==='⁻'?'-':SUP.indexOf(c)).join(''));
+const m=s.match(/^(\d*\.?\d+)x10\^?\(?(-?\d+)\)?$/);return m?{c:+m[1],n:+m[2]}:null}
+function mk(el){const mode=el.dataset.mode;let q;
+el.innerHTML=`<h3>Practice</h3><p class="q m" style="font-size:1.5rem"></p><label class="m" style="font-size:1rem" for="a-${mode}">Your working or answer</label><input type="text" id="a-${mode}" autocomplete="off" autocapitalize="off" spellcheck="false">
+<div class="pal" role="group" aria-label="Math symbols"></div><div class="row"><button class="go">Check answer</button><button class="nx">New question</button></div><div class="fb" aria-live="polite"></div>
+<p style="font-size:.85rem;color:var(--mute)">Type <span class="m">4.5 x 10^4</span> or use the symbol buttons to get <span class="m">4.5 × 10⁴</span>. Both work.</p>`;
+const inp=el.querySelector('input'),fb=el.querySelector('.fb'),qe=el.querySelector('.q');
+['×','÷','−','·','.','10','⁻','⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹'].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.type='button';b.setAttribute('aria-label','insert '+s);
+b.onclick=()=>{const i=inp.selectionStart??inp.value.length;inp.value=inp.value.slice(0,i)+s+inp.value.slice(inp.selectionEnd??i);inp.focus();inp.setSelectionRange(i+s.length,i+s.length)};el.querySelector('.pal').append(b)});
+function next(){const c=(rnd(10,999)/(rnd(0,1)?10:100)).toString(),cc=Number(c)<1?'1.5':String(+(Number(c)%9+1).toFixed(2));
+let n=mode==='small'?-rnd(3,8):rnd(3,9);q={c:cc,n};
+const ord=mode==='small'?'0.'+'0'.repeat(-n-1)+cc.replace('.',''):com(String(Math.round(Number(cc)*1e2*10**(n)/1e2)));
+q.ord=mode==='small'?ord:String(Number(cc+'e'+n));
+if(mode==='back'){q.n=rnd(0,1)?rnd(3,7):-rnd(3,6);q.ord=(Number(cc+'e'+q.n)).toFixed(Math.max(0,-q.n+(cc.split('.')[1]||'').length))}
+qe.innerHTML=mode==='back'?`Write in ordinary form: ${sci(cc,q.n)}`:`Write in scientific notation: ${mode==='small'?q.ord:com(q.ord)}`;
+inp.value='';fb.className='fb';fb.textContent=''}
+function check(){const v=inp.value;
+if(mode==='back'){const t=Number(v.replace(/,/g,'').trim());if(!v.trim()||isNaN(t))return say(0,'Enter an ordinary number such as 6200 or 0.0093.');
+return t===Number(q.ord)?say(1,'Correct! '+ (q.n>0?'Positive exponent: the decimal moved right.':'Negative exponent: the decimal moved left.')):say(0,q.n>0?`Not yet. The exponent is +${q.n}, so move the decimal ${q.n} places right.`:`Not yet. The exponent is −${-q.n}, so move the decimal ${-q.n} places left.`)}
+const p=parse(v);if(!p)return say(0,'Write it as a × 10^n, for example 4.5 × 10^4. The symbol buttons can help.');
+if(p.c<1||p.c>=10)return say(0,`The coefficient ${p.c} must be at least 1 and less than 10. Move the decimal point until one non-zero digit is in front.`);
+if(Math.abs(p.c-Number(q.c))<1e-9&&p.n===q.n)return say(1,'Correct! '+(q.n>0?'Large number: decimal moved left, exponent positive.':'Small number: decimal moved right, exponent negative.'));
+if(Math.abs(p.c-Number(q.c))<1e-9&&p.n===-q.n)return say(0,q.n>0?'Right digits, wrong sign. A large number needs a positive exponent (decimal moves left).':'Right digits, wrong sign. A small number needs a negative exponent (decimal moves right).');
+if(Math.abs(p.c-Number(q.c))<1e-9)return say(0,'Right coefficient. Recount how many places the decimal point moved.');
+say(0,'Check your digits and count the decimal moves again.')}
+function say(ok,t){fb.className='fb '+(ok?'ok':'no');fb.textContent=t}
+el.querySelector('.go').onclick=check;el.querySelector('.nx').onclick=next;inp.onkeydown=e=>{if(e.key==='Enter')check()};next()}
+document.querySelectorAll('.prac').forEach(mk);
+</script>
+<script>
+/* =========================================
+   WEBSITE PROTECTION
+   Blocks common browser shortcuts/devtools
+   ========================================= */
+
+(function () {
+    "use strict";
+
+    // Disable right-click
+    document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable common keyboard shortcuts
+    document.addEventListener("keydown", function (e) {
+        const key = e.key.toLowerCase();
+
+        // F12
+        if (e.key === "F12") {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
+        // Ctrl shortcuts
+        if (e.ctrlKey) {
+
+            // Ctrl + U = View Source
+            if (key === "u") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + S = Save Page
+            if (key === "s") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + P = Print
+            if (key === "p") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + C = Copy
+            if (key === "c") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + X = Cut
+            if (key === "x") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + A = Select All
+            if (key === "a") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + I = Developer Tools
+            if (e.shiftKey && key === "i") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + J = Console
+            if (e.shiftKey && key === "j") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + C = Inspect Element
+            if (e.shiftKey && key === "c") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }
+
+        // F1 / F3 / F6 / F10 / F11
+        if (
+            e.key === "F1" ||
+            e.key === "F3" ||
+            e.key === "F6" ||
+            e.key === "F10" ||
+            e.key === "F11"
+        ) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
+        // Shift + F10 = Context Menu
+        if (e.shiftKey && e.key === "F10") {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }, true);
+
+    // Disable text selection
+    document.addEventListener("selectstart", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable dragging images/elements
+    document.addEventListener("dragstart", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable copy
+    document.addEventListener("copy", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable cut
+    document.addEventListener("cut", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable paste if desired
+    document.addEventListener("paste", function (e) {
+        // Comment this section out if users need to paste
+        e.preventDefault();
+        return false;
+    });
+
+})();
+</script>
+</body>
+</html>

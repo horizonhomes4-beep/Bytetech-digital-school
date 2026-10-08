@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scientific Notation Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Math&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+<div class="bar-top"><div><b>Scientific Notation</b><span>Assessment</span></div></div>
+<main id="app"></main>
+<div class="pal hide" id="pal" role="group" aria-label="Math symbols"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script><script src="questions.js"></script>
+<script>
+const app=$('#app');let code='',name='',ans=[],ess=[],idx=0,focusEl=null;
+['×','÷','−','·','.','10','⁻','⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸','⁹','=','≤','<','>'].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.type='button';b.onmousedown=e=>e.preventDefault();
+b.onclick=()=>{const t=focusEl;if(!t)return;const i=t.selectionStart;t.value=t.value.slice(0,i)+s+t.value.slice(t.selectionEnd);t.setSelectionRange(i+s.length,i+s.length);t.focus();t.dispatchEvent(new Event('input'))};$('#pal').append(b)});
+document.addEventListener('focusin',e=>{if(e.target.matches('textarea')){focusEl=e.target;$('#pal').classList.remove('hide')}});
+function start(){let c='';try{c=localStorage.getItem('sn_code')||''}catch(e){}$('#pal').classList.add('hide');
+app.innerHTML=`<div class="card"><h2>Enter your passcode</h2><p>Your teacher gave you a passcode. Enter it to take the assessment. You can take it as many times as you like.</p>
+<label for="pc">Passcode</label><input type="text" id="pc" value="${esc(c)}" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12">
+<p class="warn hide" id="w"></p><p><button class="go" id="st">Continue</button></p></div>`;
+$('#pc').onkeydown=e=>{if(e.key==='Enter')$('#st').click()};
+$('#st').onclick=async()=>{const w=$('#w');w.classList.add('hide');const v=$('#pc').value.trim().toUpperCase();if(v.length<4)return;
+try{const n=(await db.ref('students/'+v+'/name').get()).val(),on=(await db.ref('students/'+v+'/on').get()).val();
+if(!n||on!==true){w.textContent='That passcode was not recognised or is switched off. Check it with your teacher.';w.classList.remove('hide');return}
+code=v;name=n;try{localStorage.setItem('sn_code',v)}catch(e){}lobby()}catch(e){w.textContent='Could not connect: '+e.message;w.classList.remove('hide')}}}
+function lobby(){window.scrollTo(0,0);$('#pal').classList.add('hide');
+app.innerHTML=`<div class="card"><h2>Hello, ${esc(name)}</h2><p>30 multiple-choice questions and 10 written questions covering every topic in the lesson. Every attempt is saved to your record and your teacher marks the written answers.</p>
+<div class="row"><button class="go" id="go">Start assessment</button><button id="sw">Not you? Change passcode</button></div></div><div id="hist"></div>`;
+$('#go').onclick=()=>{ans=Array(30).fill(-1);ess=Array(10).fill('');idx=0;show()};$('#sw').onclick=start;loadHist()}
+function show(){window.scrollTo(0,0);
+if(idx<30){const q=Q[idx];$('#pal').classList.add('hide');
+app.innerHTML=`<div class="prog"><div class="mute">Multiple choice ${idx+1} of 30 · ${T[q[0]]}</div><div class="bar"><i style="width:${idx/40*100}%"></i></div></div>
+<div class="card"><h2>${mt(q[1])}</h2>${q[2].map((o,i)=>`<label class="opt${ans[idx]===i?' sel':''}"><input type="radio" name="o" value="${i}"${ans[idx]===i?' checked':''}><span>${mt(o)}</span></label>`).join('')}
+<div class="row" style="justify-content:space-between;margin-top:1rem"><button id="pv"${idx?'':' disabled'}>Back</button><button class="go" id="nx">${idx==29?'Go to written questions':'Next'}</button></div></div>`;
+app.querySelectorAll('input[name=o]').forEach(r=>r.onchange=()=>{ans[idx]=+r.value;app.querySelectorAll('.opt').forEach((l,i)=>l.classList.toggle('sel',i==ans[idx]))});
+}else{const k=idx-30,e=E[k];
+app.innerHTML=`<div class="prog"><div class="mute">Written ${k+1} of 10 · ${T[e[0]]}</div><div class="bar"><i style="width:${idx/40*100}%"></i></div></div>
+<div class="card"><h2>${mt(e[1])}</h2><p class="mute">Use the symbol bar to type × and raised powers, for example 4.5 × 10⁴.</p><textarea id="es" aria-label="Your answer">${esc(ess[k])}</textarea>
+<div class="row" style="justify-content:space-between;margin-top:1rem"><button id="pv">Back</button><button class="go" id="nx">${k==9?'Submit assessment':'Next'}</button></div></div>`;
+const t=$('#es');t.oninput=()=>ess[k]=t.value;focusEl=t;$('#pal').classList.remove('hide')}
+$('#pv').onclick=()=>{idx--;show()};$('#nx').onclick=()=>{idx++;idx>=40?submit():show()}}
+async function submit(){$('#pal').classList.add('hide');$('#nx').disabled=true;
+const tp=T.map(()=>[0,0]);Q.forEach((q,i)=>{tp[q[0]][1]++;if(ans[i]===q[3])tp[q[0]][0]++});
+const score=ans.filter((a,i)=>a===Q[i][3]).length,ts=Date.now(),rec={ts,ans,score,tp,ess};let saved=false;
+try{await db.ref('attempts/'+code+'/'+ts+'-'+Math.random().toString(36).slice(2,6)).set(rec);saved=true}catch(e){}
+const st=cum([{tp}]);window.scrollTo(0,0);
+app.innerHTML=`<div class="card"><div class="head">${ring(Math.round(score/30*100),'Multiple choice')}<div><h2>Well done, ${esc(name)}</h2><p style="font-size:1.25rem"><b>${score} / 30</b> multiple choice</p><p class="mute">Your 10 written answers will be marked by your teacher. Your topic chart will update when they are.</p>${saved?'<p style="color:var(--ok)">Attempt saved.</p>':'<p class="warn">This attempt could not be saved. Tell your teacher.</p>'}</div></div></div>
+<div class="card"><h2>Your topics</h2><div class="two"><div>${radar(st)}</div><div>${topics(st)}</div></div></div>${advice(st)}
+<div class="card adv"><h3>Ready to try again?</h3><label class="row"><input type="checkbox" id="rv"> <span>I have gone back to the lesson and revised the topics above.</span></label><p class="row"><button class="go" id="again" disabled>Take it again</button><button id="home">Back to my records</button></p></div>`;
+$('#rv').onchange=e=>$('#again').disabled=!e.target.checked;$('#again').onclick=()=>$('#go')?0:(ans=Array(30).fill(-1),ess=Array(10).fill(''),idx=0,show());$('#home').onclick=lobby}
+async function loadHist(){try{const v=(await db.ref('attempts/'+code).get()).val();if(!v)return;
+const a=await Promise.all(Object.entries(v).map(async([k,r])=>{let m=[],c='';try{m=(await db.ref('marks/'+code+'/'+k+'/m').get()).val()||[];c=(await db.ref('marks/'+code+'/'+k+'/c').get()).val()||''}catch(e){}return{...r,marks:m,c}}));
+a.sort((x,y)=>y.ts-x.ts);const st=cum(a),t0=total(a[0]),cm=a.find(r=>r.c);
+$('#hist').innerHTML=`<div class="card"><h2>My progress</h2><div class="head">${ring(t0.pct,'Latest attempt')}<div><p><b>Latest attempt:</b> ${t0.got}/${t0.max} ${t0.done?'':'(written answers not fully marked yet)'}</p><p class="mute">${a.length} attempt${a.length>1?'s':''} so far</p></div></div>
+<div class="two" style="margin-top:1rem"><div>${radar(st)}</div><div>${topics(st)}</div></div></div>${advice(st)}
+${cm?`<div class="card"><h3>Teacher's comment</h3><p>${esc(cm.c)}</p></div>`:''}
+<div class="card"><h2>My attempts</h2><table><tr><th>Date</th><th>Multiple choice</th><th>Written</th><th>Total</th></tr>${a.map(r=>{const t=total(r),w=r.marks.filter(x=>x>=0);return`<tr><td>${new Date(r.ts).toLocaleString()}</td><td>${r.score}/30</td><td>${w.length?w.reduce((p,c)=>p+c,0)+'/'+w.length*5:'not marked yet'}</td><td>${t.got}/${t.max} (${t.pct}%)</td></tr>`}).join('')}</table></div>`}catch(e){}}
+start();
+</script>
+<script>
+/* =========================================
+   WEBSITE PROTECTION
+   Blocks common browser shortcuts/devtools
+   ========================================= */
+
+(function () {
+    "use strict";
+
+    // Disable right-click
+    document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable common keyboard shortcuts
+    document.addEventListener("keydown", function (e) {
+        const key = e.key.toLowerCase();
+
+        // F12
+        if (e.key === "F12") {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
+        // Ctrl shortcuts
+        if (e.ctrlKey) {
+
+            // Ctrl + U = View Source
+            if (key === "u") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + S = Save Page
+            if (key === "s") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + P = Print
+            if (key === "p") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + C = Copy
+            if (key === "c") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + X = Cut
+            if (key === "x") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + A = Select All
+            if (key === "a") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + I = Developer Tools
+            if (e.shiftKey && key === "i") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + J = Console
+            if (e.shiftKey && key === "j") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + C = Inspect Element
+            if (e.shiftKey && key === "c") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }
+
+        // F1 / F3 / F6 / F10 / F11
+        if (
+            e.key === "F1" ||
+            e.key === "F3" ||
+            e.key === "F6" ||
+            e.key === "F10" ||
+            e.key === "F11"
+        ) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
+        // Shift + F10 = Context Menu
+        if (e.shiftKey && e.key === "F10") {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }, true);
+
+    // Disable text selection
+    document.addEventListener("selectstart", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable dragging images/elements
+    document.addEventListener("dragstart", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable copy
+    document.addEventListener("copy", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable cut
+    document.addEventListener("cut", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable paste if desired
+    document.addEventListener("paste", function (e) {
+        // Comment this section out if users need to paste
+        e.preventDefault();
+        return false;
+    });
+
+})();
+</script>
+</body></html>

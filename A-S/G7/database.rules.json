@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "students": {
+      "$code": {
+        ".write": "newData.child('adm').val() === '164800'",
+        ".validate": "newData.hasChildren(['name','on','adm'])",
+        "name": { ".read": true },
+        "on": { ".read": true }
+      }
+    },
+    "attempts": {
+      "$code": {
+        ".read": "root.child('students/' + $code + '/name').exists()",
+        "$aid": {
+          ".write": "!data.exists() && root.child('students/' + $code + '/on').val() === true",
+          ".validate": "newData.hasChildren(['ts','score','tp','ans','ess'])"
+        }
+      }
+    },
+    "marks": {
+      "$code": {
+        "$aid": {
+          ".write": "newData.child('adm').val() === '164800'",
+          "m": { ".read": true },
+          "c": { ".read": true }
+        }
+      }
+    },
+    "admin": {
+      "$k": {
+        ".read": "$k === '164800'",
+        ".write": "$k === '164800'"
+      }
+    }
+  }
+}

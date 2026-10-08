@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin: Scientific Notation Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Math&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+<div class="bar-top"><div><b>Scientific Notation</b><span>Teacher admin</span></div></div>
+<main id="app"></main>
+<div id="print"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script><script src="questions.js"></script>
+<script>
+const app=$('#app');let key='',roster={},by={},rows=[];
+const gen=()=>{const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';crypto.getRandomValues(new Uint8Array(6)).forEach(b=>s+=c[b%c.length]);return s};
+const base=()=>location.href.replace(/admin\.html.*$/,'student.html');
+const copy=async(t,el)=>{try{await navigator.clipboard.writeText(t);if(el){const o=el.textContent;el.textContent='Copied';setTimeout(()=>el.textContent=o,1500)}}catch(e){prompt('Copy this:',t)}};
+function gate(msg){let k='';try{k=sessionStorage.getItem('sn_key')||''}catch(e){}
+app.innerHTML=`<div class="card"><h2>Admin key</h2>${msg?`<p class="warn">${esc(msg)}</p>`:''}<p>Enter the admin key set in the database rules.</p><input type="password" id="ak" value="${esc(k)}" autocomplete="off"><p><button class="go" id="ok">Open admin</button></p></div>`;
+$('#ak').onkeydown=e=>{if(e.key==='Enter')$('#ok').click()};
+$('#ok').onclick=async()=>{key=$('#ak').value;try{await db.ref('admin/'+key+'/roster').get();try{sessionStorage.setItem('sn_key',key)}catch(e){}main()}catch(e){gate('That key was not accepted.')}}}
+async function load(){rows=[];roster=(await db.ref('admin/'+key+'/roster').get()).val()||{};
+await Promise.all(Object.keys(roster).map(async c=>{const v=(await db.ref('attempts/'+c).get()).val()||{};
+await Promise.all(Object.entries(v).map(async([k,r])=>{let m=Array(10).fill(-1),cm='';try{m=(await db.ref('marks/'+c+'/'+k+'/m').get()).val()||m;cm=(await db.ref('marks/'+c+'/'+k+'/c').get()).val()||''}catch(e){}
+rows.push({...r,code:c,aid:k,key:c+'_'+k,name:roster[c].name,ans:r.ans||[],ess:r.ess||[],marks:m,c:cm})}))}));
+by={};rows.forEach(r=>(by[r.code]=by[r.code]||[]).push(r));Object.values(by).forEach(a=>a.sort((x,y)=>x.ts-y.ts))}
+async function main(show){app.innerHTML='<div class="card">Loading...</div>';try{await load()}catch(e){gate('Could not load: '+e.message);return}
+const all=cum(rows);
+app.innerHTML=`<div class="row"><button id="rf">Refresh</button><button id="lo">Lock</button></div>
+<div class="card"><h2>Add a student</h2><div class="row"><input type="text" id="nn" placeholder="Student full name" aria-label="Student name" style="flex:1;min-width:12rem" maxlength="60"><button class="go" id="add">Add student</button></div><div id="newc"></div></div>
+<div class="card"><h2>Students</h2>${Object.keys(roster).length?`<table><tr><th>Name</th><th>Passcode</th><th>Attempts</th><th>Latest</th><th>Status</th><th></th></tr>${Object.entries(roster).map(([c,s])=>{const a=by[c]||[],l=a.length?total(a.at(-1)):null;return`<tr><td>${esc(s.name)}</td><td><span class="m">${c}</span></td><td>${a.length}</td><td>${l?l.pct+'%'+(l.done?'':' (MCQ only)'):'-'}</td><td><button data-t="${c}">${s.on?'Active':'Off'}</button></td><td><button data-sh="${c}">Copy invite</button> ${a.length?`<button class="go" data-d="${c}">Open record</button>`:''}</td></tr>`}).join('')}</table>`:'<p>No students yet.</p>'}</div>
+<div class="card"><h2>Class analysis</h2>${rows.length?`<p class="mute">${Object.keys(by).length} students · ${rows.length} attempts</p><div class="two"><div>${radar(all)}</div><div>${topics(all)}</div></div>`:'<p>No attempts yet.</p>'}</div><div id="det"></div>`;
+$('#rf').onclick=()=>main();$('#lo').onclick=()=>{try{sessionStorage.removeItem('sn_key')}catch(e){}key='';gate()};
+const add=async()=>{const n=$('#nn').value.trim();if(n.length<2)return;let c;do{c=gen()}while((await db.ref('students/'+c+'/name').get()).exists());
+await db.ref('students/'+c).set({name:n,on:true,adm:key});await db.ref('admin/'+key+'/roster/'+c).set({name:n,on:true,ts:Date.now()});
+roster[c]={name:n,on:true};const msg=inv(c,n);$('#nn').value='';$('#newc').innerHTML=`<p style="margin-top:1rem"><b>${esc(n)}</b> added. Passcode: <span class="code">${c}</span></p><p><button class="go" id="ci">Copy invite message</button> <button id="mr">Done</button></p>`;
+$('#ci').onclick=e=>copy(msg,e.target);$('#mr').onclick=()=>main()};
+$('#add').onclick=add;$('#nn').onkeydown=e=>{if(e.key==='Enter')add()};
+app.querySelectorAll('button[data-t]').forEach(b=>b.onclick=async()=>{const c=b.dataset.t,s=roster[c],on=!s.on;await db.ref('students/'+c).set({name:s.name,on,adm:key});await db.ref('admin/'+key+'/roster/'+c).update({on});main()});
+app.querySelectorAll('button[data-sh]').forEach(b=>b.onclick=()=>copy(inv(b.dataset.sh,roster[b.dataset.sh].name),b));
+app.querySelectorAll('button[data-d]').forEach(b=>b.onclick=()=>{detail(b.dataset.d);$('#det').scrollIntoView()});
+if(show){detail(show);$('#det').scrollIntoView()}}
+const inv=(c,n)=>`Hello ${n}, here is your Scientific Notation assessment.\nLink: ${base()}\nPasscode: ${c}\nPlease go through the lesson first.`;
+function overall(a){const s=a.map(total),got=s.reduce((x,t)=>x+t.got,0),max=s.reduce((x,t)=>x+t.max,0);return{pct:Math.round(got/max*100),best:Math.max(...s.map(t=>t.pct)),latest:s.at(-1)}}
+function detail(c){const a=by[c],nm=roster[c].name,st=cum(a),o=overall(a),la=[...a].reverse();
+$('#det').innerHTML=`<div class="card"><div class="head">${ring(o.pct,'Cumulative')}<div style="flex:1"><h2 style="margin:0">${esc(nm)}</h2><p class="mute">Cumulative across ${a.length} attempt${a.length>1?'s':''} · latest ${o.latest.pct}% · best ${o.best}%</p>
+<div class="row"><button class="go" id="pr">Print parent report</button><button id="wa">Copy summary to share</button></div></div></div>
+<div class="two" style="margin-top:1rem"><div>${radar(st)}</div><div>${topics(st)}</div></div></div>
+<div class="card"><h2>Attempts</h2><table><tr><th>Date</th><th>Multiple choice</th><th>Written</th><th>Total</th></tr>${la.map(r=>{const t=total(r);return`<tr><td>${new Date(r.ts).toLocaleString()}</td><td>${r.score}/30</td><td>${r.marks.filter(x=>x>=0).length?r.marks.filter(x=>x>=0).reduce((p,q)=>p+q,0)+'/'+t.mk*5:'unmarked'}</td><td>${t.got}/${t.max} (${t.pct}%)</td></tr>`}).join('')}</table></div>
+${la.map((r,n)=>`<details class="card" ${n==0?'open':''}><summary><b>${new Date(r.ts).toLocaleString()}</b> · MCQ ${r.score}/30 · ${r.marks.filter(x=>x>=0).length<10?'<span class="chip mid">written answers need marking</span>':'<span class="chip ok">fully marked</span>'}</summary>
+<h3>Missed multiple choice</h3>${Q.map((q,i)=>r.ans[i]===q[3]?'':`<p>${i+1}. [${T[q[0]]}] ${mt(q[1])}<br><span class="mute">Chose:</span> ${r.ans[i]>=0?mt(q[2][r.ans[i]]):'no answer'} · <span class="mute">Correct:</span> ${mt(q[2][q[3]])}</p>`).join('')||'<p>None missed.</p>'}
+<h3>Mark written answers (0 to 5 each)</h3>${E.map((e,k)=>`<div class="card" style="margin:.6rem 0"><b>${k+1}. [${T[e[0]]}] ${mt(e[1])}</b><p class="key">Key points: ${esc(e[2])}</p><p style="white-space:pre-wrap;font-family:var(--math);font-size:1.1rem">${esc(r.ess[k]||'(blank)')}</p>
+<label>Mark out of 5: <input type="number" min="0" max="5" step="1" style="width:5rem;display:inline-block" data-k="${r.key}" data-i="${k}" value="${r.marks[k]>=0?r.marks[k]:''}"></label></div>`).join('')}
+<label for="c${r.key}">Teacher comment (shown to the student and the parent report)</label><textarea id="c${r.key}" style="font-family:var(--ui);font-size:1rem;min-height:4rem">${esc(r.c)}</textarea>
+<p class="row"><button class="go" data-save="${r.key}">Save marks</button><span class="mute" id="m${r.key}"></span></p></details>`).join('')}`;
+$('#det').querySelectorAll('button[data-save]').forEach(b=>b.onclick=async()=>{const k=b.dataset.save,r=a.find(x=>x.key===k),marks=Array(10).fill(-1);
+$('#det').querySelectorAll('input[data-k="'+k+'"]').forEach(i=>{if(i.value!=='')marks[+i.dataset.i]=Math.max(0,Math.min(5,Math.round(+i.value)))});
+const cm=document.getElementById('c'+k).value.trim();
+try{await db.ref('marks/'+r.code+'/'+r.aid).set({adm:key,m:marks,c:cm});r.marks=marks;r.c=cm;$('#m'+k).textContent='Saved';setTimeout(()=>main(c),600)}catch(e){$('#m'+k).textContent='Could not save: '+e.message}});
+$('#pr').onclick=()=>report(c);
+$('#wa').onclick=e=>{const s=[...st].sort((x,y)=>y.pct-x.pct),cm=la.find(r=>r.c);copy(`${nm}: Scientific Notation assessment report\nAttempts: ${a.length}. Overall ${o.pct}%, latest ${o.latest.pct}%, best ${o.best}%.\nStrongest: ${s.slice(0,2).map(v=>v.t+' '+v.pct+'%').join(', ')}.\nNeeds work: ${[...s].reverse().filter(v=>v.pct<75).slice(0,3).map(v=>v.t+' '+v.pct+'%').join(', ')||'none'}.${cm?'\nTeacher: '+cm.c:''}`,e.target)}}
+function report(c){const a=by[c],nm=roster[c].name,st=cum(a),o=overall(a),la=[...a].reverse(),cm=la.find(r=>r.c);
+$('#print').innerHTML=`<h1 style="font:700 20pt var(--ui);margin:0">Scientific Notation: Progress Report</h1><p style="margin:.2rem 0 1rem"><b>Student:</b> ${esc(nm)} · <b>Date:</b> ${new Date().toLocaleDateString()} · <b>Attempts:</b> ${a.length}</p>
+<div class="head">${ring(o.pct,'Overall')}<div><p><b>Overall (all attempts):</b> ${o.pct}%</p><p><b>Latest attempt:</b> ${o.latest.pct}% · <b>Best:</b> ${o.best}%</p></div></div>
+<div class="two" style="margin-top:.8rem"><div>${radar(st)}</div><div>${topics(st)}</div></div>
+<h3>Attempt history</h3><table style="display:table"><tr><th>Date</th><th>Multiple choice</th><th>Written</th><th>Total</th></tr>${a.map(r=>{const t=total(r),w=r.marks.filter(x=>x>=0);return`<tr><td>${new Date(r.ts).toLocaleDateString()}</td><td>${r.score}/30</td><td>${w.length?w.reduce((p,q)=>p+q,0)+'/'+w.length*5:'unmarked'}</td><td>${t.got}/${t.max} (${t.pct}%)</td></tr>`}).join('')}</table>
+<h3>Recommended revision</h3>${(()=>{const w=[...st].sort((x,y)=>x.pct-y.pct).filter(v=>v.pct<75);return w.length?`<ul>${w.map(v=>`<li><b>${v.t}</b> (${v.pct}%): ${H[v.i]}</li>`).join('')}</ul>`:'<p>All topics are at 75% or above. Well done.</p>'})()}
+${cm?`<h3>Teacher's comment</h3><p>${esc(cm.c)}</p>`:''}<p class="mute" style="margin-top:1.5rem">Strong 75% and above · Developing 50 to 74% · Needs work below 50%. Written answers are included once marked.</p>`;
+window.print()}
+gate();
+</script>
+<script>
+/* =========================================
+   WEBSITE PROTECTION
+   Blocks common browser shortcuts/devtools
+   ========================================= */
+
+(function () {
+    "use strict";
+
+    // Disable right-click
+    document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable common keyboard shortcuts
+    document.addEventListener("keydown", function (e) {
+        const key = e.key.toLowerCase();
+
+        // F12
+        if (e.key === "F12") {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
+        // Ctrl shortcuts
+        if (e.ctrlKey) {
+
+            // Ctrl + U = View Source
+            if (key === "u") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + S = Save Page
+            if (key === "s") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + P = Print
+            if (key === "p") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + C = Copy
+            if (key === "c") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + X = Cut
+            if (key === "x") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + A = Select All
+            if (key === "a") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + I = Developer Tools
+            if (e.shiftKey && key === "i") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + J = Console
+            if (e.shiftKey && key === "j") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+
+            // Ctrl + Shift + C = Inspect Element
+            if (e.shiftKey && key === "c") {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }
+
+        // F1 / F3 / F6 / F10 / F11
+        if (
+            e.key === "F1" ||
+            e.key === "F3" ||
+            e.key === "F6" ||
+            e.key === "F10" ||
+            e.key === "F11"
+        ) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
+        // Shift + F10 = Context Menu
+        if (e.shiftKey && e.key === "F10") {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }, true);
+
+    // Disable text selection
+    document.addEventListener("selectstart", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable dragging images/elements
+    document.addEventListener("dragstart", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable copy
+    document.addEventListener("copy", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable cut
+    document.addEventListener("cut", function (e) {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable paste if desired
+    document.addEventListener("paste", function (e) {
+        // Comment this section out if users need to paste
+        e.preventDefault();
+        return false;
+    });
+
+})();
+</script>
+</body></html>
