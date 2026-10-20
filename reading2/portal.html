@@ -21,7 +21,7 @@
 <section id="readingView" class="hidden">
  <div class="reading-top"><button id="backBtn" class="btn ghost">← Dashboard</button><div><span class="eyebrow">READING SESSION</span><h1 id="readingTitle">Passage title</h1></div><span class="pill" id="readingLevel">Level</span></div>
  <div class="reading-layout"><article class="panel passage-panel"><div class="passage-meta"><span>READ ALOUD</span><span id="targetWordCount">0 words</span></div><div class="read-progress"><span id="readProgress"></span></div><div id="passageText" class="passage-text"></div><div class="session-controls"><button id="listenBtn" class="btn ghost">🎧 Listen first</button><button id="startBtn" class="btn primary">● Start reading</button><button id="finishBtn" class="btn danger" disabled>Finish session</button><button id="retryBtn" class="btn ghost" disabled>Try again</button></div><p id="speechStatus" class="muted status" aria-live="polite">When you are ready, press Start reading and read clearly at your natural pace.</p><div class="live-strip"><div><small>Elapsed</small><b id="elapsed">00:00</b></div><div><small>Words recognised</small><b id="heardCount">0</b></div><div><small>Live WPM</small><b id="liveWpm">0</b></div></div></article>
- <aside class="panel coach-panel"><div class="coach-human-photo"><img src="mathcloud-human-guide.png" alt="Your MathCloud human reading coach"></div><h3>Meet your reading coach</h3><p>Read the words in order. Keep going if you make a mistake; the report will help you identify words to practise.</p><div class="notice"><b>Microphone tips</b><ul><li>Use Chrome or Edge on a supported device.</li><li>Allow microphone access.</li><li>Reduce background noise.</li><li>Read at a natural, steady pace.</li></ul></div><p class="tiny muted">Speech recognition is an estimate, not a perfect measure of pronunciation. Noise, accent and device quality can affect results.</p><div class="coach-speaking-note" id="coachSpeakingNote">Your coach stays beside the passage while you read.</div></aside></div>
+ <aside class="panel coach-panel" id="coachPanel" aria-label="Your reading coach"><div class="coach-human-photo"><img src="mathcloud-human-guide.png" alt="Your MathCloud reading coach"></div><h3 class="coach-copy">Your reading coach</h3><p class="coach-copy">Read the words in order. Keep going if you make a mistake; your report will show which words to practise.</p><div class="notice coach-copy coach-tips"><b>Microphone tips</b><ul><li>Use Chrome or Edge.</li><li>Allow microphone access.</li><li>Reduce background noise.</li><li>Read at a steady pace.</li></ul></div><div class="coach-speaking-note" id="coachSpeakingNote">Your coach stays beside the passage while you read.</div></aside></div>
  <div id="resultPanel" class="hidden"></div>
 </section>
 <section id="guide" class="guide panel"><div class="guide-head"><div><h2>How it works</h2><p class="muted">Four steps from passcode to progress. Press the button and the page will read the guide to you.</p></div><div class="guide-tools"><label class="rate">Voice speed<select id="voiceRate"><option value="0.75">Slow</option><option value="0.9">Normal</option><option value="1.05">Fast</option></select></label><button id="hearGuide" class="btn primary">🎧 Listen to how it works</button></div></div>
@@ -50,5 +50,44 @@
 .coach-speaking-note{border-radius:12px;background:#eef5ff;padding:12px;color:#174b9c;font-size:.8rem;font-weight:650}
 @keyframes humanCoachTalk{to{transform:translateY(-2px) scale(1.015)}}
 @media(max-width:900px){.coach-panel{position:static}.coach-human-photo{height:160px}}
+</style>
+<style>
+/* ===== Reading view v6: passage frame and coach always side by side, at every screen size ===== */
+body.is-reading .coach-dock{display:none!important}
+body.is-reading{padding-bottom:0!important}
+#readingView .reading-layout{display:grid;grid-template-columns:minmax(0,1fr) clamp(96px,25vw,330px);gap:clamp(10px,2vw,22px);align-items:stretch;height:calc(100vh - 215px);height:calc(100dvh - 215px);min-height:500px}
+#readingView .passage-panel{position:static;display:flex;flex-direction:column;min-width:0;min-height:0;height:100%;padding:clamp(12px,2vw,26px);overflow:hidden}
+#readingView .passage-text{flex:1 1 auto;height:auto;min-height:0;margin:12px 0;padding:clamp(14px,2.4vw,30px);font-size:clamp(1.12rem,1.2vw + .9rem,1.65rem);line-height:2;border-radius:20px;overflow-y:auto;scroll-behavior:smooth}
+#readingView .passage-text .word{padding:2px 3px;margin:0 -1px;border-radius:7px}
+#readingView .passage-text .word.current{background:#ffd95e;box-shadow:0 0 0 3px #ffd95e,0 4px 12px #e0a80055;color:#12233f;font-weight:700}
+#readingView .passage-text .word.correct{background:#d9f8e9;color:#0b5d43}
+#readingView .passage-text.live .word.upcoming{opacity:.5}
+#readingView .session-controls{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+#readingView .session-controls .btn{padding:10px 14px;font-size:.88rem}
+#readingView .status{margin:2px 0 8px;font-size:.84rem}
+#readingView .live-strip{margin:0}
+#readingView .coach-panel{position:static;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0;height:100%;padding:12px;overflow:hidden}
+#readingView .coach-human-photo{flex:1 1 auto;min-height:0;height:auto;margin:0;border-radius:18px;background:linear-gradient(165deg,#dfeeff,#fff 55%,#d9f6fb);display:flex;align-items:flex-end;justify-content:center;overflow:hidden;transition:box-shadow .25s}
+#readingView .coach-human-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;transform-origin:50% 100%}
+#coachPanel.speaking .coach-human-photo{box-shadow:0 0 0 3px #45d6e8aa}
+#coachPanel.speaking .coach-human-photo img{animation:humanCoachTalk .45s ease-in-out infinite alternate}
+#readingView .coach-panel h3{margin:0;font-size:1.05rem}
+#readingView .coach-panel p{margin:0}
+#readingView .coach-speaking-note{flex:0 0 auto;max-height:5.4em;overflow:auto;font-size:.78rem;padding:9px 11px}
+@media(max-height:820px){#readingView .coach-tips{display:none}}
+@media(max-height:680px){#readingView .coach-copy{display:none}}
+@media(max-width:700px){
+ #readingView .reading-layout{height:calc(100dvh - 190px);min-height:440px;gap:8px}
+ #readingView .coach-copy,#readingView .coach-speaking-note{display:none}
+ #readingView .coach-panel{padding:6px;border-radius:18px}
+ #readingView .passage-panel{padding:10px;border-radius:18px}
+ #readingView .passage-meta{font-size:.68rem}
+ #readingView .session-controls{display:grid;grid-template-columns:1fr 1fr}
+ #readingView .session-controls .btn{padding:9px 4px;font-size:.72rem;white-space:normal;line-height:1.2}
+ #readingView .live-strip b{font-size:.9rem}#readingView .live-strip small{font-size:.62rem}
+ #readingView .status{font-size:.74rem}
+ #readingView .reading-top{gap:8px;flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){#coachPanel.speaking .coach-human-photo img{animation:none}}
 </style>
 </body></html>
