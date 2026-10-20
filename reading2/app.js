@@ -8,7 +8,7 @@ const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 const configured = () => window.FIREBASE_READY && window.firebase;
 let db=null, root=null;
 if(configured()){try{firebase.initializeApp(window.FIREBASE_CONFIG);db=firebase.database();root=db.ref();}catch(e){console.error(e);}}
-function show(view){const g=$('guide');if(g)g.classList.toggle('hidden',view==='readingView');['loginView','dashboardView','readingView'].forEach(id=>$(id).classList.toggle('hidden',id!==view));}
+function show(view){document.body.classList.toggle('is-reading',view==='readingView');const g=$('guide');if(g)g.classList.toggle('hidden',view==='readingView');['loginView','dashboardView','readingView'].forEach(id=>$(id).classList.toggle('hidden',id!==view));}
 function sayStatus(s){$('speechStatus').textContent=s;}
 function dateLabel(ms){return new Date(ms).toLocaleString([], {dateStyle:'medium',timeStyle:'short'});}
 function noticeConfig(){if(!db){$('loginError').textContent='Firebase is not configured. Edit firebase-config.js with your project settings, then reload.';}}
@@ -99,12 +99,14 @@ async function finishReading(){
 
 const vs={token:0,voice:null,active:false,src:'',rate:parseFloat(localStorage.getItem('rfRate'))||0.9};
 if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=()=>{vs.voice=null;};
-function pickVoice(){if(vs.voice)return vs.voice;const score=v=>{const n=(v.name||'').toLowerCase(),l=(v.lang||'').toLowerCase();let s=0;if(/natural|neural|online/i.test(n))s+=100;if(/aria|jenny|sonia|zira|samantha|victoria|serena|hazel|libby|natasha|ava|allison|karen|moira|tessa|female|woman/i.test(n))s+=120;if(/google uk english female|google us english female/i.test(n))s+=140;if(/en-ng/.test(l))s+=25;else if(/en-gb/.test(l))s+=20;else if(/en-us/.test(l))s+=15;else if(/^en/.test(l))s+=5;return s;};const ranked=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)).map(v=>({v,s:score(v)})).sort((a,b)=>b.s-a.s);return vs.voice=ranked.length&&ranked[0].s>=100?ranked[0].v:null;}
+function pickVoice(){if(vs.voice)return vs.voice;const score=v=>{const n=(v.name||'').toLowerCase(),l=(v.lang||'').toLowerCase();let s=0;if(/natural|neural|online/i.test(n))s+=100;if(/aria|jenny|sonia|zira|samantha|victoria|serena|hazel|libby|natasha|ava|allison|karen|moira|tessa|female|woman/i.test(n))s+=120;if(/google uk english female|google us english female/i.test(n))s+=140;if(/(male|david|mark|guy|ryan|daniel|george|alex|fred|james)/i.test(n)&&!/female/i.test(n))s-=200;if(/en-ng/.test(l))s+=25;else if(/en-gb/.test(l))s+=20;else if(/en-us/.test(l))s+=15;else if(/^en/.test(l))s+=5;return s;};const ranked=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)).map(v=>({v,s:score(v)})).sort((a,b)=>b.s-a.s);return vs.voice=ranked.length?ranked[0].v:null;}
 function syncBtns(){const l=$('listenBtn'),g=$('hearGuide');if(l)l.textContent=vs.active&&vs.src==='listen'?'■ Stop listening':'🎧 Listen first';if(g)g.textContent=vs.active&&vs.src==='guide'?'■ Stop guide':'🎧 Listen to how it works';}
 // Real human portrait avatar: animate the portrait card while speech synthesis is active.
 const Avatar=(()=>{
- const els=()=>({root:document.getElementById('coachDock')||document.getElementById('avatarBox'),cap:document.getElementById('dockCoachSays')||document.getElementById('coachSays')});
- return {begin(){const {root}=els();if(root)root.classList.add('speaking');},word(){const {root}=els();if(root)root.classList.add('speaking');},rest(){},stop(){const {root}=els();if(root)root.classList.remove('speaking');},caption(t){const {cap}=els();if(cap)cap.textContent=t;}};
+ const roots=()=>['coachDock','coachPanel','avatarBox'].map(id=>document.getElementById(id)).filter(Boolean);
+ const on=()=>roots().forEach(r=>r.classList.add('speaking'));
+ return {begin:on,word:on,rest(){},stop(){roots().forEach(r=>r.classList.remove('speaking'));},
+  caption(t){const c=document.getElementById('dockCoachSays')||document.getElementById('coachSays');if(c)c.textContent=t;const s=document.getElementById('coachSpeakingNote');if(s&&t)s.textContent=String(t).length>150?String(t).slice(0,147)+'…':t;}};
 })();
 function clearHL(){document.querySelectorAll('.word.current,.guide-step.active,.correction-card.speaking').forEach(e=>e.classList.remove('current','active','speaking'));}
 function chunks(text){const w=String(text||'').trim().split(/\s+/).filter(Boolean),out=[];let cur=[],len=0,start=0;
@@ -170,7 +172,7 @@ const dockAvatar=document.getElementById('dockAvatar');
 // Keep the photorealistic MathCloud guide image supplied by portal.html; speech status animates the portrait card.
 if(dockAvatar){const talk=document.getElementById('dockCoachTalk');if(talk)talk.addEventListener('click',()=>speak('Hello, reader! I am your MathCloud reading coach. Read at your natural pace, look carefully at each word, and keep going if you make a mistake. I am here to help you practise.',{src:'dock'}));}
 function renderResult(r,c){
- $('resultPanel').classList.remove('hidden');
+ $('resultPanel').classList.remove('hidden');setTimeout(()=>{try{$('resultPanel').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}},200);
  const all=(r.issues||[]).slice(0,100),items=all.filter(x=>x.type!=='extra'),extras=all.filter(x=>x.type==='extra'),total=items.length,nm=state.student.name||'reader';
  const greeting=total?`Hi ${nm}! I am Coach Reed. Press “Hear word” and I will say each word for you.`:`Well done, ${nm}! I did not find any words for you to practise.`;
  const stageHtml=`<div class="coach-stage"><div class="avatar-box" id="avatarBox"><img src="mathcloud-human-guide.png" alt="MathCloud human reading coach" loading="lazy"></div><div class="coach-bubble"><b>Coach Reed</b><p id="coachSays">${esc(greeting)}</p></div></div>`;
