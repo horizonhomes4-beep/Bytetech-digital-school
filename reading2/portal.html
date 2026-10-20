@@ -90,4 +90,24 @@ body.is-reading{padding-bottom:0!important}
 }
 @media(prefers-reduced-motion:reduce){#coachPanel.speaking .coach-human-photo img{animation:none}}
 </style>
+<style>
+/* ===== Reading view v7: tighter header, avatar at natural size beside the passage ===== */
+body.is-reading .shell{padding-top:12px}
+#readingView .reading-top{margin:0 0 10px;gap:12px}
+#readingView .reading-top h1{font-size:clamp(1.25rem,2.4vw,1.8rem);margin:2px 0 0}
+#readingView .reading-top .btn{padding:9px 14px}
+#readingView .reading-layout{height:calc(100vh - 185px);height:calc(100dvh - 185px);min-height:480px}
+@media(max-width:700px){
+ body.is-reading .shell{padding-inline:10px}
+ #readingView .reading-top{display:grid;grid-template-columns:auto 1fr;align-items:center}
+ #readingView .reading-top .pill{display:none}
+ #readingView .reading-top .eyebrow{display:none}
+ #readingView .reading-top h1{text-align:left;font-size:1.05rem}
+ #readingView .reading-layout{grid-template-columns:minmax(0,1fr) clamp(112px,31vw,150px);height:auto;min-height:0;align-items:start}
+ #readingView .passage-panel{height:calc(100dvh - 160px);min-height:420px}
+ #readingView .coach-panel{position:sticky;top:78px;height:auto;padding:5px}
+ #readingView .coach-human-photo{flex:none;aspect-ratio:2/3;height:auto;width:100%}
+ #readingView .coach-human-photo img{height:100%;width:100%}
+}
+</style>
 </body></html>
