@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Parent dashboard · ParentGuard</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="shell"><h1>👨‍👩‍👧 ParentGuard · My Children</h1><div id="app"><div class="c">Connecting to Firebase…</div></div></main>
+<script type="module">
+import {auth,db,A,F,panel,esc} from './common.js';
+const app=document.getElementById('app');let deviceUnsubscribe=null,rendered=new Map();
+function login(message=''){
+ if(deviceUnsubscribe){deviceUnsubscribe();deviceUnsubscribe=null;}rendered.clear();
+ app.innerHTML=`<section class="c login"><h2>Parent sign in</h2>${message?`<p class="off">${esc(message)}</p>`:''}<label for="parentEmail">Email address</label><input id="parentEmail" type="email" autocomplete="username"><label for="parentPassword">Password</label><input id="parentPassword" type="password" autocomplete="current-password"><button id="parentSignIn">Sign in securely</button><p id="parentMessage" role="status" aria-live="polite"></p><p><a href="index.html">Home</a></p></section>`;
+ const email=document.getElementById('parentEmail'),password=document.getElementById('parentPassword'),button=document.getElementById('parentSignIn'),msg=document.getElementById('parentMessage');
+ const go=async()=>{button.disabled=true;msg.textContent='Signing in…';try{await A.signInWithEmailAndPassword(auth,email.value.trim(),password.value)}catch(e){msg.className='off';msg.textContent=e.code||e.message;button.disabled=false;}};
+ button.addEventListener('click',go);password.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+}
+A.onAuthStateChanged(auth,async user=>{
+ if(deviceUnsubscribe){deviceUnsubscribe();deviceUnsubscribe=null;}rendered.clear();
+ if(!user||user.isAnonymous){login();return;}
+ app.innerHTML='<div class="c">Checking parent account…</div>';
+ try{
+  const profile=await F.getDoc(F.doc(db,'parents',user.uid));
+  if(!profile.exists()||profile.data().uid!==user.uid){await A.signOut(auth);login('This account has not been assigned as a ParentGuard parent. Contact your administrator.');return;}
+  app.innerHTML=`<div class="c"><div class="row"><div><b>Welcome, ${esc(profile.data().name||user.email)}</b><p>Live status and controls for your assigned children.</p></div><button id="parentSignOut" class="gr">Sign out</button></div></div><div id="children"></div>`;
+  document.getElementById('parentSignOut').onclick=()=>A.signOut(auth);
+  const children=document.getElementById('children');
+  deviceUnsubscribe=F.onSnapshot(F.query(F.collection(db,'devices'),F.where('parentId','==',user.uid)),snap=>{
+   if(snap.empty){children.innerHTML='<section class="c">No children have been assigned to your account yet. Please contact your administrator.</section>';rendered.clear();return;}
+   const seen=new Set();for(const doc of snap.docs){const data=doc.data();seen.add(doc.id);const sig=JSON.stringify([data.name,data.cfg,data.adminCfg,data.status]);const old=rendered.get(doc.id);if(old&&old.sig===sig){old.el.refresh(data);continue;}const el=panel(doc.id,data,'parent',cfg=>F.updateDoc(doc.ref,{cfg:JSON.stringify(cfg)}));if(old)old.el.replaceWith(el);else children.append(el);rendered.set(doc.id,{sig,el});}
+   for(const [id,item] of rendered){if(!seen.has(id)){item.el.remove();rendered.delete(id);}}
+  },error=>{children.textContent='Could not load assigned children: '+(error.code||error.message);});
+ }catch(error){app.innerHTML='<section class="c"><p class="off">Could not open parent dashboard: '+esc(error.code||error.message)+'</p><button id="retryParent" class="gr">Try again</button></section>';document.getElementById('retryParent').onclick=()=>login();}
+});
+</script></body></html>
