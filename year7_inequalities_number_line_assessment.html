@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Year 7 mathematics assessment on inequalities and number lines, with instant automatic marking.">
+<title>Year 7 Maths | Inequalities & Number Lines</title>
+<style>
+:root{--navy:#172554;--blue:#2563eb;--sky:#eaf3ff;--teal:#0f766e;--ink:#182235;--muted:#64748b;--line:#dbe4f0;--paper:#fff;--bg:#f4f7fc;--good:#15803d;--bad:#b91c1c;--gold:#f59e0b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink);line-height:1.5}
+header{background:linear-gradient(120deg,#172554,#1d4ed8 70%,#0f766e);color:white;padding:28px 18px 34px}
+.wrap{max-width:980px;margin:auto}.topline{display:flex;align-items:center;gap:12px}.brand-icon{width:48px;height:48px;border-radius:15px;background:#ffffff20;display:grid;place-items:center;font-size:26px;border:1px solid #ffffff45}
+h1{font-size:clamp(1.55rem,4vw,2.25rem);margin:14px 0 5px;line-height:1.15}.subtitle{color:#dbeafe;margin:0;max-width:680px}
+main{max-width:980px;margin:-17px auto 50px;padding:0 16px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 8px 24px #1725540a;margin-bottom:18px}
+.intro-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:center}.hero-art{background:linear-gradient(145deg,#eff6ff,#ecfeff);border-radius:15px;padding:12px;min-height:150px;display:grid;place-items:center}
+h2{font-size:1.2rem;margin:0 0 8px;color:var(--navy)}p{margin:7px 0}.muted{color:var(--muted);font-size:.94rem}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.pill{background:var(--sky);color:#1e40af;border-radius:999px;padding:6px 11px;font-size:.82rem;font-weight:700}
+label{display:block;font-weight:700;margin:12px 0 6px}input[type=text]{width:100%;max-width:440px;padding:13px 14px;border:1px solid #cbd5e1;border-radius:10px;font:inherit}
+button{border:0;border-radius:11px;padding:12px 18px;font:inherit;font-weight:750;cursor:pointer;transition:.15s}button:focus-visible,input:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}.primary{background:var(--blue);color:white}.primary:hover{background:#1d4ed8}.secondary{background:#eaf1ff;color:#1e40af}.secondary:hover{background:#dbeafe}.start-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:17px}
+#assessment{display:none}.progress-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px;font-size:.9rem;font-weight:700;color:#334155}.progress{height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:linear-gradient(90deg,#2563eb,#0d9488);width:0;transition:width .2s}
+.question{border:1px solid var(--line);border-radius:15px;padding:18px;margin:16px 0;background:#fff}.qhead{display:flex;gap:12px;align-items:flex-start}.qnum{flex:none;width:34px;height:34px;border-radius:10px;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;font-weight:800}.qtitle{font-weight:750;margin:2px 0 8px}.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.option{border:1px solid #cbd5e1;border-radius:11px;padding:10px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;font-weight:600;background:#fff}.option:hover{border-color:#60a5fa;background:#f8fbff}.option input{accent-color:var(--blue);width:17px;height:17px}.math{font-size:1.12rem;font-weight:800;color:#172554;letter-spacing:.02em}
+.diagram{background:#f8fbff;border:1px solid #e2eaf5;border-radius:13px;padding:12px;margin-top:12px}.numberline{width:100%;height:auto;display:block;max-height:125px}.feedback{display:none;margin-top:12px;padding:10px 12px;border-radius:10px;font-size:.92rem}.feedback.correct{display:block;background:#ecfdf5;color:#166534}.feedback.incorrect{display:block;background:#fef2f2;color:#991b1b}
+.submitbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px}.result{display:none}.score{font-size:2.2rem;font-weight:900;color:var(--navy)}.result-banner{background:linear-gradient(120deg,#eff6ff,#ecfeff);border-radius:14px;padding:18px;margin:12px 0}.result-list{padding-left:20px}.result-list li{margin:7px 0}.small{font-size:.85rem;color:var(--muted)}
+footer{text-align:center;color:var(--muted);padding:15px;font-size:.85rem}
+@media(max-width:700px){.intro-grid{grid-template-columns:1fr}.hero-art{min-height:120px}.panel{padding:17px}.options{grid-template-columns:1fr}.question{padding:14px}.submitbar{align-items:stretch}.submitbar button{width:100%}}
+@media print{header{padding:12px}.panel{box-shadow:none}button{display:none!important}body{background:white}.question{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+ <div class="topline"><div class="brand-icon">📏</div><div><strong>MATHS EXPLORER</strong><div style="font-size:.8rem;color:#dbeafe">YEAR 7 • NUMBER & ALGEBRA</div></div></div>
+ <h1>Inequalities on a Number Line</h1><p class="subtitle">Learn how inequality signs work, read number lines and choose the correct shaded region. Then test what you know!</p>
+</div></header>
+<main>
+<section class="panel intro-grid" id="welcome">
+ <div><h2>🎯 Your learning mission</h2>
+  <p>Complete this assessment on <strong>inequalities</strong>. Read each question carefully and select one answer.</p>
+  <div class="pills"><span class="pill">12 questions</span><span class="pill">Year 7 level</span><span class="pill">Instant auto-marking</span></div>
+  <label for="studentName">Your name</label><input id="studentName" type="text" maxlength="60" placeholder="Enter your name to begin">
+  <div class="start-row"><button class="primary" id="startBtn">Start assessment →</button><span class="small">You can review your answers after submitting.</span></div>
+  <p id="nameError" class="small" style="color:#b91c1c" aria-live="polite"></p>
+ </div>
+ <div class="hero-art" aria-label="Illustration of a number line"><svg viewBox="0 0 340 150" role="img" aria-label="Number line with an open circle and arrow pointing right">
+  <line x1="25" y1="78" x2="315" y2="78" stroke="#334155" stroke-width="3"/><path d="M315 78l-10 -6v12z" fill="#334155"/><path d="M25 78l10 -6v12z" fill="#334155"/>
+  <g stroke="#64748b" stroke-width="2"><path d="M55 68v20M112 68v20M169 68v20M226 68v20M283 68v20"/></g>
+  <g fill="#334155" font-size="13" text-anchor="middle"><text x="55" y="108">−2</text><text x="112" y="108">−1</text><text x="169" y="108">0</text><text x="226" y="108">1</text><text x="283" y="108">2</text></g>
+  <path d="M226 78H303" stroke="#0d9488" stroke-width="8" stroke-linecap="round"/><circle cx="226" cy="78" r="10" fill="white" stroke="#0d9488" stroke-width="4"/>
+  <text x="170" y="25" text-anchor="middle" fill="#1e40af" font-size="15" font-weight="bold">x &gt; 1</text>
+  <text x="170" y="137" text-anchor="middle" fill="#64748b" font-size="11">Open circle • values greater than 1</text>
+ </svg></div>
+</section>
+<section id="assessment">
+ <div class="panel">
+  <div class="progress-row"><span id="progressText">0 of 12 answered</span><span id="studentLabel"></span></div>
+  <div class="progress"><div id="progressFill"></div></div>
+  <p class="muted">Tip: An <strong>open circle ○</strong> means the endpoint is not included. A <strong>filled circle ●</strong> means it is included. The arrow shows the values that work.</p>
+ </div>
+ <div id="questions"></div>
+ <div class="panel submitbar"><span class="muted" id="completionText">Answer every question before submitting.</span><button class="primary" id="submitBtn">Submit and mark my work ✓</button></div>
+</section>
+<section class="panel result" id="results" aria-live="polite">
+ <h2>🏆 Your assessment result</h2><div class="result-banner"><div id="resultName" style="font-weight:800"></div><div class="score" id="score"></div><div id="gradeText"></div></div>
+ <h2>Answer review</h2><ol class="result-list" id="review"></ol>
+ <div class="start-row"><button class="primary" onclick="window.print()">Print / Save result</button><button class="secondary" id="retryBtn">Try again</button></div>
+</section>
+</main>
+<footer>Maths Explorer • Keep practising — every mathematician starts with one step!</footer>
+<script>
+const questions=[
+ {q:"What does the symbol < mean?",opts:["Greater than","Less than","Equal to","Not equal to"],a:1,why:"The symbol < means less than. For example, 3 < 5."},
+ {q:"Which symbol makes this statement true: 8 ___ 5?",opts:["<",">","=","≤"],a:1,why:"8 is greater than 5, so use >."},
+ {q:"Which inequality means “x is greater than 4”?",opts:["x < 4","x ≤ 4","x > 4","x ≥ 4"],a:2,why:"The symbol > means greater than."},
+ {q:"Which inequality includes the number 6?",opts:["x > 6","x < 6","x ≥ 6","x < 5"],a:2,why:"The symbol ≥ means greater than or equal to, so 6 is included."},
+ {q:"On a number line, what does an open circle at 2 mean?",opts:["2 is included","2 is not included","The answer is 2 only","All numbers are included"],a:1,why:"An open circle means the endpoint is not part of the solution."},
+ {q:"Which number is a solution to x < 3?",opts:["5","3","−1","8"],a:2,why:"−1 is less than 3. The number 3 itself is not included."},
+ {q:"Which number line represents x > 1?",opts:["Open circle at 1, arrow right","Filled circle at 1, arrow right","Open circle at 1, arrow left","Filled circle at 1, arrow left"],a:0,why:"Greater than 1 uses an open circle at 1 and shading or an arrow to the right."},
+ {q:"Which number line represents x ≤ −2?",opts:["Open circle at −2, arrow left","Filled circle at −2, arrow left","Filled circle at −2, arrow right","Open circle at −2, arrow right"],a:1,why:"Less than or equal to −2 includes −2, so use a filled circle and point left."},
+ {q:"Which inequality is shown by this number line?",diagram:"leftOpen",opts:["x < 0","x ≤ 0","x > 0","x ≥ 0"],a:0,why:"The open circle at 0 excludes 0, and the arrow points left: x < 0."},
+ {q:"Which inequality is shown by this number line?",diagram:"rightClosed",opts:["x > 2","x ≥ 2","x < 2","x ≤ 2"],a:1,why:"The filled circle includes 2 and the arrow points right: x ≥ 2."},
+ {q:"A lift can carry a maximum of 8 people. If p is the number of people, which inequality is correct?",opts:["p > 8","p < 8","p ≤ 8","p ≥ 8"],a:2,why:"A maximum of 8 means 8 or fewer people: p ≤ 8."},
+ {q:"Which values satisfy −1 ≤ x < 2?",opts:["−1, 0 and 1","−2, −1 and 0","0, 1 and 2","−1 and 2 only"],a:0,why:"−1 is included, 2 is excluded, and the whole numbers between them are 0 and 1."}
+];
+let answers=Array(questions.length).fill(null),student="";
+const $=id=>document.getElementById(id);
+function lineSVG(type){
+ const left=type==="leftOpen",x=left?170:225,dir=left?-1:1;
+ const start=left?35:225,end=left?170:310;
+ return `<div class="diagram"><svg class="numberline" viewBox="0 0 340 100" role="img" aria-label="${left?'Open circle at zero with arrow to the left':'Filled circle at two with arrow to the right'}">
+ <line x1="25" y1="48" x2="315" y2="48" stroke="#475569" stroke-width="2.5"/><path d="M315 48l-9 -5v10zM25 48l9 -5v10z" fill="#475569"/>
+ <g stroke="#64748b" stroke-width="1.5"><path d="M55 40v16M112 40v16M170 40v16M225 40v16M282 40v16"/></g>
+ <g fill="#334155" font-size="12" text-anchor="middle"><text x="55" y="73">−4</text><text x="112" y="73">−2</text><text x="170" y="73">0</text><text x="225" y="73">2</text><text x="282" y="73">4</text></g>
+ <line x1="${left?42:225}" y1="48" x2="${left?170:304}" y2="48" stroke="#0d9488" stroke-width="7" stroke-linecap="round"/>
+ <path d="${left?'M42 48l11 -7v14z':'M304 48l-11 -7v14z'}" fill="#0d9488"/>
+ <circle cx="${x}" cy="48" r="9" fill="${left?'white':'#0d9488'}" stroke="#0d9488" stroke-width="3"/>
+ </svg></div>`;
+}
+function render(){
+ $("questions").innerHTML=questions.map((q,i)=>`<article class="question" id="q${i}">
+ <div class="qhead"><div class="qnum">${i+1}</div><div style="flex:1"><div class="qtitle">${q.q}</div>${q.diagram?lineSVG(q.diagram):""}
+ <div class="options">${q.opts.map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}" ${answers[i]===j?"checked":""}><span>${o}</span></label>`).join("")}</div>
+ <div class="feedback" id="f${i}"></div></div></div></article>`).join("");
+ document.querySelectorAll('input[type=radio]').forEach(el=>el.addEventListener("change",e=>{const i=Number(e.target.name.slice(1));answers[i]=Number(e.target.value);updateProgress();}));
+ updateProgress();
+}
+function updateProgress(){const n=answers.filter(x=>x!==null).length;$("progressText").textContent=`${n} of ${questions.length} answered`;$("progressFill").style.width=`${n/questions.length*100}%`;$("completionText").textContent=n===questions.length?"All questions answered. You are ready to submit!":`You still have ${questions.length-n} question(s) to answer.`;$("submitBtn").disabled=n!==questions.length;$("submitBtn").style.opacity=n===questions.length?"1":".55";}
+$("startBtn").addEventListener("click",()=>{student=$("studentName").value.trim();if(!student){$("nameError").textContent="Please enter your name before starting.";return;}$("welcome").style.display="none";$("assessment").style.display="block";$("studentLabel").textContent=student;render();window.scrollTo({top:0,behavior:"smooth"});});
+$("submitBtn").addEventListener("click",()=>{if(answers.some(x=>x===null))return;let score=0;questions.forEach((q,i)=>{const ok=answers[i]===q.a;if(ok)score++;const f=$("f"+i);f.className="feedback "+(ok?"correct":"incorrect");f.innerHTML=`<strong>${ok?"✓ Correct":"✗ Not quite"}.</strong> ${q.why} <span style="display:block;margin-top:4px">Correct answer: <b>${q.opts[q.a]}</b></span>`;});const pct=Math.round(score/questions.length*100);$("resultName").textContent=`Student: ${student}`;$("score").textContent=`${score} / ${questions.length} (${pct}%)`;$("gradeText").textContent=pct>=80?"Excellent work! You understand inequalities very well.":pct>=60?"Good effort! Review the explanations and keep practising.":"Keep going! Read the feedback, then try the assessment again."; $("review").innerHTML=questions.map((q,i)=>`<li><b>Q${i+1}:</b> ${q.q}<br><span style="color:${answers[i]===q.a?'#15803d':'#b91c1c'}">Your answer: ${q.opts[answers[i]]}</span> · Correct: ${q.opts[q.a]}</li>`).join("");$("assessment").style.display="none";$("results").style.display="block";window.scrollTo({top:0,behavior:"smooth"});});
+$("retryBtn").addEventListener("click",()=>{answers=Array(questions.length).fill(null);$("results").style.display="none";$("assessment").style.display="block";render();window.scrollTo({top:0,behavior:"smooth"});});
+</script>
+</body></html>
