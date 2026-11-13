@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10243a">
+<title>Gmail Consent Demo</title>
+<style>
+:root{font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;color:#182433;background:#f3f6fa}
+*{box-sizing:border-box}body{margin:0}.top{background:#10243a;color:#fff;padding:22px 18px}
+.wrap{max-width:900px;margin:auto;padding:20px}.top .wrap{padding:0 20px}
+h1{font-size:clamp(22px,4vw,30px);margin:0 0 7px}.sub{color:#c6d3e0;margin:0;font-size:14px}
+.card{background:#fff;border:1px solid #dce4ec;border-radius:16px;padding:18px;margin:0 0 16px;box-shadow:0 5px 20px #17324d0b}
+h2{font-size:17px;margin:0 0 12px}.muted{color:#647487;font-size:13px;line-height:1.5}
+button{border:0;border-radius:10px;padding:12px 16px;background:#1769aa;color:white;font-weight:650;font-size:14px;cursor:pointer}
+button.secondary{background:#e8eef5;color:#21364b}button:disabled{opacity:.5;cursor:not-allowed}
+input{width:100%;padding:12px;border:1px solid #cbd6e1;border-radius:9px;font-size:14px;margin:6px 0 12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.status{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#34485c}
+.dot{width:9px;height:9px;border-radius:50%;background:#9aa8b5}.dot.green{background:#20965c}.dot.amber{background:#d68a17}
+.message{border:1px solid #e1e7ee;border-radius:12px;padding:14px;margin-top:12px}
+.message strong{display:block;margin-bottom:6px}.message .meta{font-size:12px;color:#647487;margin-bottom:9px}.emailbody{white-space:pre-wrap;overflow-wrap:anywhere;color:#253447;font-size:14px;line-height:1.6;border-top:1px solid #e1e7ee;margin-top:12px;padding-top:12px;max-height:420px;overflow:auto}
+.pill{display:inline-block;border-radius:20px;background:#edf3f8;padding:5px 9px;font-size:12px;color:#3b536b}
+.log{font:12px/1.6 ui-monospace,Consolas,monospace;background:#101c2a;color:#dce8f3;border-radius:10px;padding:12px;min-height:76px;white-space:pre-wrap;overflow-wrap:anywhere}
+.warn{background:#fff7e8;border:1px solid #f0d39a;padding:12px;border-radius:10px;color:#6a4a12;font-size:13px;line-height:1.5}
+footer{padding:0 20px 28px;color:#647487;font-size:12px;text-align:center}
+@media(max-width:600px){.wrap{padding:14px}.card{padding:15px}.row button{flex:1}}
+</style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<h1>Gmail Read-Only Consent Demo</h1>
+<p class="sub">A visible classroom demonstration of user-approved Gmail access</p>
+</div></header>
+<main class="wrap">
+<section class="card">
+<h2>1. Connect your own Gmail account</h2>
+<p class="muted">This page requests Google's read-only Gmail permission. You will see Google's consent screen and can cancel at any time. It retrieves the newest message's sender, subject and readable email body (up to 20,000 characters).</p>
+<label class="muted" for="clientId">Google OAuth Web Client ID</label>
+<input id="clientId" placeholder="Paste your Google OAuth Client ID here">
+<div class="row">
+<button id="connect">Connect Gmail with Google</button>
+<button id="disconnect" class="secondary" disabled>Disconnect / clear</button>
+</div>
+<p class="muted" style="margin-top:12px">This demo does not ask for your Gmail password. Never enter your password into this page.</p>
+</section>
+
+<section class="card">
+<h2>2. Live status</h2>
+<div class="row" style="justify-content:space-between">
+<span class="status"><span id="dot" class="dot"></span><span id="status">Not connected</span></span>
+<span id="visibility" class="pill">Page visible</span>
+</div>
+<p class="muted" id="account">No Gmail account connected.</p>
+<div class="row">
+<button id="read" disabled>Read latest email</button>
+<button id="auto" class="secondary" disabled>Start 60-second refresh</button>
+<button id="stop" class="secondary" disabled>Stop refresh</button>
+</div>
+<div id="message" class="message" hidden>
+<strong id="subject"></strong>
+<div class="meta" id="from"></div>
+<div id="snippet" class="muted"></div>
+<div id="bodyText" class="emailbody"></div>
+</div>
+</section>
+
+<section class="card">
+<h2>3. Background behaviour demonstration</h2>
+<p class="muted">When refresh is enabled, this page checks Gmail every 60 seconds while it is visible. If you switch tabs or minimise the browser, the browser may throttle or suspend page timers. This demo pauses checks while hidden and resumes when you return. It does not run secretly or continuously in the background.</p>
+<div class="row"><span class="status"><span class="dot amber"></span><span id="pollState">Refresh is off</span></span><span class="pill" id="lastCheck">No checks yet</span></div>
+</section>
+
+<section class="card">
+<h2>Activity log</h2>
+<div class="log" id="log" aria-live="polite">Demo loaded. No Gmail data has been accessed.</div>
+</section>
+
+<section class="card">
+<h2>Privacy and safety</h2>
+<div class="warn">Use only your own Gmail account or an account whose owner has explicitly agreed. The app requests the Gmail <b>readonly</b> scope. The access token is kept in this browser tab's memory and is not sent to a separate server by this demo. Disconnecting clears the local token and displayed message. Do not use this page on a shared or public computer.</div>
+<p class="muted">Google may show an “unverified app” warning while your own OAuth project is in testing. Only proceed if the OAuth project and client ID are yours and the consent screen clearly identifies your project.</p>
+</section>
+</main>
+<footer>Educational prototype • No stealth collection • No Gmail password collection</footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  let tokenClient = null, accessToken = null, timer = null, connectedEmail = "";
+  const SCOPE = "https://www.googleapis.com/auth/gmail.readonly";
+  const log = msg => {
+    const stamp = new Date().toLocaleTimeString();
+    $("log").textContent = `[${stamp}] ${msg}\n` + $("log").textContent;
+  };
+  function status(text, color="") {
+    $("status").textContent = text;
+    $("dot").className = "dot" + (color ? " " + color : "");
+  }
+  function updateVisibility() {
+    const hidden = document.visibilityState !== "visible";
+    $("visibility").textContent = hidden ? "Page hidden" : "Page visible";
+    if (hidden) {
+      $("pollState").textContent = "Browser tab hidden — refresh paused";
+      log("Page became hidden; automatic checks paused.");
+    } else if (timer) {
+      $("pollState").textContent = "Refresh active while page is visible";
+      log("Page visible again; automatic checks resumed.");
+      fetchLatest();
+    }
+  }
+  document.addEventListener("visibilitychange", updateVisibility);
+
+  $("connect").onclick = () => {
+    const clientId = $("clientId").value.trim();
+    if (!clientId) { alert("Paste your Google OAuth Web Client ID first."); return; }
+    if (!window.google?.accounts?.oauth2) {
+      alert("Google sign-in library is still loading. Wait a moment and try again.");
+      return;
+    }
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: clientId,
+      scope: SCOPE,
+      callback: async (response) => {
+        if (response.error) {
+          status("Google connection failed");
+          log("Google OAuth error: " + response.error);
+          return;
+        }
+        accessToken = response.access_token;
+        status("Connected with read-only permission", "green");
+        $("read").disabled = false;
+        $("auto").disabled = false;
+        $("disconnect").disabled = false;
+        $("account").textContent = "Connected. The demo will request only the newest message when you choose to read or enable refresh.";
+        log("Google granted a temporary read-only access token.");
+        await fetchLatest();
+      }
+    });
+    tokenClient.requestAccessToken({prompt:"consent"});
+  };
+
+  async function fetchLatest() {
+    if (!accessToken) return;
+    if (document.visibilityState !== "visible") {
+      $("pollState").textContent = "Page hidden — refresh paused";
+      return;
+    }
+    try {
+      const r = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=1", {
+        headers: {Authorization: "Bearer " + accessToken}
+      });
+      if (r.status === 401) {
+        status("Permission expired — reconnect", "amber");
+        log("Google access token expired or was revoked. Reconnect to continue.");
+        stopRefresh();
+        accessToken = null;
+        $("read").disabled = true; $("auto").disabled = true;
+        return;
+      }
+      if (!r.ok) {
+        const detail = await r.text();
+        throw new Error("Gmail API returned " + r.status + ": " + detail.slice(0,220));
+      }
+      const data = await r.json();
+      if (!data.messages?.length) {
+        $("message").hidden = false;
+        $("subject").textContent = "No messages found";
+        $("from").textContent = "";
+        $("snippet").textContent = "The connected inbox did not return a message.";
+      } else {
+        const id = data.messages[0].id;
+        const mr = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/" + encodeURIComponent(id) + "?format=full", {
+          headers: {Authorization: "Bearer " + accessToken}
+        });
+        if (!mr.ok) throw new Error("Could not retrieve the email content (" + mr.status + ").");
+        const m = await mr.json();
+        const headers = m.payload?.headers || [];
+        const getHeader = name => headers.find(h => h.name.toLowerCase() === name.toLowerCase())?.value || "(not supplied)";
+        $("subject").textContent = getHeader("Subject");
+        $("from").textContent = "From: " + getHeader("From");
+        $("snippet").textContent = "Full message content from Gmail (attachments are not displayed).";
+        const decodePart = data => {
+          if (!data) return "";
+          const normalized = data.replace(/-/g, "+").replace(/_/g, "/");
+          const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
+          const binary = atob(padded);
+          const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
+          return new TextDecoder("utf-8").decode(bytes);
+        };
+        const parts = [];
+        const walk = part => {
+          if (!part) return;
+          const mime = (part.mimeType || "").toLowerCase();
+          if (part.body?.data && (mime === "text/plain" || mime === "text/html")) {
+            parts.push({mime, text: decodePart(part.body.data)});
+          }
+          (part.parts || []).forEach(walk);
+        };
+        walk(m.payload);
+        const plain = parts.find(p => p.mime === "text/plain");
+        const htmlPart = parts.find(p => p.mime === "text/html");
+        let body = plain?.text || "";
+        if (!body && htmlPart) {
+          const parsed = new DOMParser().parseFromString(htmlPart.text, "text/html");
+          body = parsed.body?.textContent || "";
+        }
+        if (!body.trim()) body = "This email has no readable text body in the returned message (it may contain only images or unsupported content).";
+        $("bodyText").textContent = body.slice(0, 20000) + (body.length > 20000 ? "\n\n[Display shortened after 20,000 characters.]" : "");
+        $("message").hidden = false;
+      }
+      const now = new Date().toLocaleTimeString();
+      $("lastCheck").textContent = "Last check: " + now;
+      log("Read one latest email's metadata and short preview.");
+    } catch (e) {
+      log("Error: " + e.message);
+      status("Check failed — see activity log", "amber");
+    }
+  }
+  function startRefresh() {
+    if (!accessToken || timer) return;
+    timer = setInterval(fetchLatest, 60000);
+    $("pollState").textContent = "Refresh active while page is visible";
+    $("auto").disabled = true; $("stop").disabled = false;
+    log("60-second refresh enabled. Checks pause when this tab is hidden.");
+  }
+  function stopRefresh() {
+    if (timer) clearInterval(timer);
+    timer = null;
+    $("pollState").textContent = "Refresh is off";
+    $("auto").disabled = !accessToken; $("stop").disabled = true;
+  }
+  $("read").onclick = fetchLatest;
+  $("auto").onclick = startRefresh;
+  $("stop").onclick = () => { stopRefresh(); log("Automatic refresh stopped by user."); };
+  $("disconnect").onclick = () => {
+    stopRefresh();
+    if (accessToken && window.google?.accounts?.oauth2) {
+      google.accounts.oauth2.revoke(accessToken, () => log("Google token revocation requested."));
+    }
+    accessToken = null; connectedEmail = "";
+    $("message").hidden = true;
+    $("account").textContent = "No Gmail account connected.";
+    $("read").disabled = true; $("auto").disabled = true; $("disconnect").disabled = true;
+    status("Disconnected");
+    $("lastCheck").textContent = "No checks yet";
+    log("Disconnected. Token and displayed message cleared from this page.");
+  };
+})();
+</script>
+</body>
+</html>
