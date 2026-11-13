@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isInstructor() {
+      return signedIn() && request.auth.token.labAdmin == true;
+    }
+    match /sharedEmails/{studentUid} {
+      // Students can only create/update their own single shared-message record.
+      allow create, update: if signedIn()
+        && request.auth.uid == studentUid
+        && request.resource.data.studentUid == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          'studentUid', 'studentEmail', 'gmailAccount', 'sender',
+          'subject', 'body', 'messageId', 'sharedAt'
+        ])
+        && request.resource.data.body is string
+        && request.resource.data.body.size() <= 20000
+        && request.resource.data.subject is string
+        && request.resource.data.sender is string;
+      // Only instructor accounts can list/read all shared records.
+      allow read: if isInstructor() || (signedIn() && request.auth.uid == studentUid);
+      allow delete: if isInstructor() || (signedIn() && request.auth.uid == studentUid);
+    }
+  }
+}
