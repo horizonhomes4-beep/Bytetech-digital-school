@@ -1,0 +1,11 @@
+(()=>{const m=document.querySelector('.menu'),n=document.querySelector('.nav'),lb=document.querySelector('.lb');
+const close=()=>{n.classList.remove('open');m.setAttribute('aria-expanded','false')};
+m?.addEventListener('click',()=>{m.setAttribute('aria-expanded',n.classList.toggle('open'))});
+n?.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+document.addEventListener('click',e=>{if(!e.target.closest('.hdr'))close()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){close();lb?.classList.remove('on')}});
+document.querySelectorAll('[data-demo-form]').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();alert('This form is a front-end placeholder. Connect a form service or backend before publishing.')}));
+document.querySelectorAll('.gal button').forEach(b=>b.addEventListener('click',()=>{lb.querySelector('img').src=b.querySelector('img').src;lb.classList.add('on')}));
+lb?.addEventListener('click',()=>lb.classList.remove('on'));
+document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='Copied ✓'}catch(e){b.textContent='Copy failed'}setTimeout(()=>b.textContent='Copy',2000)}));
+})();

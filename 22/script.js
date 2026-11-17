@@ -1,0 +1,10 @@
+const m=document.querySelector('.menu'),n=document.querySelector('.nav');
+const close=()=>{n.classList.remove('open');m.setAttribute('aria-expanded','false');m.textContent='Menu'};
+m?.addEventListener('click',()=>{const o=n.classList.toggle('open');m.setAttribute('aria-expanded',o);m.textContent=o?'Close':'Menu'});
+n?.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+document.addEventListener('keydown',e=>e.key==='Escape'&&close());
+addEventListener('resize',()=>innerWidth>900&&close());
+const io='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1}):null;
+document.querySelectorAll('.rv').forEach(el=>io?io.observe(el):el.classList.add('in'));
+document.querySelectorAll('[data-form]').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();f.querySelector('.ok').hidden=false;f.reset()}));
+document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{navigator.clipboard?.writeText(b.dataset.copy);const t=b.textContent;b.textContent='Copied!';setTimeout(()=>b.textContent=t,1800)}));
